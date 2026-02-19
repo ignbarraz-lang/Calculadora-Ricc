@@ -7,16 +7,14 @@
     <style>
         :root { --primary: #3498db; --success: #27ae60; --danger: #e74c3c; --bg: #f0f4f8; }
         body { font-family: 'Segoe UI', sans-serif; padding: 10px; background-color: var(--bg); color: #333; margin: 0; }
-        .container { max-width: 800px; margin: auto; }
+        .container { max-width: 850px; margin: auto; }
         
-        /* Pestañas */
         .tabs { display: flex; margin-bottom: 20px; gap: 5px; overflow-x: auto; padding-bottom: 5px; }
         .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; background: #cbd5e1; font-weight: bold; white-space: nowrap; transition: 0.3s; }
         .tab-btn.active { background: var(--primary); color: white; }
         .content { display: none; }
         .content.active { display: block; }
 
-        /* Tarjetas */
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; border-top: 4px solid var(--primary); }
         h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 1.1rem; }
         label { display: block; margin: 15px 0 5px; font-weight: bold; font-size: 14px; }
@@ -29,7 +27,6 @@
         .falla { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
         .info-area { background: #fff3cd; color: #856404; border-color: #ffeeba; }
 
-        /* Esquema y PDF */
         .esquema-box { background: white; padding: 20px; border-radius: 12px; text-align: center; border: 2px solid #333; }
         .pdf-viewer { width: 100%; height: 75vh; border: 1px solid #ccc; border-radius: 8px; margin-top: 10px; }
     </style>
@@ -46,10 +43,10 @@
     <div id="calc" class="content active">
         <div class="card">
             <h2>📏 Caída de Tensión (RIC 04)</h2>
-            <label>Distancia (m):</label> <input type="number" id="dist" value="10">
-            <label>Corriente (A):</label> <input type="number" id="amp" value="16">
-            <label>Sección (mm²):</label> <input type="number" id="sec" value="6">
-            <button class="main-btn" onclick="calcCaida()">CALCULAR</button>
+            <label>Distancia del tramo (m):</label> <input type="number" id="dist" value="10">
+            <label>Corriente de carga (A):</label> <input type="number" id="amp" value="16">
+            <label>Sección conductor (mm²):</label> <input type="number" id="sec" value="6">
+            <button class="main-btn" onclick="calcCaida()">CALCULAR CAÍDA</button>
             <div id="outCaida"></div>
         </div>
 
@@ -75,7 +72,12 @@
                 <text x="50" y="30" font-size="18" font-weight="bold">S G C</text>
                 <text x="250" y="30" font-size="18" font-weight="bold">Cargador</text>
                 
-                <circle cx="35" cy="100" r="6" fill="#2ecc71"/> <circle cx="75" cy="100" r="6" fill="#3498db"/> <circle cx="115" cy="100" r="6" fill="#2ecc71"/> <circle cx="155" cy="100" r="6" fill="#8b4513"/> <circle cx="250" cy="100" r="6" fill="#bdc3c7"/> <circle cx="290" cy="100" r="6" fill="#8b4513"/> <circle cx="330" cy="100" r="6" fill="#2ecc71"/> <circle cx="370" cy="100" r="6" fill="#3498db"/> <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/>
+                <circle cx="35" cy="100" r="6" fill="#2ecc71"/><circle cx="75" cy="100" r="6" fill="#3498db"/>
+                <circle cx="115" cy="100" r="6" fill="#2ecc71"/><circle cx="155" cy="100" r="6" fill="#8b4513"/>
+                <circle cx="250" cy="100" r="6" fill="#bdc3c7"/><circle cx="290" cy="100" r="6" fill="#8b4513"/>
+                <circle cx="330" cy="100" r="6" fill="#2ecc71"/><circle cx="370" cy="100" r="6" fill="#3498db"/>
+                
+                <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/>
                 <path d="M 155 106 L 155 160 L 290 160 L 290 106" stroke="#8b4513" fill="none" stroke-width="2"/>
                 <path d="M 115 130 L 115 200 L 330 200 L 330 106" stroke="#2ecc71" fill="none" stroke-width="2"/>
                 <path d="M 75 106 L 75 240 L 370 240 L 370 106" stroke="#3498db" fill="none" stroke-width="2"/>
@@ -91,22 +93,29 @@
 
     <div id="normativa" class="content">
         <div class="card">
-            <h2>📚 Biblioteca Pliegos RIC</h2>
+            <h2>📚 Biblioteca Pliegos RIC (Nombres Oficiales)</h2>
             <select id="selectRIC" onchange="loadPDF(this.value)">
-                <option value="">-- Seleccionar Pliego --</option>
-                <option value="RIC01.pdf">RIC 01: Empalmes</option>
-                <option value="RIC02.pdf">RIC 02: Tableros</option>
-                <option value="RIC03.pdf">RIC 03: Alimentadores</option>
-                <option value="RIC04.pdf">RIC 04: Canalizaciones</option>
-                <option value="RIC05.pdf">RIC 05: Protecciones</option>
-                <option value="RIC06.pdf">RIC 06: Puesta a Tierra</option>
-                <option value="RIC07.pdf">RIC 07: Uso General</option>
-                <option value="RIC15.pdf">RIC 15: Conectividad</option>
-                <option value="RIC15.1.pdf">RIC 15.1: Infraestructura Carga VE</option>
-                <option value="RIC16.pdf">RIC 16: Generación Local</option>
-                <option value="RIC17.pdf">RIC 17: Operación y Mantenimiento</option>
-                <option value="RIC18.pdf">RIC 18: Presentación Proyectos</option>
-                <option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
+                <option value="">-- Seleccionar Pliego Técnico --</option>
+                <option value="RIC01.pdf">RIC N°01: Empalmes</option>
+                <option value="RIC02.pdf">RIC N°02: Tableros Eléctricos</option>
+                <option value="RIC03.pdf">RIC N°03: Alimentadores y Subalimentadores</option>
+                <option value="RIC04.pdf">RIC N°04: Conductores y Canalizaciones</option>
+                <option value="RIC05.pdf">RIC N°05: Medidas de Protección contra tensiones peligrosas</option>
+                <option value="RIC06.pdf">RIC N°06: Puesta a Tierra y Enlace Equipotencial</option>
+                <option value="RIC07.pdf">RIC N°07: Instalaciones de Uso General</option>
+                <option value="RIC08.pdf">RIC N°08: Sistemas de Emergencia</option>
+                <option value="RIC09.pdf">RIC N°09: Sistemas de Autogeneración</option>
+                <option value="RIC10.pdf">RIC N°10: Instalaciones en Áreas Peligrosas</option>
+                <option value="RIC11.pdf">RIC N°11: Instalaciones en Lugares de Reunión de Personas</option>
+                <option value="RIC12.pdf">RIC N°12: Instalaciones Deportivas y Recreativas</option>
+                <option value="RIC13.pdf">RIC N°13: Instalaciones en recintos de Espectáculos</option>
+                <option value="RIC14.pdf">RIC N°14: Instalaciones en Servicentros de Combustible</option>
+                <option value="RIC15.pdf">RIC N°15: Infraestructura de Carga de Vehículos Eléctricos</option>
+                <option value="RIC15.1.pdf">RIC N°15.1: Especificaciones para Infraestructura de Carga</option>
+                <option value="RIC16.pdf">RIC N°16: Subsistemas de Generación Local</option>
+                <option value="RIC17.pdf">RIC N°17: Operación y Mantenimiento</option>
+                <option value="RIC18.pdf">RIC N°18: Presentación de Proyectos</option>
+                <option value="RIC19.pdf">RIC N°19: Puesta en Servicio</option>
             </select>
             <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe>
         </div>
@@ -140,9 +149,11 @@
         let areaT = (areaU * n) + (utp ? 32 : 0);
         let cond = n + (utp ? 1 : 0);
         let f = cond === 1 ? 0.53 : (cond === 2 ? 0.31 : 0.40);
+        
         let ductos = [{n:"32mm", d:28.4}, {n:"40mm", d:35.5}, {n:"50mm", d:45.3}];
         let html = `<div class="res info-area">Área Requerida: ${areaT.toFixed(1)} mm²</div>`;
         let yaRec = false;
+
         ductos.forEach(t => {
             let cap = ((Math.PI * Math.pow(t.d, 2)) / 4) * f;
             if (cap >= areaT) {
