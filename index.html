@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora RIC & Biblioteca IRVE</title>
+    <title>Calculadora RIC & Biblioteca Técnica</title>
     <style>
         :root { --primary: #3498db; --success: #27ae60; --danger: #e74c3c; --bg: #f0f4f8; }
         body { font-family: 'Segoe UI', sans-serif; padding: 10px; background-color: var(--bg); color: #333; margin: 0; }
-        .container { max-width: 700px; margin: auto; }
+        .container { max-width: 800px; margin: auto; }
         
-        /* Sistema de Pestañas */
-        .tabs { display: flex; margin-bottom: 20px; gap: 5px; overflow-x: auto; }
+        /* Pestañas */
+        .tabs { display: flex; margin-bottom: 20px; gap: 5px; overflow-x: auto; padding-bottom: 5px; }
         .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; background: #cbd5e1; font-weight: bold; white-space: nowrap; transition: 0.3s; }
         .tab-btn.active { background: var(--primary); color: white; }
-        .content { display: none; padding-top: 10px; }
+        .content { display: none; }
         .content.active { display: block; }
 
-        /* Tarjetas y UI */
+        /* Tarjetas */
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; border-top: 4px solid var(--primary); }
-        h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 1.2rem; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 1.1rem; }
         label { display: block; margin: 15px 0 5px; font-weight: bold; font-size: 14px; }
         input, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccd1d9; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
         
@@ -29,10 +29,8 @@
         .falla { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
         .info-area { background: #fff3cd; color: #856404; border-color: #ffeeba; }
 
-        /* Esquema SVG */
+        /* Esquema y PDF */
         .esquema-box { background: white; padding: 20px; border-radius: 12px; text-align: center; border: 2px solid #333; }
-        
-        /* Visor PDF */
         .pdf-viewer { width: 100%; height: 75vh; border: 1px solid #ccc; border-radius: 8px; margin-top: 10px; }
     </style>
 </head>
@@ -42,19 +40,16 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event, 'calc')">Calculadoras</button>
         <button class="tab-btn" onclick="openTab(event, 'esquema')">Esquema SGC</button>
-        <button class="tab-btn" onclick="openTab(event, 'normativa')">Normativa RIC</button>
+        <button class="tab-btn" onclick="openTab(event, 'normativa')">Biblioteca RIC</button>
     </div>
 
     <div id="calc" class="content active">
         <div class="card">
             <h2>📏 Caída de Tensión (RIC 04)</h2>
-            <label>Distancia del tramo (m):</label> 
-            <input type="number" id="dist" value="10">
-            <label>Corriente de carga (A):</label> 
-            <input type="number" id="amp" value="16">
-            <label>Sección conductor (mm²):</label> 
-            <input type="number" id="sec" value="6">
-            <button class="main-btn" onclick="calcCaida()">CALCULAR CAÍDA</button>
+            <label>Distancia (m):</label> <input type="number" id="dist" value="10">
+            <label>Corriente (A):</label> <input type="number" id="amp" value="16">
+            <label>Sección (mm²):</label> <input type="number" id="sec" value="6">
+            <button class="main-btn" onclick="calcCaida()">CALCULAR</button>
             <div id="outCaida"></div>
         </div>
 
@@ -62,13 +57,12 @@
             <h2>🕳️ Ductos EMT (RIC 07)</h2>
             <label>Cable RVK:</label>
             <select id="cable">
-                <option value="52.8">6mm² (Ø 8.2mm)</option>
-                <option value="81.7">10mm² (Ø 10.2mm)</option>
-                <option value="109.4">16mm² (Ø 11.8mm)</option>
+                <option value="52.8">6mm²</option>
+                <option value="81.7">10mm²</option>
+                <option value="109.4">16mm²</option>
             </select>
-            <label>Cantidad de cables:</label> 
-            <input type="number" id="cant" value="1">
-            <label><input type="checkbox" id="utp"> ¿Incluir cable UTP Cat6? (+32mm²)</label>
+            <label>Cantidad:</label> <input type="number" id="cant" value="1">
+            <label><input type="checkbox" id="utp"> Incluir UTP Cat6 (+32mm²)</label>
             <button class="main-btn" style="background:var(--success)" onclick="calcDuctos()">ANALIZAR DUCTOS</button>
             <div id="outDucto"></div>
         </div>
@@ -81,21 +75,16 @@
                 <text x="50" y="30" font-size="18" font-weight="bold">S G C</text>
                 <text x="250" y="30" font-size="18" font-weight="bold">Cargador</text>
                 
-                <text x="32" y="85" font-size="12">3</text>
-                <text x="72" y="85" font-size="12">4</text>
-                <text x="112" y="85" font-size="12">5</text>
-                <text x="152" y="85" font-size="12">6</text>
-                
                 <circle cx="35" cy="100" r="6" fill="#2ecc71"/> <circle cx="75" cy="100" r="6" fill="#3498db"/> <circle cx="115" cy="100" r="6" fill="#2ecc71"/> <circle cx="155" cy="100" r="6" fill="#8b4513"/> <circle cx="250" cy="100" r="6" fill="#bdc3c7"/> <circle cx="290" cy="100" r="6" fill="#8b4513"/> <circle cx="330" cy="100" r="6" fill="#2ecc71"/> <circle cx="370" cy="100" r="6" fill="#3498db"/> <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/>
                 <path d="M 155 106 L 155 160 L 290 160 L 290 106" stroke="#8b4513" fill="none" stroke-width="2"/>
                 <path d="M 115 130 L 115 200 L 330 200 L 330 106" stroke="#2ecc71" fill="none" stroke-width="2"/>
                 <path d="M 75 106 L 75 240 L 370 240 L 370 106" stroke="#3498db" fill="none" stroke-width="2"/>
             </svg>
             <div style="font-size: 14px; text-align: left; margin-top: 10px;">
-                <span style="color:#2ecc71">●</span> <b>Verde:</b> Puente Pin 3-5 (SGC).<br>
-                <span style="color:#3498db">●</span> <b>Azul:</b> Pin 4 (SGC).<br>
-                <span style="color:#8b4513">●</span> <b>Café:</b> Pin 6 (SGC).<br>
-                <span style="color:#bdc3c7">●</span> Pin 1 Cargador: Sin conexión (Gris).
+                <span style="color:#2ecc71">●</span> <b>Verde:</b> Puente Pin 3-5.<br>
+                <span style="color:#3498db">●</span> <b>Azul:</b> Pin 4.<br>
+                <span style="color:#8b4513">●</span> <b>Café:</b> Pin 6.<br>
+                <span style="color:#bdc3c7">●</span> Pin 1 Cargador: Sin conexión.
             </div>
         </div>
     </div>
@@ -105,10 +94,18 @@
             <h2>📚 Biblioteca Pliegos RIC</h2>
             <select id="selectRIC" onchange="loadPDF(this.value)">
                 <option value="">-- Seleccionar Pliego --</option>
+                <option value="RIC01.pdf">RIC 01: Empalmes</option>
                 <option value="RIC02.pdf">RIC 02: Tableros</option>
                 <option value="RIC03.pdf">RIC 03: Alimentadores</option>
                 <option value="RIC04.pdf">RIC 04: Canalizaciones</option>
+                <option value="RIC05.pdf">RIC 05: Protecciones</option>
+                <option value="RIC06.pdf">RIC 06: Puesta a Tierra</option>
+                <option value="RIC07.pdf">RIC 07: Uso General</option>
+                <option value="RIC15.pdf">RIC 15: Conectividad</option>
                 <option value="RIC15.1.pdf">RIC 15.1: Infraestructura Carga VE</option>
+                <option value="RIC16.pdf">RIC 16: Generación Local</option>
+                <option value="RIC17.pdf">RIC 17: Operación y Mantenimiento</option>
+                <option value="RIC18.pdf">RIC 18: Presentación Proyectos</option>
                 <option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
             </select>
             <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe>
@@ -127,15 +124,10 @@
         evt.currentTarget.classList.add("active");
     }
 
-    function loadPDF(file) {
-        if(file) document.getElementById('pdfFrame').src = file;
-    }
+    function loadPDF(file) { if(file) document.getElementById('pdfFrame').src = file; }
 
     function calcCaida() {
-        let l = parseFloat(document.getElementById('dist').value);
-        let i = parseFloat(document.getElementById('amp').value);
-        let s = parseFloat(document.getElementById('sec').value);
-        let dv = (2 * l * i * 0.018) / s;
+        let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / parseFloat(document.getElementById('sec').value);
         let p = (dv / 220) * 100;
         let clase = p <= 3 ? 'recomendado' : 'falla';
         document.getElementById('outCaida').innerHTML = `<div class="res ${clase}">Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%)<br>${p<=3?'CUMPLE ✅':'EXCEDE 3% ❌'}</div>`;
@@ -148,22 +140,19 @@
         let areaT = (areaU * n) + (utp ? 32 : 0);
         let cond = n + (utp ? 1 : 0);
         let f = cond === 1 ? 0.53 : (cond === 2 ? 0.31 : 0.40);
-        
         let ductos = [{n:"32mm", d:28.4}, {n:"40mm", d:35.5}, {n:"50mm", d:45.3}];
-        let html = `<div class="res info-area">Área Requerida: ${areaT.toFixed(1)}mm² | Límite: ${f*100}%</div>`;
+        let html = `<div class="res info-area">Área Requerida: ${areaT.toFixed(1)} mm²</div>`;
         let yaRec = false;
-
         ductos.forEach(t => {
             let cap = ((Math.PI * Math.pow(t.d, 2)) / 4) * f;
             if (cap >= areaT) {
                 if (!yaRec) { html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`; yaRec = true; }
                 else { html += `<div class="res excesivo">${t.n}: EXCESIVO 🔵</div>`; }
-            } else { html += `<div class="res falla">${t.n}: SOBRECARGADO ❌<br><small>Capacidad: ${cap.toFixed(1)}mm²</small></div>`; }
+            } else { html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`; }
         });
         document.getElementById('outDucto').innerHTML = html;
     }
 </script>
 </body>
 </html>
-
 
