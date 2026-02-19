@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora RIC & Esquema SGC</title>
+    <title>Calculadora RIC & Esquema SGC Pro</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; padding: 10px; background-color: #f0f4f8; color: #333; }
         .container { max-width: 600px; margin: auto; }
@@ -57,32 +57,14 @@
 
     <div id="esquema" class="content">
         <div class="esquema-box">
-            <h2>Esquema de Conexión Final</h2>
+            <h2>Conexión SGC - Cargador</h2>
             <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
                 <text x="50" y="30" font-size="18" font-weight="bold">S G C</text>
                 <text x="250" y="30" font-size="18" font-weight="bold">Cargador</text>
                 
-                <text x="30" y="80" font-weight="bold">3</text>
-                <text x="70" y="80" font-weight="bold">4</text>
-                <text x="110" y="80" font-weight="bold">5</text>
-                <text x="150" y="80" font-weight="bold">6</text>
-                <circle cx="35" cy="100" r="6" fill="red"/>
-                <circle cx="75" cy="100" r="6" fill="black"/>
-                <circle cx="115" cy="100" r="6" fill="red"/>
-                <circle cx="155" cy="100" r="6" fill="black"/>
-
-                <circle cx="250" cy="100" r="6" fill="#bdc3c7"/> <circle cx="290" cy="100" r="6" fill="black"/>
-                <circle cx="330" cy="100" r="6" fill="black"/>
-                <circle cx="370" cy="100" r="6" fill="black"/>
-
-                <path d="M 35 106 L 35 130 L 115 130 L 115 106" stroke="red" fill="none" stroke-width="3"/>
-                
-                <path d="M 155 106 L 155 160 L 290 160 L 290 106" stroke="black" fill="none" stroke-width="2"/>
-                <path d="M 115 130 L 115 200 L 330 200 L 330 106" stroke="black" fill="none" stroke-width="2"/>
-                <path d="M 75 106 L 75 240 L 370 240 L 370 106" stroke="black" fill="none" stroke-width="2"/>
-            </svg>
-            <p style="text-align:left; font-size:14px;">
-                🔴 <b>Puente:</b> Pin 3 y Pin 5 unidos.<br>
-                ⚪ <b>Punto Plomo:</b> Primer pin del cargador
-
+                <text x="30" y="80" font-size="12">3</text>
+                <text x="70" y="80" font-size="12">4</text>
+                <text x="110" y="80" font-size="12">5</text>
+                <text x="150" y="80" font-size="12">6</text>
+                <circle cx="35" cy="100" r="6" fill="#e74c3c"/>
 
