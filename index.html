@@ -3,68 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Técnico RIC - IRVE</title>
+    <title>Calculadora RIC & Biblioteca Técnica</title>
     <style>
         :root { --primary: #3498db; --success: #27ae60; --danger: #e74c3c; --bg: #f0f4f8; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: #333; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 850px; padding: 15px; }
+        body { font-family: 'Segoe UI', sans-serif; padding: 10px; background-color: var(--bg); color: #333; margin: 0; }
+        .container { max-width: 850px; margin: auto; }
         
-        /* LOGIN STYLE */
-        #login-screen { max-width: 400px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; border-top: 6px solid var(--primary); }
-        
-        /* APP STYLE */
-        #app-content { display: none; width: 100%; }
-        .tabs { display: flex; margin-bottom: 20px; gap: 5px; overflow-x: auto; }
-        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; background: #cbd5e1; font-weight: bold; white-space: nowrap; }
+        .tabs { display: flex; margin-bottom: 20px; gap: 5px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; background: #cbd5e1; font-weight: bold; white-space: nowrap; transition: 0.3s; }
         .tab-btn.active { background: var(--primary); color: white; }
         .content { display: none; }
         .content.active { display: block; }
 
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; border-top: 4px solid var(--primary); }
         h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 1.1rem; }
-        label { display: block; margin: 15px 0 5px; font-weight: bold; font-size: 14px; text-align: left; }
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccd1d9; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; font-size: 14px; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccd1d9; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
         
-        .main-btn { background: var(--primary); color: white; padding: 15px; border: none; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .main-btn { background: var(--primary); color: white; padding: 15px; border: none; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
         .res { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: bold; border-left: 6px solid; }
         .recomendado { background: #d4edda; color: #155724; border-color: var(--success); }
+        .excesivo { background: #e7f3ff; color: #004085; border-color: var(--primary); }
         .falla { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
+        .info-area { background: #fff3cd; color: #856404; border-color: #ffeeba; }
 
         .esquema-box { background: white; padding: 20px; border-radius: 12px; text-align: center; border: 2px solid #333; }
-        .pdf-viewer { width: 100%; height: 70vh; border: 1px solid #ccc; border-radius: 8px; }
-        .user-welcome { font-size: 14px; color: var(--primary); font-weight: bold; margin-bottom: 10px; text-align: right; }
+        .pdf-viewer { width: 100%; height: 75vh; border: 1px solid #ccc; border-radius: 8px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div id="login-screen">
-    <h1>🛡️ Acceso Técnico</h1>
-    <label>ID Usuario:</label>
-    <input type="text" id="userInput" placeholder="Ej: 1234">
-    <label>Contraseña:</label>
-    <input type="password" id="passInput" placeholder="••••">
-    <button class="main-btn" onclick="checkLogin()">INGRESAR</button>
-    <p id="error-msg" style="color:var(--danger); display:none; margin-top:15px;">⚠️ Credenciales incorrectas</p>
-</div>
-
-<div id="app-content" class="container">
-    <div id="welcome-msg" class="user-welcome"></div>
+<div class="container">
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event, 'calc')">Calculadoras</button>
         <button class="tab-btn" onclick="openTab(event, 'esquema')">Esquema SGC</button>
         <button class="tab-btn" onclick="openTab(event, 'normativa')">Biblioteca RIC</button>
-        <button class="tab-btn" style="background:#95a5a6; color:white;" onclick="logout()">Salir</button>
     </div>
 
     <div id="calc" class="content active">
         <div class="card">
             <h2>📏 Caída de Tensión (RIC 04)</h2>
-            <label>Distancia (m):</label> <input type="number" id="dist" value="10">
-            <label>Corriente (A):</label> <input type="number" id="amp" value="16">
-            <label>Sección (mm²):</label> <input type="number" id="sec" value="6">
-            <button class="main-btn" onclick="calcCaida()">CALCULAR</button>
+            <label>Distancia del tramo (m):</label> <input type="number" id="dist" value="10">
+            <label>Corriente de carga (A):</label> <input type="number" id="amp" value="16">
+            <label>Sección conductor (mm²):</label> <input type="number" id="sec" value="6">
+            <button class="main-btn" onclick="calcCaida()">CALCULAR CAÍDA</button>
             <div id="outCaida"></div>
         </div>
+
         <div class="card">
             <h2>🕳️ Ductos EMT (RIC 07)</h2>
             <label>Cable RVK:</label>
@@ -75,7 +60,7 @@
             </select>
             <label>Cantidad:</label> <input type="number" id="cant" value="1">
             <label><input type="checkbox" id="utp"> Incluir UTP Cat6 (+32mm²)</label>
-            <button class="main-btn" style="background:var(--success)" onclick="calcDuctos()">ANALIZAR</button>
+            <button class="main-btn" style="background:var(--success)" onclick="calcDuctos()">ANALIZAR DUCTOS</button>
             <div id="outDucto"></div>
         </div>
     </div>
@@ -86,43 +71,51 @@
             <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
                 <text x="50" y="30" font-size="18" font-weight="bold">S G C</text>
                 <text x="250" y="30" font-size="18" font-weight="bold">Cargador</text>
+                
                 <circle cx="35" cy="100" r="6" fill="#2ecc71"/><circle cx="75" cy="100" r="6" fill="#3498db"/>
                 <circle cx="115" cy="100" r="6" fill="#2ecc71"/><circle cx="155" cy="100" r="6" fill="#8b4513"/>
                 <circle cx="250" cy="100" r="6" fill="#bdc3c7"/><circle cx="290" cy="100" r="6" fill="#8b4513"/>
                 <circle cx="330" cy="100" r="6" fill="#2ecc71"/><circle cx="370" cy="100" r="6" fill="#3498db"/>
+                
                 <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/>
                 <path d="M 155 106 L 155 160 L 290 160 L 290 106" stroke="#8b4513" fill="none" stroke-width="2"/>
                 <path d="M 115 130 L 115 200 L 330 200 L 330 106" stroke="#2ecc71" fill="none" stroke-width="2"/>
                 <path d="M 75 106 L 75 240 L 370 240 L 370 106" stroke="#3498db" fill="none" stroke-width="2"/>
             </svg>
+            <div style="font-size: 14px; text-align: left; margin-top: 10px;">
+                <span style="color:#2ecc71">●</span> <b>Verde:</b> Puente Pin 3-5.<br>
+                <span style="color:#3498db">●</span> <b>Azul:</b> Pin 4.<br>
+                <span style="color:#8b4513">●</span> <b>Café:</b> Pin 6.<br>
+                <span style="color:#bdc3c7">●</span> Pin 1 Cargador: Sin conexión.
+            </div>
         </div>
     </div>
 
     <div id="normativa" class="content">
         <div class="card">
-            <h2>📚 Biblioteca Pliegos RIC Oficiales</h2>
+            <h2>📚 Biblioteca Pliegos RIC (Nombres Oficiales)</h2>
             <select id="selectRIC" onchange="loadPDF(this.value)">
                 <option value="">-- Seleccionar Pliego Técnico --</option>
-                <option value="RIC01.pdf">RIC 01: Empalmes</option>
-                <option value="RIC02.pdf">RIC 02: Tableros Eléctricos</option>
-                <option value="RIC03.pdf">RIC 03: Alimentadores y Subalimentadores</option>
-                <option value="RIC04.pdf">RIC 04: Conductores y Canalizaciones</option>
-                <option value="RIC05.pdf">RIC 05: Medidas de Protección</option>
-                <option value="RIC06.pdf">RIC 06: Puesta a Tierra</option>
-                <option value="RIC07.pdf">RIC 07: Instalaciones de Uso General</option>
-                <option value="RIC08.pdf">RIC 08: Sistemas de Emergencia</option>
-                <option value="RIC09.pdf">RIC 09: Sistemas de Autogeneración</option>
-                <option value="RIC10.pdf">RIC 10: Áreas Peligrosas</option>
-                <option value="RIC11.pdf">RIC 11: Lugares de Reunión de Personas</option>
-                <option value="RIC12.pdf">RIC 12: Instalaciones Deportivas</option>
-                <option value="RIC13.pdf">RIC 13: Recintos de Espectáculos</option>
-                <option value="RIC14.pdf">RIC 14: Servicentros de Combustible</option>
-                <option value="RIC15.pdf">RIC 15: Conectividad y Carga (General)</option>
-                <option value="RIC15.1.pdf">RIC 15.1: Infraestructura Carga VE</option>
-                <option value="RIC16.pdf">RIC 16: Subsistemas de Generación Local</option>
-                <option value="RIC17.pdf">RIC 17: Operación y Mantenimiento</option>
-                <option value="RIC18.pdf">RIC 18: Presentación de Proyectos</option>
-                <option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
+                <option value="RIC01.pdf">RIC N°01: Empalmes</option>
+                <option value="RIC02.pdf">RIC N°02: Tableros Eléctricos</option>
+                <option value="RIC03.pdf">RIC N°03: Alimentadores y Subalimentadores</option>
+                <option value="RIC04.pdf">RIC N°04: Conductores y Canalizaciones</option>
+                <option value="RIC05.pdf">RIC N°05: Medidas de Protección contra tensiones peligrosas</option>
+                <option value="RIC06.pdf">RIC N°06: Puesta a Tierra y Enlace Equipotencial</option>
+                <option value="RIC07.pdf">RIC N°07: Instalaciones de Uso General</option>
+                <option value="RIC08.pdf">RIC N°08: Sistemas de Emergencia</option>
+                <option value="RIC09.pdf">RIC N°09: Sistemas de Autogeneración</option>
+                <option value="RIC10.pdf">RIC N°10: Instalaciones en Áreas Peligrosas</option>
+                <option value="RIC11.pdf">RIC N°11: Instalaciones en Lugares de Reunión de Personas</option>
+                <option value="RIC12.pdf">RIC N°12: Instalaciones Deportivas y Recreativas</option>
+                <option value="RIC13.pdf">RIC N°13: Instalaciones en recintos de Espectáculos</option>
+                <option value="RIC14.pdf">RIC N°14: Instalaciones en Servicentros de Combustible</option>
+                <option value="RIC15.pdf">RIC N°15: Infraestructura de Carga de Vehículos Eléctricos</option>
+                <option value="RIC15.1.pdf">RIC N°15.1: Especificaciones para Infraestructura de Carga</option>
+                <option value="RIC16.pdf">RIC N°16: Subsistemas de Generación Local</option>
+                <option value="RIC17.pdf">RIC N°17: Operación y Mantenimiento</option>
+                <option value="RIC18.pdf">RIC N°18: Presentación de Proyectos</option>
+                <option value="RIC19.pdf">RIC N°19: Puesta en Servicio</option>
             </select>
             <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe>
         </div>
@@ -130,41 +123,48 @@
 </div>
 
 <script>
-    const USERS = [
-        { id: "1234", pass: "adminRIC", name: "Administrador" },
-        { id: "101", pass: "obra2026", name: "Técnico en Terreno" }
-    ];
-
-    function checkLogin() {
-        const user = USERS.find(u => u.id === document.getElementById('userInput').value && u.pass === document.getElementById('passInput').value);
-        if (user) {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app-content').style.display = 'block';
-            document.getElementById('welcome-msg').innerText = "Hola, " + user.name;
-        } else { document.getElementById('error-msg').style.display = 'block'; }
-    }
-
-    function logout() { location.reload(); }
     function openTab(evt, tabName) {
-        var i, content = document.getElementsByClassName("content"), tablinks = document.getElementsByClassName("tab-btn");
+        var i, content, tablinks;
+        content = document.getElementsByClassName("content");
         for (i = 0; i < content.length; i++) { content[i].classList.remove("active"); }
+        tablinks = document.getElementsByClassName("tab-btn");
         for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
         document.getElementById(tabName).classList.add("active");
         evt.currentTarget.classList.add("active");
     }
+
     function loadPDF(file) { if(file) document.getElementById('pdfFrame').src = file; }
 
     function calcCaida() {
         let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / parseFloat(document.getElementById('sec').value);
         let p = (dv / 220) * 100;
-        document.getElementById('outCaida').innerHTML = `<div class="res ${p<=3?'recomendado':'falla'}">Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%)</div>`;
+        let clase = p <= 3 ? 'recomendado' : 'falla';
+        document.getElementById('outCaida').innerHTML = `<div class="res ${clase}">Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%)<br>${p<=3?'CUMPLE ✅':'EXCEDE 3% ❌'}</div>`;
     }
 
     function calcDuctos() {
-        let areaT = (parseFloat(document.getElementById('cable').value) * parseInt(document.getElementById('cant').value)) + (document.getElementById('utp').checked ? 32 : 0);
-        document.getElementById('outDucto').innerHTML = `<div class="res" style="background:#fff3cd">Área Requerida: ${areaT.toFixed(1)} mm²</div>`;
+        let areaU = parseFloat(document.getElementById('cable').value);
+        let n = parseInt(document.getElementById('cant').value);
+        let utp = document.getElementById('utp').checked;
+        let areaT = (areaU * n) + (utp ? 32 : 0);
+        let cond = n + (utp ? 1 : 0);
+        let f = cond === 1 ? 0.53 : (cond === 2 ? 0.31 : 0.40);
+        
+        let ductos = [{n:"32mm", d:28.4}, {n:"40mm", d:35.5}, {n:"50mm", d:45.3}];
+        let html = `<div class="res info-area">Área Requerida: ${areaT.toFixed(1)} mm²</div>`;
+        let yaRec = false;
+
+        ductos.forEach(t => {
+            let cap = ((Math.PI * Math.pow(t.d, 2)) / 4) * f;
+            if (cap >= areaT) {
+                if (!yaRec) { html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`; yaRec = true; }
+                else { html += `<div class="res excesivo">${t.n}: EXCESIVO 🔵</div>`; }
+            } else { html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`; }
+        });
+        document.getElementById('outDucto').innerHTML = html;
     }
 </script>
 </body>
 </html>
+
 
