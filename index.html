@@ -3,68 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora RIC & Esquema SGC Pro</title>
+    <title>Calculadora Eléctrica Pro</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; padding: 10px; background-color: #f0f4f8; color: #333; }
-        .container { max-width: 600px; margin: auto; }
-        .tabs { display: flex; margin-bottom: 20px; gap: 10px; }
-        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; background: #cbd5e1; font-weight: bold; }
-        .tab-btn.active { background: #3498db; color: white; }
+        body { font-family: sans-serif; padding: 15px; background: #f0f2f5; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .tabs { display: flex; gap: 5px; max-width: 500px; margin: 0 auto 15px; }
+        .tab-btn { flex: 1; padding: 10px; cursor: pointer; border: none; background: #ccc; font-weight: bold; border-radius: 5px; }
+        .tab-btn.active { background: #007bff; color: white; }
         .content { display: none; }
         .content.active { display: block; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
-        label { display: block; margin: 15px 0 5px; font-weight: bold; }
-        input, select { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button.main-btn { background: #3498db; color: white; padding: 15px; border: none; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .res { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: bold; border-left: 6px solid; }
-        .recomendado { background: #d4edda; color: #155724; border-color: #28a745; }
-        .excesivo { background: #e7f3ff; color: #004085; border-color: #007bff; }
-        .falla { background: #f8d7da; color: #721c24; border-color: #dc3545; }
-        .esquema-box { background: white; padding: 20px; border-radius: 12px; text-align: center; border: 2px solid #333; }
+        input, select { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+        button.calc-btn { width: 100%; padding: 15px; background: #28a745; color: white; border: none; font-weight: bold; border-radius: 5px; cursor: pointer; }
+        .box { margin-top: 15px; padding: 10px; border-radius: 5px; font-weight: bold; }
+        .verde { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .azul { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
+        .rojo { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'calc')">Calculadoras</button>
-        <button class="tab-btn" onclick="openTab(event, 'esquema')">Esquema SGC</button>
+<div class="tabs">
+    <button class="tab-btn active" onclick="verTab('calc')">Calculadora</button>
+    <button class="tab-btn" onclick="verTab('sgc')">Esquema SGC</button>
+</div>
+
+<div id="calc" class="content active">
+    <div class="card">
+        <h3>📏 Caída de Voltaje</h3>
+        Metros: <input type="number" id="L" value="10">
+        Amperes: <input type="number" id="A" value="16">
+        Sección (mm²): <input type="number" id="S" value="6">
+        <button class="calc-btn" onclick="caida()">CALCULAR</button>
+        <div id="resV"></div>
     </div>
-
-    <div id="calc" class="content active">
-        <div class="card">
-            <h2>📏 Caída de Tensión</h2>
-            <label>Distancia (m):</label> <input type="number" id="dist" value="10">
-            <label>Amperaje (A):</label> <input type="number" id="amp" value="16">
-            <label>Sección (mm²):</label> <input type="number" id="sec" value="6">
-            <button class="main-btn" onclick="calcCaida()">CALCULAR</button>
-            <div id="outCaida"></div>
-        </div>
-        <div class="card">
-            <h2>🕳️ Ductos EMT (RIC 07)</h2>
-            <label>Cable RVK:</label>
-            <select id="cable">
-                <option value="52.8">6mm²</option>
-                <option value="81.7">10mm²</option>
-                <option value="109.4">16mm²</option>
-            </select>
-            <label>Cantidad:</label> <input type="number" id="cant" value="1">
-            <button class="main-btn" style="background:#27ae60" onclick="calcDuctos()">ANALIZAR</button>
-            <div id="outDucto"></div>
-        </div>
+    <div class="card">
+        <h3>🕳️ Ductos EMT (RIC 07)</h3>
+        Cables 6mm²: <input type="number" id="n" value="1">
+        <button class="calc-btn" style="background:#007bff" onclick="ducto()">ANALIZAR</button>
+        <div id="resD"></div>
     </div>
+</div>
 
-    <div id="esquema" class="content">
-        <div class="esquema-box">
-            <h2>Conexión SGC - Cargador</h2>
-            <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-                <text x="50" y="30" font-size="18" font-weight="bold">S G C</text>
-                <text x="250" y="30" font-size="18" font-weight="bold">Cargador</text>
-                
-                <text x="30" y="80" font-size="12">3</text>
-                <text x="70" y="80" font-size="12">4</text>
-                <text x="110" y="80" font-size="12">5</text>
-                <text x="150" y="80" font-size="12">6</text>
-                <circle cx="35" cy="100" r="6" fill="#e74c3c"/>
+<div id="sgc" class="content">
+    <div class="card" style="text-align: center;">
+        <h3>Esquema Conexión SGC</h3>
+        <svg viewBox="0 0 400 250" style="width: 100%;">
+            <text x="50" y="30" font-weight="bold">SGC</text>
+            <text x="280" y="30" font-weight="bold">CARGADOR</text>
+            <circle cx="40" cy="80" r="6" fill="red"/> <text x="35" y="70">3</text>
+            <circle cx="80" cy="80" r="6" fill="black"/> <text x="75" y="70">4</text>
+            <circle cx="120" cy="80" r="6" fill="red"/> <text x="115" y="70">5</text>
+            <circle cx="160" cy="80" r="6" fill="black"/> <text x="155" y="70">6</text>
+            <circle cx="280" cy="80" r="6" fill="#aaa"/> <text x="270" y="70">Saltado</text>
+            <circle cx="310" cy="80" r="6" fill="black"/>
+            <circle cx="340" cy="80" r="6" fill="black"/>
+            <circle cx="370" cy="80" r="6" fill="black"/>
+            <path d="M 40 85 L 40 110 L 120 110 L 120 85" stroke="red" fill="none" stroke-width="3"/>
+            <path d="M 160 85 L 160 140 L 310 140 L 310 85" stroke="black" fill="none" stroke-width="2"/>
+            <path d="M 120 110 L 120 170 L 340 170 L 340 85" stroke="black" fill="none" stroke-width="2"/>
+            <path d="M 80 85 L 80 200 L 370 200 L 370 85" stroke="black" fill="none" stroke-width="2"/>
+        </svg>
+        <p style="color:red; font-weight:bold;">Puente Pin 3 y 5 realizado.</p>
+    </div>
+</div>
 
+<script>
+    function verTab(id) {
+        document.getElementById('calc').classList.remove('active');
+        document.getElementById('sgc').classList.remove('active');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    function caida() {
+        let l = document.getElementById('L').value, i = document.getElementById('A').value, s = document.getElementById('S').value;
+        let v = (2 * l * i * 0.018) / s;
+        let p = (v / 220) * 100;
+        let c = p <= 3 ? 'verde' : 'rojo';
+        document.getElementById('resV').innerHTML = `<div class="box ${c}">Pérdida: ${v.toFixed(2)}V (${p.toFixed(2)}%)</div>`;
+    }
+
+    function ducto() {
+        let n = parseInt(document.getElementById('n').value);
+        let areaT = n * 52.8;
+        let f = n == 1 ? 0.53 : (n == 2 ? 0.31 : 0.40);
+        let ductos = [{n:"32mm", d:28.4}, {n:"40mm", d:35.5}, {n:"50mm", d:45.3}];
+        let html = `<p>Área: ${areaT.toFixed(1)}mm²</p>`, ya = false;
+        ductos.forEach(t => {
+            let cap = (3.1416 * (t.d**2) / 4) * f;
+            if (cap >= areaT) {
+                if (!ya) { html += `<div class="box verde">${t.n}: RECOMENDADO</div>`; ya = true; }
+                else { html += `<div class="box azul">${t.n}: EXCESIVO</div>`; }
+            } else { html += `<div class="box rojo">${t.n}: NO CABE</div>`; }
+        });
+        document.getElementById('resD').innerHTML = html;
+    }
+</script>
+</body>
+</html>
