@@ -22,27 +22,31 @@
 
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; border-top: 4px solid var(--primary); }
         h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 1.1rem; }
+        label { display: block; margin: 10px 0 5px; font-weight: bold; font-size: 14px; text-align: left; }
         .main-btn { background: var(--primary); color: white; padding: 15px; border: none; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
         
         .res { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: bold; border-left: 6px solid; }
         .recomendado { background: #d4edda; color: #155724; border-color: var(--success); }
         .falla { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
+        .excesivo { background: #e7f3ff; color: #004085; border-color: var(--primary); }
         .pdf-viewer { width: 100%; height: 70vh; border: 1px solid #ccc; border-radius: 8px; }
+        .user-welcome { font-size: 14px; color: var(--primary); font-weight: bold; margin-bottom: 15px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div id="login-screen">
-    <h1 style="font-size: 1.4rem;">🔐 Acceso Técnico RIC</h1>
-    <input type="text" id="userInput" placeholder="Usuario (Ej: 1234)">
+    <h1 style="font-size: 1.4rem;">🔐 Acceso Autorizado</h1>
+    <input type="text" id="userInput" placeholder="Nombre de Usuario">
     <input type="password" id="passInput" placeholder="Contraseña">
     <button class="main-btn" onclick="checkLogin()">ENTRAR AL SISTEMA</button>
-    <p id="login-error" style="color:red; display:none; margin-top:10px;">Credenciales incorrectas</p>
+    <p id="login-error" style="color:red; display:none; margin-top:10px;">⚠️ Usuario o clave incorrecta</p>
 </div>
 
 <div id="app-content" class="container">
+    <div id="welcome-msg" class="user-welcome"></div>
     <div class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'calc')">Cálculos</button>
+        <button class="tab-btn active" onclick="openTab(event, 'calc')">Calculadoras</button>
         <button class="tab-btn" onclick="openTab(event, 'esquema')">Esquema SGC</button>
         <button class="tab-btn" onclick="openTab(event, 'normativa')">Biblioteca RIC</button>
         <button class="tab-btn" style="background:#95a5a6; color:white;" onclick="location.reload()">Salir</button>
@@ -51,28 +55,35 @@
     <div id="calc" class="content active">
         <div class="card">
             <h2>📏 Caída de Tensión (RIC 04)</h2>
-            <input type="number" id="dist" placeholder="Distancia (m)" value="10">
-            <input type="number" id="amp" placeholder="Amperaje (A)" value="16">
-            <input type="number" id="sec" placeholder="Sección (mm²)" value="6">
-            <button class="main-btn" onclick="calcCaida()">CALCULAR</button>
+            <label>Distancia del alimentador (m):</label> 
+            <input type="number" id="dist" value="10">
+            <label>Corriente de diseño (A):</label> 
+            <input type="number" id="amp" value="16">
+            <label>Sección del conductor (mm²):</label> 
+            <input type="number" id="sec" value="6">
+            <button class="main-btn" onclick="calcCaida()">CALCULAR PÉRDIDA</button>
             <div id="outCaida"></div>
         </div>
+
         <div class="card">
-            <h2>🕳️ Ductos EMT (RIC 07)</h2>
+            <h2>🕳️ Llenado de Ductos EMT (RIC 07)</h2>
+            <label>Tipo de Conductor (RVK):</label>
             <select id="cable">
-                <option value="52.8">6mm² (RVK)</option>
-                <option value="81.7">10mm² (RVK)</option>
-                <option value="109.4">16mm² (RVK)</option>
+                <option value="52.8">6mm² (Ø 8.2mm)</option>
+                <option value="81.7">10mm² (Ø 10.2mm)</option>
+                <option value="109.4">16mm² (Ø 11.8mm)</option>
+                <option value="176.7">25mm² (Ø 15.0mm)</option>
             </select>
-            <input type="number" id="cant" placeholder="N° de cables" value="1">
-            <button class="main-btn" style="background:var(--success)" onclick="calcDuctos()">ANALIZAR DUCTO</button>
+            <label>Cantidad de conductores:</label> 
+            <input type="number" id="cant" value="1">
+            <button class="main-btn" style="background:var(--success)" onclick="calcDuctos()">ANALIZAR CANALIZACIÓN</button>
             <div id="outDucto"></div>
         </div>
     </div>
 
     <div id="esquema" class="content">
         <div class="card" style="text-align: center;">
-            <h2>Conexión SGC - Cargador</h2>
+            <h2>Esquema de Control SGC (Gestión de Carga)</h2>
             <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="35" cy="100" r="6" fill="#2ecc71"/><circle cx="75" cy="100" r="6" fill="#3498db"/>
                 <circle cx="115" cy="100" r="6" fill="#2ecc71"/><circle cx="155" cy="100" r="6" fill="#8b4513"/>
@@ -81,22 +92,40 @@
                 <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/>
                 <path d="M 155 106 L 155 160 L 290 160 L 290 106" stroke="#8b4513" fill="none" stroke-width="2"/>
                 <path d="M 115 130 L 115 200 L 330 200 L 330 106" stroke="#2ecc71" fill="none" stroke-width="2"/>
-                <path d="M 75 106 L 75 240 L 370 240 L 370 106" stroke="#3498db" fill="none" stroke-width="2"/>
+                <path d="M 75 106 L 75 230 L 370 230 L 370 106" stroke="#3498db" fill="none" stroke-width="2"/>
             </svg>
+            <div style="text-align: left; font-size: 14px; background: #f8f9fa; padding: 10px; border-radius: 5px;">
+                <b>Detalle de Conexión Técnico:</b><br>
+                🟢 <b>Punte Verde:</b> Conexión entre Pin 3 y Pin 5.<br>
+                🔵 <b>Línea Azul:</b> Conexión a Pin 4.<br>
+                🟤 <b>Línea Café:</b> Conexión a Pin 6.
+            </div>
         </div>
     </div>
 
     <div id="normativa" class="content">
         <div class="card">
-            <h2>📚 Biblioteca Pliegos RIC (1-19)</h2>
-            <select onchange="loadPDF(this.value)">
-                <option value="">-- Seleccionar Pliego --</option>
+            <h2>📚 Biblioteca Pliegos RIC (Completos 01-19)</h2>
+            <select id="pdfSelector" onchange="loadPDF(this.value)">
+                <option value="">-- Seleccionar Pliego Técnico --</option>
                 <option value="RIC01.pdf">RIC 01: Empalmes</option>
-                <option value="RIC02.pdf">RIC 02: Tableros</option>
-                <option value="RIC03.pdf">RIC 03: Alimentadores</option>
-                <option value="RIC04.pdf">RIC 04: Canalizaciones</option>
-                <option value="RIC05.pdf">RIC 05: Protecciones</option>
-                <option value="RIC15.1.pdf">RIC 15.1: Carga VE</option>
+                <option value="RIC02.pdf">RIC 02: Tableros Eléctricos</option>
+                <option value="RIC03.pdf">RIC 03: Alimentadores y Subalimentadores</option>
+                <option value="RIC04.pdf">RIC 04: Conductores y Canalizaciones</option>
+                <option value="RIC05.pdf">RIC 05: Medidas de Protección</option>
+                <option value="RIC06.pdf">RIC 06: Puesta a Tierra</option>
+                <option value="RIC07.pdf">RIC 07: Instalaciones de Uso General</option>
+                <option value="RIC08.pdf">RIC 08: Sistemas de Emergencia</option>
+                <option value="RIC09.pdf">RIC 09: Sistemas de Autogeneración</option>
+                <option value="RIC10.pdf">RIC 10: Áreas Peligrosas</option>
+                <option value="RIC11.pdf">RIC 11: Reunión de Personas</option>
+                <option value="RIC12.pdf">RIC 12: Instalaciones Deportivas</option>
+                <option value="RIC13.pdf">RIC 13: Recintos de Espectáculos</option>
+                <option value="RIC14.pdf">RIC 14: Servicentros</option>
+                <option value="RIC15.pdf">RIC 15: Carga Vehículos Eléctricos</option>
+                <option value="RIC16.pdf">RIC 16: Generación Local</option>
+                <option value="RIC17.pdf">RIC 17: Operación y Mantenimiento</option>
+                <option value="RIC18.pdf">RIC 18: Presentación de Proyectos</option>
                 <option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
             </select>
             <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe>
@@ -105,16 +134,39 @@
 </div>
 
 <script>
-    // SISTEMA DE ACCESO
+    // BASE DE DATOS DE USUARIOS
+    const USERS = [
+        { id: "Padilla", pass: "1648", name: "Padilla" },
+        { id: "Isaias", pass: "2071", name: "Isaias" },
+        { id: "Brayan", pass: "2025", name: "Brayan" },
+        { id: "1234", pass: "adminRIC", name: "Administrador" }
+    ];
+
     function checkLogin() {
-        const u = document.getElementById('userInput').value;
-        const p = document.getElementById('passInput').value;
-        if(u === "1234" && p === "adminRIC") {
+        const uVal = document.getElementById('userInput').value;
+        const pVal = document.getElementById('passInput').value;
+        const user = USERS.find(u => u.id === uVal && u.pass === pVal);
+
+        if(user) {
             document.getElementById('login-screen').style.display='none';
             document.getElementById('app-content').style.display='block';
+            document.getElementById('welcome-msg').innerText = "⚡ Profesional conectado: " + user.name;
+            iniciarIA();
         } else {
             document.getElementById('login-error').style.display='block';
         }
+    }
+
+    function iniciarIA() {
+        if(!window.chatbase || window.chatbase("getState")!=="initialized"){
+            window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};
+            window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}});
+        }
+        const script = document.createElement("script");
+        script.src = "https://www.chatbase.co/embed.min.js";
+        script.id = "HZBhzPxQtpDaw6ZlcBzEA"; // Tu ID de IA
+        script.domain = "www.chatbase.co";
+        document.body.appendChild(script);
     }
 
     function openTab(evt, tabName) {
@@ -127,34 +179,65 @@
 
     function loadPDF(f) { if(f) document.getElementById('pdfFrame').src = f; }
 
+    // LÓGICA DE CÁLCULO CAÍDA DE TENSIÓN
     function calcCaida() {
-        let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / parseFloat(document.getElementById('sec').value);
+        const L = parseFloat(document.getElementById('dist').value);
+        const I = parseFloat(document.getElementById('amp').value);
+        const S = parseFloat(document.getElementById('sec').value);
+        const rho = 0.018; // Resistividad cobre
+        
+        let dv = (2 * L * I * rho) / S;
         let p = (dv / 220) * 100;
-        document.getElementById('outCaida').innerHTML = `<div class="res ${p<=3?'recomendado':'falla'}">Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%)</div>`;
+
+        let resClass = p <= 3 ? 'recomendado' : 'falla';
+        let msg = p <= 3 ? 'DENTRO DE NORMA ✅' : 'EXCEDE EL 3% (RIC 04) ❌';
+
+        document.getElementById('outCaida').innerHTML = `
+            <div class="res ${resClass}">
+                Voltaje Perdido: ${dv.toFixed(2)} V<br>
+                Porcentaje: ${p.toFixed(2)}%<br>
+                Resultado: ${msg}
+            </div>`;
     }
 
+    // LÓGICA DE CÁLCULO DUCTOS
     function calcDuctos() {
-        let areaU = parseFloat(document.getElementById('cable').value);
+        let areaUnitaria = parseFloat(document.getElementById('cable').value);
         let n = parseInt(document.getElementById('cant').value);
-        let areaT = areaU * n;
+        let areaTotalCables = areaUnitaria * n;
+        
+        // Factor de llenado según cantidad de cables (RIC 07)
         let f = n === 1 ? 0.53 : (n === 2 ? 0.31 : 0.40);
-        let ductos = [{n:"32mm", d:28.4}, {n:"40mm", d:35.5}, {n:"50mm", d:45.3}];
-        let html = `<div class="res" style="background:#fff3cd; color:#856404;">Área Requerida: ${areaT.toFixed(1)} mm²</div>`;
+        
+        // Ductos estándar EMT (Diámetro interno mm)
+        let ductos = [
+            {n:"EMT 20mm (3/4\")", d:18.5},
+            {n:"EMT 25mm (1\")", d:24.3},
+            {n:"EMT 32mm (1 1/4\")", d:32.5},
+            {n:"EMT 40mm (1 1/2\")", d:38.4},
+            {n:"EMT 50mm (2\")", d:50.1}
+        ];
+
+        let html = `<div class="res" style="background:#fff3cd">Área de cables: ${areaTotalCables.toFixed(1)} mm²</div>`;
         let yaRec = false;
+
         ductos.forEach(t => {
-            let cap = ((Math.PI * Math.pow(t.d, 2)) / 4) * f;
-            if (cap >= areaT) {
-                if (!yaRec) { html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`; yaRec = true; }
-                else { html += `<div class="res" style="background:#e7f3ff; color:#004085; border-left:6px solid var(--primary)">${t.n}: EXCESIVO 🔵</div>`; }
-            } else { html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`; }
+            let areaDucto = (Math.PI * Math.pow(t.d, 2)) / 4;
+            let capacidadUtil = areaDucto * f;
+
+            if (capacidadUtil >= areaTotalCables) {
+                if (!yaRec) {
+                    html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`;
+                    yaRec = true;
+                } else {
+                    html += `<div class="res excesivo">${t.n}: DISPONIBLE 🔵</div>`;
+                }
+            } else {
+                html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`;
+            }
         });
         document.getElementById('outDucto').innerHTML = html;
     }
-
-    // TU CÓDIGO DE CHATBASE INTEGRADO
-    (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="HZBhzPxQtpDaw6ZlcBzEA";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
 </script>
-
 </body>
 </html>
-
