@@ -26,6 +26,7 @@
         .res { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: bold; border-left: 6px solid; }
         .recomendado { background: #d4edda; color: #155724; border-color: var(--success); }
         .falla { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
+        .excesivo { background: #e7f3ff; color: #004085; border-color: var(--primary); }
         .pdf-viewer { width: 100%; height: 70vh; border: 1px solid #ccc; border-radius: 8px; }
         .user-welcome { font-size: 14px; color: var(--primary); font-weight: bold; margin-bottom: 15px; text-align: center; }
     </style>
@@ -95,41 +96,38 @@
                 <circle cx="250" cy="100" r="7" fill="#bdc3c7"/><circle cx="290" cy="100" r="7" fill="#8b4513"/>
                 <circle cx="330" cy="100" r="7" fill="#2ecc71"/><circle cx="370" cy="100" r="7" fill="#3498db"/>
                 
-                <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/> <path d="M 155 107 L 155 160 L 290 160 L 290 107" stroke="#8b4513" fill="none" stroke-width="2"/> <path d="M 115 130 L 115 200 L 330 200 L 330 107" stroke="#2ecc71" fill="none" stroke-width="2"/> <path d="M 75 107 L 75 235 L 370 235 L 370 107" stroke="#3498db" fill="none" stroke-width="2"/> </svg>
-            <div style="text-align: left; font-size: 14px; background: #f8f9fa; padding: 12px; border-radius: 8px; border-left: 5px solid var(--primary); margin-top: 10px;">
-                <b>Instrucciones de Cableado:</b><br>
-                1. 🟢 <b>Cargador:</b> Realizar puente físico entre <b>Pin 3 y Pin 5</b>.<br>
-                2. 🟤 <b>Café:</b> Del <b>Pin 6</b> (Cargador) al <b>Pin 4</b> (SGC).<br>
-                3. 🟢 <b>Verde:</b> Del <b>Pin 5</b> (Cargador) al <b>Pin 3</b> (SGC).<br>
-                4. 🔵 <b>Azul:</b> Del <b>Pin 4</b> (Cargador) al <b>Pin 4</b> (SGC).
-            </div>
+                <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/>
+                <path d="M 155 107 L 155 160 L 290 160 L 290 107" stroke="#8b4513" fill="none" stroke-width="2"/>
+                <path d="M 115 130 L 115 200 L 330 200 L 330 107" stroke="#2ecc71" fill="none" stroke-width="2"/>
+                <path d="M 75 107 L 75 235 L 370 235 L 370 107" stroke="#3498db" fill="none" stroke-width="2"/>
+            </svg>
         </div>
     </div>
 
     <div id="normativa" class="content">
         <div class="card">
-            <h2>📚 Biblioteca Pliegos RIC (01-19)</h2>
+            <h2>📚 Biblioteca Pliegos RIC (Completos 01-19)</h2>
             <select onchange="loadPDF(this.value)">
-                <option value="">-- Seleccionar Pliego --</option>
+                <option value="">-- Seleccionar Pliego Técnico --</option>
                 <option value="RIC01.pdf">RIC 01: Empalmes</option>
-                <option value="RIC02.pdf">RIC 02: Tableros</option>
-                <option value="RIC03.pdf">RIC 03: Alimentadores</option>
-                <option value="RIC04.pdf">RIC 04: Canalizaciones</option>
-                <option value="RIC05.pdf">RIC 05: Protecciones</option>
+                <option value="RIC02.pdf">RIC 02: Tableros Eléctricos</option>
+                <option value="RIC03.pdf">RIC 03: Alimentadores y Subalimentadores</option>
+                <option value="RIC04.pdf">RIC 04: Conductores y Canalizaciones</option>
+                <option value="RIC05.pdf">RIC 05: Medidas de Protección</option>
                 <option value="RIC06.pdf">RIC 06: Puesta a Tierra</option>
-                <option value="RIC07.pdf">RIC 07: Uso General</option>
+                <option value="RIC07.pdf">RIC 07: Instalaciones de Uso General</option>
                 <option value="RIC08.pdf">RIC 08: Sistemas de Emergencia</option>
-                <option value="RIC09.pdf">RIC 09: Autogeneración</option>
+                <option value="RIC09.pdf">RIC 09: Sistemas de Autogeneración</option>
                 <option value="RIC10.pdf">RIC 10: Áreas Peligrosas</option>
                 <option value="RIC11.pdf">RIC 11: Reunión de Personas</option>
                 <option value="RIC12.pdf">RIC 12: Instalaciones Deportivas</option>
-                <option value="RIC13.pdf">RIC 13: Espectáculos</option>
+                <option value="RIC13.pdf">RIC 13: Recintos de Espectáculos</option>
                 <option value="RIC14.pdf">RIC 14: Servicentros</option>
-                <option value="RIC15.pdf">RIC 15: Carga VE</option>
+                <option value="RIC15.pdf">RIC 15: Carga de Vehículos Eléctricos</option>
                 <option value="RIC15.1.pdf">RIC 15.1: Especificaciones IRVE</option>
                 <option value="RIC16.pdf">RIC 16: Generación Local</option>
-                <option value="RIC17.pdf">RIC 17: Mantenimiento</option>
-                <option value="RIC18.pdf">RIC 18: Proyectos</option>
+                <option value="RIC17.pdf">RIC 17: Operación y Mantenimiento</option>
+                <option value="RIC18.pdf">RIC 18: Presentación de Proyectos</option>
                 <option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
             </select>
             <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe>
@@ -188,13 +186,34 @@
     function calcDuctos() {
         let areaU = parseFloat(document.getElementById('cable').value);
         let n = parseInt(document.getElementById('cant').value);
-        let areaT = (areaU * n) + (document.getElementById('utp').checked ? 32 : 0);
-        let f = (n + (document.getElementById('utp').checked ? 1 : 0)) === 1 ? 0.53 : 0.40;
-        let ductos = [{n:"25mm", d:24.3}, {n:"32mm", d:32.5}, {n:"40mm", d:38.4}];
-        let html = `<div class="res" style="background:#fff3cd">Área: ${areaT.toFixed(1)} mm²</div>`;
+        let utp = document.getElementById('utp').checked;
+        let areaT = (areaU * n) + (utp ? 32 : 0);
+        let totalCond = n + (utp ? 1 : 0);
+        
+        let f = totalCond === 1 ? 0.53 : (totalCond === 2 ? 0.31 : 0.40);
+        let ductos = [
+            {n:"25mm (1\")", d:24.3}, 
+            {n:"32mm (1 1/4\")", d:32.5}, 
+            {n:"40mm (1 1/2\")", d:38.4},
+            {n:"50mm (2\")", d:50.1}
+        ];
+        
+        let html = `<div class="res" style="background:#fff3cd; color:#856404;">Área Total: ${areaT.toFixed(1)} mm²</div>`;
+        let yaRec = false;
+        
         ductos.forEach(t => {
-            let cap = ((Math.PI * Math.pow(t.d, 2)) / 4) * f;
-            html += `<div class="res ${cap>=areaT?'recomendado':'falla'}">${t.n}: ${cap>=areaT?'OK':'NO'}</div>`;
+            let areaDucto = (Math.PI * Math.pow(t.d, 2)) / 4;
+            let capUtil = areaDucto * f;
+            if (capUtil >= areaT) {
+                if (!yaRec) { 
+                    html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`; 
+                    yaRec = true; 
+                } else { 
+                    html += `<div class="res excesivo">${t.n}: EXCESIVO 🔵</div>`; 
+                }
+            } else { 
+                html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`; 
+            }
         });
         document.getElementById('outDucto').innerHTML = html;
     }
