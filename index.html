@@ -9,11 +9,9 @@
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: #333; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 850px; padding: 15px; display: none; }
         
-        /* LOGIN */
         #login-screen { max-width: 400px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; border-top: 6px solid var(--primary); }
         input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccd1d9; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
         
-        /* TABS */
         .tabs { display: flex; margin-bottom: 20px; gap: 5px; overflow-x: auto; }
         .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; background: #cbd5e1; font-weight: bold; white-space: nowrap; }
         .tab-btn.active { background: var(--primary); color: white; }
@@ -55,35 +53,32 @@
     <div id="calc" class="content active">
         <div class="card">
             <h2>📏 Caída de Tensión (RIC 04)</h2>
-            <label>Distancia del alimentador (m):</label> 
-            <input type="number" id="dist" value="10">
-            <label>Corriente de diseño (A):</label> 
-            <input type="number" id="amp" value="16">
-            <label>Sección del conductor (mm²):</label> 
-            <input type="number" id="sec" value="6">
-            <button class="main-btn" onclick="calcCaida()">CALCULAR PÉRDIDA</button>
+            <label>Distancia (m):</label> <input type="number" id="dist" value="10">
+            <label>Corriente (A):</label> <input type="number" id="amp" value="16">
+            <label>Sección (mm²):</label> <input type="number" id="sec" value="6">
+            <button class="main-btn" onclick="calcCaida()">CALCULAR</button>
             <div id="outCaida"></div>
         </div>
 
         <div class="card">
-            <h2>🕳️ Llenado de Ductos EMT (RIC 07)</h2>
-            <label>Tipo de Conductor (RVK):</label>
+            <h2>🕳️ Ductos EMT (RIC 07)</h2>
+            <label>Cable de Fuerza (RVK):</label>
             <select id="cable">
                 <option value="52.8">6mm² (Ø 8.2mm)</option>
                 <option value="81.7">10mm² (Ø 10.2mm)</option>
                 <option value="109.4">16mm² (Ø 11.8mm)</option>
-                <option value="176.7">25mm² (Ø 15.0mm)</option>
             </select>
-            <label>Cantidad de conductores:</label> 
+            <label>Cantidad de cables de fuerza:</label> 
             <input type="number" id="cant" value="1">
-            <button class="main-btn" style="background:var(--success)" onclick="calcDuctos()">ANALIZAR CANALIZACIÓN</button>
+            <label><input type="checkbox" id="utp"> <b>Incluir UTP Cat6 (+32mm²)</b></label>
+            <button class="main-btn" style="background:var(--success)" onclick="calcDuctos()">ANALIZAR DUCTO</button>
             <div id="outDucto"></div>
         </div>
     </div>
 
     <div id="esquema" class="content">
         <div class="card" style="text-align: center;">
-            <h2>Esquema de Control SGC (Gestión de Carga)</h2>
+            <h2>Conexión SGC - Cargador</h2>
             <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="35" cy="100" r="6" fill="#2ecc71"/><circle cx="75" cy="100" r="6" fill="#3498db"/>
                 <circle cx="115" cy="100" r="6" fill="#2ecc71"/><circle cx="155" cy="100" r="6" fill="#8b4513"/>
@@ -94,38 +89,34 @@
                 <path d="M 115 130 L 115 200 L 330 200 L 330 106" stroke="#2ecc71" fill="none" stroke-width="2"/>
                 <path d="M 75 106 L 75 230 L 370 230 L 370 106" stroke="#3498db" fill="none" stroke-width="2"/>
             </svg>
-            <div style="text-align: left; font-size: 14px; background: #f8f9fa; padding: 10px; border-radius: 5px;">
-                <b>Detalle de Conexión Técnico:</b><br>
-                🟢 <b>Punte Verde:</b> Conexión entre Pin 3 y Pin 5.<br>
-                🔵 <b>Línea Azul:</b> Conexión a Pin 4.<br>
-                🟤 <b>Línea Café:</b> Conexión a Pin 6.
-            </div>
+            <p style="font-size: 13px;">Puente Verde (3-5) | Azul (4) | Café (6)</p>
         </div>
     </div>
 
     <div id="normativa" class="content">
         <div class="card">
-            <h2>📚 Biblioteca Pliegos RIC (Completos 01-19)</h2>
-            <select id="pdfSelector" onchange="loadPDF(this.value)">
-                <option value="">-- Seleccionar Pliego Técnico --</option>
+            <h2>📚 Biblioteca Pliegos RIC Completos</h2>
+            <select onchange="loadPDF(this.value)">
+                <option value="">-- Seleccionar Pliego --</option>
                 <option value="RIC01.pdf">RIC 01: Empalmes</option>
-                <option value="RIC02.pdf">RIC 02: Tableros Eléctricos</option>
-                <option value="RIC03.pdf">RIC 03: Alimentadores y Subalimentadores</option>
-                <option value="RIC04.pdf">RIC 04: Conductores y Canalizaciones</option>
-                <option value="RIC05.pdf">RIC 05: Medidas de Protección</option>
+                <option value="RIC02.pdf">RIC 02: Tableros</option>
+                <option value="RIC03.pdf">RIC 03: Alimentadores</option>
+                <option value="RIC04.pdf">RIC 04: Canalizaciones</option>
+                <option value="RIC05.pdf">RIC 05: Protecciones</option>
                 <option value="RIC06.pdf">RIC 06: Puesta a Tierra</option>
-                <option value="RIC07.pdf">RIC 07: Instalaciones de Uso General</option>
+                <option value="RIC07.pdf">RIC 07: Uso General</option>
                 <option value="RIC08.pdf">RIC 08: Sistemas de Emergencia</option>
-                <option value="RIC09.pdf">RIC 09: Sistemas de Autogeneración</option>
+                <option value="RIC09.pdf">RIC 09: Autogeneración</option>
                 <option value="RIC10.pdf">RIC 10: Áreas Peligrosas</option>
                 <option value="RIC11.pdf">RIC 11: Reunión de Personas</option>
                 <option value="RIC12.pdf">RIC 12: Instalaciones Deportivas</option>
-                <option value="RIC13.pdf">RIC 13: Recintos de Espectáculos</option>
+                <option value="RIC13.pdf">RIC 13: Espectáculos</option>
                 <option value="RIC14.pdf">RIC 14: Servicentros</option>
-                <option value="RIC15.pdf">RIC 15: Carga Vehículos Eléctricos</option>
+                <option value="RIC15.pdf">RIC 15: Carga VE</option>
+                <option value="RIC15.1.pdf">RIC 15.1: Especificaciones IRVE</option>
                 <option value="RIC16.pdf">RIC 16: Generación Local</option>
-                <option value="RIC17.pdf">RIC 17: Operación y Mantenimiento</option>
-                <option value="RIC18.pdf">RIC 18: Presentación de Proyectos</option>
+                <option value="RIC17.pdf">RIC 17: Mantenimiento</option>
+                <option value="RIC18.pdf">RIC 18: Proyectos</option>
                 <option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
             </select>
             <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe>
@@ -134,7 +125,6 @@
 </div>
 
 <script>
-    // BASE DE DATOS DE USUARIOS
     const USERS = [
         { id: "Padilla", pass: "1648", name: "Padilla" },
         { id: "Isaias", pass: "2071", name: "Isaias" },
@@ -164,7 +154,7 @@
         }
         const script = document.createElement("script");
         script.src = "https://www.chatbase.co/embed.min.js";
-        script.id = "HZBhzPxQtpDaw6ZlcBzEA"; // Tu ID de IA
+        script.id = "HZBhzPxQtpDaw6ZlcBzEA";
         script.domain = "www.chatbase.co";
         document.body.appendChild(script);
     }
@@ -179,62 +169,37 @@
 
     function loadPDF(f) { if(f) document.getElementById('pdfFrame').src = f; }
 
-    // LÓGICA DE CÁLCULO CAÍDA DE TENSIÓN
     function calcCaida() {
-        const L = parseFloat(document.getElementById('dist').value);
-        const I = parseFloat(document.getElementById('amp').value);
-        const S = parseFloat(document.getElementById('sec').value);
-        const rho = 0.018; // Resistividad cobre
-        
-        let dv = (2 * L * I * rho) / S;
+        let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / parseFloat(document.getElementById('sec').value);
         let p = (dv / 220) * 100;
-
-        let resClass = p <= 3 ? 'recomendado' : 'falla';
-        let msg = p <= 3 ? 'DENTRO DE NORMA ✅' : 'EXCEDE EL 3% (RIC 04) ❌';
-
-        document.getElementById('outCaida').innerHTML = `
-            <div class="res ${resClass}">
-                Voltaje Perdido: ${dv.toFixed(2)} V<br>
-                Porcentaje: ${p.toFixed(2)}%<br>
-                Resultado: ${msg}
-            </div>`;
+        document.getElementById('outCaida').innerHTML = `<div class="res ${p<=3?'recomendado':'falla'}">Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%)</div>`;
     }
 
-    // LÓGICA DE CÁLCULO DUCTOS
     function calcDuctos() {
-        let areaUnitaria = parseFloat(document.getElementById('cable').value);
+        let areaU = parseFloat(document.getElementById('cable').value);
         let n = parseInt(document.getElementById('cant').value);
-        let areaTotalCables = areaUnitaria * n;
+        let utp = document.getElementById('utp').checked;
+        let areaT = (areaU * n) + (utp ? 32 : 0);
+        let condTotal = n + (utp ? 1 : 0);
         
-        // Factor de llenado según cantidad de cables (RIC 07)
-        let f = n === 1 ? 0.53 : (n === 2 ? 0.31 : 0.40);
-        
-        // Ductos estándar EMT (Diámetro interno mm)
+        let f = condTotal === 1 ? 0.53 : (condTotal === 2 ? 0.31 : 0.40);
         let ductos = [
-            {n:"EMT 20mm (3/4\")", d:18.5},
-            {n:"EMT 25mm (1\")", d:24.3},
-            {n:"EMT 32mm (1 1/4\")", d:32.5},
-            {n:"EMT 40mm (1 1/2\")", d:38.4},
-            {n:"EMT 50mm (2\")", d:50.1}
+            {n:"25mm (1\")", d:24.3}, 
+            {n:"32mm (1 1/4\")", d:32.5}, 
+            {n:"40mm (1 1/2\")", d:38.4}, 
+            {n:"50mm (2\")", d:50.1}
         ];
-
-        let html = `<div class="res" style="background:#fff3cd">Área de cables: ${areaTotalCables.toFixed(1)} mm²</div>`;
+        
+        let html = `<div class="res" style="background:#fff3cd">Área Requerida: ${areaT.toFixed(1)} mm²</div>`;
         let yaRec = false;
-
+        
         ductos.forEach(t => {
             let areaDucto = (Math.PI * Math.pow(t.d, 2)) / 4;
-            let capacidadUtil = areaDucto * f;
-
-            if (capacidadUtil >= areaTotalCables) {
-                if (!yaRec) {
-                    html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`;
-                    yaRec = true;
-                } else {
-                    html += `<div class="res excesivo">${t.n}: DISPONIBLE 🔵</div>`;
-                }
-            } else {
-                html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`;
-            }
+            let capUtil = areaDucto * f;
+            if (capUtil >= areaT) {
+                if (!yaRec) { html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`; yaRec = true; }
+                else { html += `<div class="res excesivo">${t.n}: DISPONIBLE 🔵</div>`; }
+            } else { html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`; }
         });
         document.getElementById('outDucto').innerHTML = html;
     }
