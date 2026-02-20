@@ -26,7 +26,6 @@
         .res { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: bold; border-left: 6px solid; }
         .recomendado { background: #d4edda; color: #155724; border-color: var(--success); }
         .falla { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
-        .excesivo { background: #e7f3ff; color: #004085; border-color: var(--primary); }
         .pdf-viewer { width: 100%; height: 70vh; border: 1px solid #ccc; border-radius: 8px; }
         .user-welcome { font-size: 14px; color: var(--primary); font-weight: bold; margin-bottom: 15px; text-align: center; }
     </style>
@@ -38,7 +37,6 @@
     <input type="text" id="userInput" placeholder="Nombre de Usuario">
     <input type="password" id="passInput" placeholder="Contraseña">
     <button class="main-btn" onclick="checkLogin()">ENTRAR AL SISTEMA</button>
-    <p id="login-error" style="color:red; display:none; margin-top:10px;">⚠️ Usuario o clave incorrecta</p>
 </div>
 
 <div id="app-content" class="container">
@@ -68,8 +66,7 @@
                 <option value="81.7">10mm² (Ø 10.2mm)</option>
                 <option value="109.4">16mm² (Ø 11.8mm)</option>
             </select>
-            <label>Cantidad de cables de fuerza:</label> 
-            <input type="number" id="cant" value="1">
+            <label>Cantidad:</label> <input type="number" id="cant" value="1">
             <label><input type="checkbox" id="utp"> <b>Incluir UTP Cat6 (+32mm²)</b></label>
             <button class="main-btn" style="background:var(--success)" onclick="calcDuctos()">ANALIZAR DUCTO</button>
             <div id="outDucto"></div>
@@ -78,24 +75,40 @@
 
     <div id="esquema" class="content">
         <div class="card" style="text-align: center;">
-            <h2>Conexión SGC - Cargador</h2>
-            <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="35" cy="100" r="6" fill="#2ecc71"/><circle cx="75" cy="100" r="6" fill="#3498db"/>
-                <circle cx="115" cy="100" r="6" fill="#2ecc71"/><circle cx="155" cy="100" r="6" fill="#8b4513"/>
-                <circle cx="250" cy="100" r="6" fill="#bdc3c7"/><circle cx="290" cy="100" r="6" fill="#8b4513"/>
-                <circle cx="330" cy="100" r="6" fill="#2ecc71"/><circle cx="370" cy="100" r="6" fill="#3498db"/>
-                <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/>
-                <path d="M 155 106 L 155 160 L 290 160 L 290 106" stroke="#8b4513" fill="none" stroke-width="2"/>
-                <path d="M 115 130 L 115 200 L 330 200 L 330 106" stroke="#2ecc71" fill="none" stroke-width="2"/>
-                <path d="M 75 106 L 75 230 L 370 230 L 370 106" stroke="#3498db" fill="none" stroke-width="2"/>
-            </svg>
-            <p style="font-size: 13px;">Puente Verde (3-5) | Azul (4) | Café (6)</p>
+            <h2>Esquema de Conexión SGC</h2>
+            <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" style="background: #fff; border-radius: 8px;">
+                <text x="95" y="30" font-family="Arial" font-size="16" font-weight="bold" fill="#2c3e50" text-anchor="middle">CARGADOR</text>
+                <text x="310" y="30" font-family="Arial" font-size="16" font-weight="bold" fill="#2c3e50" text-anchor="middle">SGC</text>
+                
+                <text x="35" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">3</text>
+                <text x="75" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">4</text>
+                <text x="115" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">5</text>
+                <text x="155" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">6</text>
+                
+                <text x="250" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">--</text>
+                <text x="290" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">4</text>
+                <text x="330" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">3</text>
+                <text x="370" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">4</text>
+
+                <circle cx="35" cy="100" r="7" fill="#2ecc71"/><circle cx="75" cy="100" r="7" fill="#3498db"/>
+                <circle cx="115" cy="100" r="7" fill="#2ecc71"/><circle cx="155" cy="100" r="7" fill="#8b4513"/>
+                <circle cx="250" cy="100" r="7" fill="#bdc3c7"/><circle cx="290" cy="100" r="7" fill="#8b4513"/>
+                <circle cx="330" cy="100" r="7" fill="#2ecc71"/><circle cx="370" cy="100" r="7" fill="#3498db"/>
+                
+                <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/> <path d="M 155 107 L 155 160 L 290 160 L 290 107" stroke="#8b4513" fill="none" stroke-width="2"/> <path d="M 115 130 L 115 200 L 330 200 L 330 107" stroke="#2ecc71" fill="none" stroke-width="2"/> <path d="M 75 107 L 75 235 L 370 235 L 370 107" stroke="#3498db" fill="none" stroke-width="2"/> </svg>
+            <div style="text-align: left; font-size: 14px; background: #f8f9fa; padding: 12px; border-radius: 8px; border-left: 5px solid var(--primary); margin-top: 10px;">
+                <b>Instrucciones de Cableado:</b><br>
+                1. 🟢 <b>Cargador:</b> Realizar puente físico entre <b>Pin 3 y Pin 5</b>.<br>
+                2. 🟤 <b>Café:</b> Del <b>Pin 6</b> (Cargador) al <b>Pin 4</b> (SGC).<br>
+                3. 🟢 <b>Verde:</b> Del <b>Pin 5</b> (Cargador) al <b>Pin 3</b> (SGC).<br>
+                4. 🔵 <b>Azul:</b> Del <b>Pin 4</b> (Cargador) al <b>Pin 4</b> (SGC).
+            </div>
         </div>
     </div>
 
     <div id="normativa" class="content">
         <div class="card">
-            <h2>📚 Biblioteca Pliegos RIC Completos</h2>
+            <h2>📚 Biblioteca Pliegos RIC (01-19)</h2>
             <select onchange="loadPDF(this.value)">
                 <option value="">-- Seleccionar Pliego --</option>
                 <option value="RIC01.pdf">RIC 01: Empalmes</option>
@@ -136,27 +149,24 @@
         const uVal = document.getElementById('userInput').value;
         const pVal = document.getElementById('passInput').value;
         const user = USERS.find(u => u.id === uVal && u.pass === pVal);
-
         if(user) {
             document.getElementById('login-screen').style.display='none';
             document.getElementById('app-content').style.display='block';
-            document.getElementById('welcome-msg').innerText = "⚡ Profesional conectado: " + user.name;
+            document.getElementById('welcome-msg').innerText = "⚡ Profesional: " + user.name;
             iniciarIA();
-        } else {
-            document.getElementById('login-error').style.display='block';
         }
     }
 
     function iniciarIA() {
-        if(!window.chatbase || window.chatbase("getState")!=="initialized"){
+        if(!window.chatbase){
             window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};
             window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}});
         }
-        const script = document.createElement("script");
-        script.src = "https://www.chatbase.co/embed.min.js";
-        script.id = "HZBhzPxQtpDaw6ZlcBzEA";
-        script.domain = "www.chatbase.co";
-        document.body.appendChild(script);
+        const s = document.createElement("script");
+        s.src = "https://www.chatbase.co/embed.min.js";
+        s.id = "HZBhzPxQtpDaw6ZlcBzEA";
+        s.domain = "www.chatbase.co";
+        document.body.appendChild(s);
     }
 
     function openTab(evt, tabName) {
@@ -178,31 +188,17 @@
     function calcDuctos() {
         let areaU = parseFloat(document.getElementById('cable').value);
         let n = parseInt(document.getElementById('cant').value);
-        let utp = document.getElementById('utp').checked;
-        let areaT = (areaU * n) + (utp ? 32 : 0);
-        let condTotal = n + (utp ? 1 : 0);
-        
-        let f = condTotal === 1 ? 0.53 : (condTotal === 2 ? 0.31 : 0.40);
-        let ductos = [
-            {n:"25mm (1\")", d:24.3}, 
-            {n:"32mm (1 1/4\")", d:32.5}, 
-            {n:"40mm (1 1/2\")", d:38.4}, 
-            {n:"50mm (2\")", d:50.1}
-        ];
-        
-        let html = `<div class="res" style="background:#fff3cd">Área Requerida: ${areaT.toFixed(1)} mm²</div>`;
-        let yaRec = false;
-        
+        let areaT = (areaU * n) + (document.getElementById('utp').checked ? 32 : 0);
+        let f = (n + (document.getElementById('utp').checked ? 1 : 0)) === 1 ? 0.53 : 0.40;
+        let ductos = [{n:"25mm", d:24.3}, {n:"32mm", d:32.5}, {n:"40mm", d:38.4}];
+        let html = `<div class="res" style="background:#fff3cd">Área: ${areaT.toFixed(1)} mm²</div>`;
         ductos.forEach(t => {
-            let areaDucto = (Math.PI * Math.pow(t.d, 2)) / 4;
-            let capUtil = areaDucto * f;
-            if (capUtil >= areaT) {
-                if (!yaRec) { html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`; yaRec = true; }
-                else { html += `<div class="res excesivo">${t.n}: DISPONIBLE 🔵</div>`; }
-            } else { html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`; }
+            let cap = ((Math.PI * Math.pow(t.d, 2)) / 4) * f;
+            html += `<div class="res ${cap>=areaT?'recomendado':'falla'}">${t.n}: ${cap>=areaT?'OK':'NO'}</div>`;
         });
         document.getElementById('outDucto').innerHTML = html;
     }
 </script>
 </body>
 </html>
+
