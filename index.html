@@ -3,162 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema RIC Pro - Brayan Barraza</title>
+    <title>ElectriCalc Pro - Brayan Barraza</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { 
-            --primary: #2563eb; --dark: #0f172a; --bg: #f8fafc; 
-            --accent: #3b82f6; --white: #ffffff; 
-        }
-        
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; color: var(--dark); overflow-x: hidden; }
+        :root { --primary: #3498db; --dark: #1a252f; --bg: #f1f5f9; --white: #ffffff; --success: #27ae60; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
 
-        /* --- LOGIN --- */
-        #login-wrapper { 
-            height: 100vh; display: flex; align-items: center; justify-content: center; 
-            background: linear-gradient(135deg, var(--dark) 0%, #1e293b 100%); 
-            position: fixed; width: 100%; z-index: 2000; 
-        }
-        .login-card { 
-            background: var(--white); padding: 40px; border-radius: 24px; 
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); text-align: center; width: 85%; max-width: 350px; 
-        }
-        .login-card i { font-size: 45px; color: var(--primary); margin-bottom: 15px; }
-        .login-card input { 
-            width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #e2e8f0; 
-            border-radius: 10px; box-sizing: border-box; font-size: 16px;
-        }
+        /* LOGIN */
+        #login-wrapper { height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--dark); position: fixed; width: 100%; z-index: 2000; }
+        .login-card { background: var(--white); padding: 40px; border-radius: 20px; text-align: center; width: 320px; }
+        .login-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; }
 
-        /* --- NAVBAR --- */
-        .navbar { 
-            background: var(--dark); color: white; padding: 1rem; 
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
+        /* NAVBAR */
+        .navbar { background: var(--dark); color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
 
-        /* --- CONTENEDOR --- */
-        .main-content { padding: 20px; max-width: 900px; margin: 0 auto; display: none; }
-        .card { 
-            background: white; padding: 20px; border-radius: 16px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; 
-        }
+        /* CONTENEDOR Y TABS */
+        .main-container { max-width: 950px; margin: 15px auto; padding: 0 15px; display: none; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn { padding: 10px 18px; border: none; border-radius: 50px; background: #cbd5e1; cursor: pointer; font-weight: bold; white-space: nowrap; font-size: 13px; }
+        .tab-btn.active { background: var(--primary); color: white; }
 
-        /* --- BURBUJA DE IA --- */
-        #chat-bubble {
-            position: fixed; bottom: 25px; right: 25px;
-            width: 60px; height: 60px; background: var(--primary);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 24px; cursor: pointer; z-index: 1500;
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        #chat-bubble:hover { transform: scale(1.1); }
-        
-        #chat-window {
-            position: fixed; bottom: 95px; right: 25px;
-            width: 380px; height: 550px; max-width: 90vw; max-height: 70vh;
-            background: white; border-radius: 20px; display: none;
-            flex-direction: column; overflow: hidden; z-index: 1500;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;
-        }
-        #chat-window.active { display: flex; animation: slideUp 0.3s ease; }
+        /* TARJETAS */
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: none; margin-bottom: 20px; border: 1px solid #e2e8f0; }
+        .card.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* IFRAMES */
+        .ia-frame { width: 100%; height: 70vh; border: none; border-radius: 12px; }
 
-        .chat-header { 
-            background: var(--dark); color: white; padding: 15px; 
-            display: flex; justify-content: space-between; align-items: center; 
-        }
+        /* CALCULADORA */
+        .btn-calc { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .res-box { margin-top: 15px; padding: 15px; border-radius: 12px; background: #f0fdf4; border-left: 5px solid var(--success); display: none; }
 
-        /* --- UTILIDADES --- */
-        .btn { 
-            background: var(--primary); color: white; border: none; padding: 12px; 
-            width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; 
-        }
-        iframe { width: 100%; border: none; border-radius: 12px; }
+        /* BURBUJA FLOTANTE */
+        #chat-bubble { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000; }
+        #chat-window { position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; max-width: 90vw; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; z-index: 1000; border: 1px solid #ddd; }
+        #chat-window.active { display: flex; }
     </style>
 </head>
 <body>
 
-    <div id="login-wrapper">
-        <div class="login-card">
-            <i class="fas fa-bolt"></i>
-            <h2 style="margin:0">Sistema RIC Pro</h2>
-            <p style="color:#64748b; font-size:14px; margin-bottom:20px">Acceso Instaladores Autorizados</p>
-            <input type="text" id="u" placeholder="Usuario">
-            <input type="password" id="p" placeholder="Contraseña">
-            <button class="btn" onclick="login()">ENTRAR</button>
-            <p id="err" style="color:#ef4444; display:none; margin-top:10px; font-weight:bold">Credenciales incorrectas</p>
-        </div>
+<div id="login-wrapper">
+    <div class="login-card">
+        <i class="fas fa-bolt" style="font-size: 40px; color: var(--primary);"></i>
+        <h2>Sistema RIC Pro</h2>
+        <input type="text" id="u" placeholder="Usuario">
+        <input type="password" id="p" placeholder="Contraseña">
+        <button class="btn-calc" onclick="login()">ENTRAR</button>
     </div>
+</div>
 
-    <div id="app-content">
-        <nav class="navbar">
-            <div style="font-weight:bold"><i class="fas fa-shield-bolt"></i> Brayan Barraza</div>
-            <div id="user-tag" style="font-size:14px; opacity:0.9"></div>
-        </nav>
+<div id="app" style="display:none;">
+    <nav class="navbar">
+        <div style="font-weight:bold;"><i class="fas fa-shield-bolt"></i> B. Barraza</div>
+        <div id="user-display" style="font-size: 14px;"></div>
+    </nav>
 
-        <div class="main-content" id="main-ui">
-            <div class="card">
-                <h3><i class="fas fa-folder-open"></i> Biblioteca de Pliegos</h3>
-                <p style="font-size:14px; color:#64748b">Selecciona un pliego para visualizarlo:</p>
-                <select onchange="cambiarPDF(this.value)" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px">
-                    <option value="RIC02.pdf">Pliego RIC 02 - Tableros Eléctricos</option>
-                    <option value="RIC10.pdf">Pliego RIC 10 - Puesta a Tierra</option>
-                    <option value="RIC15.pdf">Pliego RIC 15 - Infraestructura de Carga VE</option>
-                    <option value="RIC19.pdf">Pliego RIC 19 - Puesta en Servicio</option>
+    <div class="main-container" style="display:block;">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab(event, 'ia-fija')"><i class="fas fa-brain"></i> IA COMPLETA</button>
+            <button class="tab-btn" onclick="showTab(event, 'calc')"><i class="fas fa-calculator"></i> CÁLCULOS</button>
+            <button class="tab-btn" onclick="showTab(event, 'esquema')"><i class="fas fa-project-diagram"></i> ESQUEMAS</button>
+            <button class="tab-btn" onclick="showTab(event, 'pdf')"><i class="fas fa-file-pdf"></i> PLIEGOS</button>
+        </div>
+
+        <div id="ia-fija" class="card active">
+            <h3 style="margin-top:0">Asistente Qwen 2.5 (Modo Detallado)</h3>
+            <iframe src="https://brayaton-asistente-ric-pro.hf.space" class="ia-frame"></iframe>
+        </div>
+
+        <div id="calc" class="card">
+            <h3>Cálculo de Ductos</h3>
+            <div style="margin-bottom:15px">
+                <label style="display:block; margin-bottom:5px">Cable RVK:</label>
+                <select id="cable" style="width:100%; padding:10px; border-radius:8px">
+                    <option value="52.8">2.5 mm²</option>
+                    <option value="81.7">6 mm²</option>
+                    <option value="113.1">10 mm²</option>
                 </select>
-                <iframe id="visor-pdf" src="RIC15.pdf" style="height: 500px;"></iframe>
             </div>
-
-            <div class="card">
-                <h3><i class="fas fa-info-circle"></i> Instrucciones</h3>
-                <p style="font-size:14px">Usa la burbuja azul en la esquina inferior para hablar con la **IA Experta en RIC**. Resuelve dudas de cálculos y normativas en segundos.</p>
+            <div style="margin-bottom:15px">
+                <label style="display:block; margin-bottom:5px">Cantidad:</label>
+                <input type="number" id="cant" value="3" style="width:100%; padding:10px; border-radius:8px">
+            </div>
+            <button class="btn-calc" onclick="calcular()">CALCULAR</button>
+            <div id="resultado" class="res-box">
+                Ducto sugerido: <strong id="ducto"></strong>
             </div>
         </div>
-    </div>
 
-    <div id="chat-bubble" onclick="toggleChat()">
-        <i class="fas fa-robot"></i>
-    </div>
-
-    <div id="chat-window">
-        <div class="chat-header">
-            <span><i class="fas fa-brain"></i> Qwen 2.5 RIC</span>
-            <i class="fas fa-times" onclick="toggleChat()" style="cursor:pointer"></i>
+        <div id="esquema" class="card">
+            <h3>Esquemas de Conexión</h3>
+            
+            <p style="font-size:12px; color:#666">Referencia técnica para instalaciones VE.</p>
         </div>
-        <iframe src="https://brayaton-asistente-ric-pro.hf.space" style="height:100%"></iframe>
+
+        <div id="pdf" class="card">
+            <h3>Visor de Normativa</h3>
+            <select onchange="document.getElementById('visor').src=this.value" style="width:100%; padding:10px; border-radius:8px; margin-bottom:10px">
+                <option value="RIC15.pdf">RIC 15 - Carga VE</option>
+                <option value="RIC02.pdf">RIC 02 - Tableros</option>
+            </select>
+            <iframe id="visor" src="RIC15.pdf" style="width:100%; height:60vh; border:none"></iframe>
+        </div>
     </div>
+</div>
 
-    <script>
-        // Credenciales de tu equipo
-        const USERS = [
-            {id: "Padilla", pass: "1648", n: "Padilla"},
-            {id: "Isaias", pass: "2071", n: "Isaias"},
-            {id: "Brayan", pass: "2025", n: "B. Barraza"}
-        ];
+<div id="chat-bubble" onclick="toggleChat()">
+    <i class="fas fa-comment-dots"></i>
+</div>
 
-        function login() {
-            const userIn = document.getElementById('u').value;
-            const passIn = document.getElementById('p').value;
-            const user = USERS.find(x => x.id === userIn && x.pass === passIn);
+<div id="chat-window">
+    <div style="background:var(--dark); color:white; padding:12px; display:flex; justify-content:space-between; align-items:center">
+        <span style="font-size:14px; font-weight:bold">Asistente Rápido RIC</span>
+        <i class="fas fa-times" onclick="toggleChat()" style="cursor:pointer"></i>
+    </div>
+    <iframe src="https://brayaton-asistente-ric-pro.hf.space" style="width:100%; height:100%; border:none"></iframe>
+</div>
 
-            if(user) {
-                document.getElementById('login-wrapper').style.display = 'none';
-                document.getElementById('main-ui').style.display = 'block';
-                document.getElementById('user-tag').innerText = "👷 " + user.n;
-            } else {
-                document.getElementById('err').style.display = 'block';
-            }
+<script>
+    function login() {
+        const u = document.getElementById('u').value;
+        const p = document.getElementById('p').value;
+        if((u==="Padilla" && p==="1648") || (u==="Isaias" && p==="2071") || (u==="Brayan" && p==="2025")) {
+            document.getElementById('login-wrapper').style.display='none';
+            document.getElementById('app').style.display='block';
+            document.getElementById('user-display').innerText = "👷 " + u;
         }
+    }
 
-        function toggleChat() {
-            document.getElementById('chat-window').classList.toggle('active');
-        }
+    function showTab(e, id) {
+        let cards = document.getElementsByClassName("card"), btns = document.getElementsByClassName("tab-btn");
+        for(let c of cards) c.classList.remove("active");
+        for(let b of btns) b.classList.remove("active");
+        document.getElementById(id).classList.add("active");
+        e.currentTarget.classList.add("active");
+    }
 
-        function cambiarPDF(val) {
-            if(val) document.getElementById('visor-pdf').src = val;
-        }
-    </script>
+    function toggleChat() {
+        document.getElementById('chat-window').classList.toggle('active');
+    }
+
+    function calcular() {
+        const total = parseFloat(document.getElementById('cable').value) * parseInt(document.getElementById('cant').value);
+        let d = total > 110 ? "Conduit 25mm" : "Conduit 20mm";
+        document.getElementById('ducto').innerText = d;
+        document.getElementById('resultado').style.display = 'block';
+    }
+</script>
 </body>
 </html>
