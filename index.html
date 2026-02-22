@@ -49,9 +49,6 @@
         .res-warn { background: #eff6ff; color: #1e40af; border-color: var(--primary); }
         
         /* NODOS ECUACIONES */
-        .nodo-box { background: #f1f5f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); }
-        .nodo-title { font-weight: bold; margin-bottom: 10px; color: #1e293b; text-transform: uppercase; font-size: 0.85rem; }
-        .grid-nodos { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
         .ecuacion-box { display: none; margin-top: 15px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #334155; line-height: 1.5; }
         .math-res { color: var(--danger); font-weight: bold; }
 
@@ -121,40 +118,10 @@
 
         <div id="nodos" class="card">
             <h2>Cálculo de Impedancia y Cortocircuito</h2>
-            <div class="nodo-box" style="border-color: #f59e0b;">
-                <div class="nodo-title">a) Nodo 1 (Empalme)</div>
-                <div class="grid-nodos">
-                    <div><label>Icc n.1 (kA):</label><input type="number" id="icc1" value="6.00" step="0.01"></div>
-                    <div><label>Zcc n.1 (mΩ):</label><input type="number" id="zcc1" value="36.67" step="0.01"></div>
-                </div>
-            </div>
-            <div class="nodo-box">
-                <div class="nodo-title">b) Nodo 2 (TDF Voltex)</div>
-                <div class="grid-nodos">
-                    <div><label>L AL-01 (m):</label><input type="number" id="L2" value="2"></div>
-                    <div><label>Sección (mm²):</label><input type="number" id="S2" value="6"></div>
-                </div>
-                <button class="btn-calc" onclick="calcNodoInteractivo(2)">CALCULAR Y VER ECUACIÓN</button>
-                <div id="ecu-2" class="ecuacion-box"></div>
-            </div>
-            <div class="nodo-box">
-                <div class="nodo-title">c) Nodo 3 (SAVE.01)</div>
-                <div class="grid-nodos">
-                    <div><label>L CR-01 (m):</label><input type="number" id="L3" value="12"></div>
-                    <div><label>Sección (mm²):</label><input type="number" id="S3" value="6"></div>
-                </div>
-                <button class="btn-calc" onclick="calcNodoInteractivo(3)">CALCULAR Y VER ECUACIÓN</button>
-                <div id="ecu-3" class="ecuacion-box"></div>
-            </div>
-            <div class="nodo-box">
-                <div class="nodo-title">d) Nodo 4 (TDA Hogar)</div>
-                <div class="grid-nodos">
-                    <div><label>L Sub-alim (m):</label><input type="number" id="L4" value="2"></div>
-                    <div><label>Sección (mm²):</label><input type="number" id="S4" value="6"></div>
-                </div>
-                <button class="btn-calc" onclick="calcNodoInteractivo(4)">CALCULAR Y VER ECUACIÓN</button>
-                <div id="ecu-4" class="ecuacion-box"></div>
-            </div>
+            <div class="nodo-box" style="border-color: #f59e0b;"><div class="nodo-title">a) Nodo 1 (Empalme)</div><div class="grid-nodos"><div><label>Icc n.1 (kA):</label><input type="number" id="icc1" value="6.00" step="0.01"></div><div><label>Zcc n.1 (mΩ):</label><input type="number" id="zcc1" value="36.67" step="0.01"></div></div></div>
+            <div class="nodo-box"><div class="nodo-title">b) Nodo 2 (TDF Voltex)</div><div class="grid-nodos"><div><label>L AL-01 (m):</label><input type="number" id="L2" value="2"></div><div><label>Sección (mm²):</label><input type="number" id="S2" value="6"></div></div><button class="btn-calc" onclick="calcNodoInteractivo(2)">CALCULAR Y VER ECUACIÓN</button><div id="ecu-2" class="ecuacion-box"></div></div>
+            <div class="nodo-box"><div class="nodo-title">c) Nodo 3 (SAVE.01)</div><div class="grid-nodos"><div><label>L CR-01 (m):</label><input type="number" id="L3" value="12"></div><div><label>Sección (mm²):</label><input type="number" id="S3" value="6"></div></div><button class="btn-calc" onclick="calcNodoInteractivo(3)">CALCULAR Y VER ECUACIÓN</button><div id="ecu-3" class="ecuacion-box"></div></div>
+            <div class="nodo-box"><div class="nodo-title">d) Nodo 4 (TDA Hogar)</div><div class="grid-nodos"><div><label>L Sub-alim (m):</label><input type="number" id="L4" value="2"></div><div><label>Sección (mm²):</label><input type="number" id="S4" value="6"></div></div><button class="btn-calc" onclick="calcNodoInteractivo(4)">CALCULAR Y VER ECUACIÓN</button><div id="ecu-4" class="ecuacion-box"></div></div>
         </div>
 
         <div id="tuberia" class="card">
@@ -162,8 +129,7 @@
             <div class="form-group"><label>Cable RVK:</label><select id="cable-tipo"><option value="52.8">6mm² (8.2mm Ø)</option><option value="81.7">10mm² (10.2mm Ø)</option><option value="109.4">16mm² (11.8mm Ø)</option></select></div>
             <div class="form-group"><label>Cantidad de cables:</label><input type="number" id="cable-cant" value="1"></div>
             <div class="form-group"><label><input type="checkbox" id="utp-check"> Incluir Cable UTP Cat6 (+32mm²)</label></div>
-            <button class="btn-calc" style="background:var(--success)" onclick="calcDucto()">Analizar Tubería</button>
-            <div id="res-ducto"></div>
+            <button class="btn-calc" style="background:var(--success)" onclick="calcDucto()">Analizar Tubería</button><div id="res-ducto"></div>
         </div>
 
         <div id="sgc" class="card" style="text-align:center;">
@@ -195,12 +161,12 @@
                 <input type="text" id="new-item-name" placeholder="Nombre Material"><input type="number" id="new-item-qty" placeholder="Cant."><button onclick="addMaterial()" class="btn-calc" style="padding:0;">+</button>
             </div>
             <table class="inv-table">
-                <thead><tr><th>Material</th><th>Stock Bodega</th><th>Cant. a Usar</th><th>Acción</th></tr></thead>
+                <thead><tr><th>Material</th><th>Bodega</th><th>Usar</th><th>Acción</th></tr></thead>
                 <tbody id="inv-body"></tbody>
             </table>
             <div class="install-list">
-                <h3>Plantilla de Salida</h3>
-                <input type="text" id="install-proj" placeholder="Nombre Proyecto" style="margin-bottom:10px; width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+                <h3>Plantilla de Salida (Instalación)</h3>
+                <input type="text" id="install-proj" placeholder="Nombre Proyecto" style="margin-bottom:10px; width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:1rem;">
                 <div id="bag-items"></div><hr>
                 <button class="btn-calc btn-success" style="background:var(--success);" onclick="generateFile()">Generar Archivo y Descontar Stock</button>
             </div>
@@ -237,12 +203,11 @@
         evt.currentTarget.classList.add("active");
     }
 
-    /* NODOS CON ECUACIONES COMPLETAS */
+    /* NODOS ECUACIONES */
     function calcNodoInteractivo(nodo) {
         const rho = 0.0185, V = 220, zcc1 = parseFloat(document.getElementById('zcc1').value);
         const calcZ = (L, S) => ((rho / S) * L * 2) * 1000;
         let resHTML = "", z_acum = 0, z_cable = 0, icc = 0, label_cable = "";
-
         if (nodo === 2) {
             z_cable = calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
             z_acum = zcc1 + z_cable; icc = V / (z_acum / 1000) / 1000; label_cable = "AL-01";
@@ -286,7 +251,7 @@
         document.getElementById('res-ducto').innerHTML = html;
     }
 
-    /* INVENTARIO */
+    /* INVENTARIO LOGICA */
     function addMaterial() {
         const n = document.getElementById('new-item-name').value, q = parseInt(document.getElementById('new-item-qty').value);
         if(n && !isNaN(q)) { inventory.push({ name: n, stock: q }); document.getElementById('new-item-name').value = ""; document.getElementById('new-item-qty').value = ""; renderInv(); }
@@ -300,7 +265,6 @@
     }
     function updateStock(idx, val) { inventory[idx].stock = parseInt(val); localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory)); }
     function delMat(idx) { if(confirm("¿Eliminar?")) { inventory.splice(idx, 1); renderInv(); } }
-    
     function addToBag(idx) {
         const useQty = parseInt(document.getElementById(`use-qty-${idx}`).value);
         if(isNaN(useQty) || useQty <= 0) return;
@@ -322,17 +286,15 @@
             inventory[item.originalIdx].stock -= item.qty;
         });
 
-        // CORRECCIÓN PARA DESCARGA DIRECTA
-        const element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(txt));
-        element.setAttribute('download', `${proj}_Materiales.txt`);
-        element.style.display = 'none';
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
+        const link = document.createElement('a');
+        const file = new Blob([txt], {type: 'text/plain'});
+        link.href = URL.createObjectURL(file);
+        link.download = `${proj}_Materiales.txt`;
+        link.click();
+        URL.revokeObjectURL(link.href);
 
         bag = []; renderBag(); renderInv();
-        alert("Archivo generado y stock actualizado.");
+        alert("Archivo generado.");
     }
 
     function iniciarChatbase() {
