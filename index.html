@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LINSTELEC CHILE - Sistema de Ingeniería</title>
+    <title>LINSTELEC CHILE - Brayan Barraza</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { 
@@ -16,177 +16,261 @@
         /* LOGIN */
         #login-wrapper { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--dark) 0%, #1a252f 100%); }
         .login-card { background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); text-align: center; width: 100%; max-width: 350px; }
+        
+        /* LOGO EN LOGIN */
         .login-logo { width: 120px; height: auto; margin-bottom: 25px; background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        
         .login-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
         
-        /* NAVBAR (Solo Logo) */
+        /* NAVBAR */
         .navbar { background: var(--dark); color: white; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .nav-logo { height: 45px; width: auto; background: white; padding: 4px; border-radius: 6px; }
+        .nav-brand { display: flex; align-items: center; }
+        
+        /* LOGO EN NAVBAR */
+        .nav-logo { height: 40px; width: auto; background: white; padding: 4px; border-radius: 6px; }
 
         /* CONTAINER & TABS */
-        .main-container { max-width: 950px; margin: 20px auto; padding: 0 20px; display: none; }
-        .calc-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; }
-        .tab-btn { padding: 12px 20px; border: none; border-radius: 12px; background: var(--white); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); white-space: nowrap; font-size: 0.9rem; }
+        .main-container { max-width: 900px; margin: 20px auto; padding: 0 20px; display: none; }
+        .calc-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn { padding: 12px 20px; border: none; border-radius: 12px; background: var(--white); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); white-space: nowrap; }
         .tab-btn.active { background: var(--primary); color: white; }
         
         /* CARDS */
         .card { background: var(--white); padding: 25px; border-radius: 15px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 20px; display: none; }
-        .card.active { display: block; border-top: 4px solid var(--primary); }
-        .card h2 { margin-top: 0; font-size: 1.2rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .card.active { display: block; }
+        .card h2 { margin-top: 0; font-size: 1.25rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 20px; }
         
-        /* GRID DE NODOS */
-        .nodo-box { background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 15px; }
-        .nodo-header { font-weight: bold; color: var(--dark); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .nodo-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        /* FORM ELEMENTS */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        select, input[type="number"] { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
         
-        .form-group { margin-bottom: 10px; }
-        label { display: block; margin-bottom: 4px; font-weight: 600; font-size: 0.8rem; color: #64748b; }
-        select, input { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; box-sizing: border-box; }
+        .btn-calc { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
         
-        .btn-calc { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-calc:hover { background: #2980b9; }
+        /* RESULTS */
+        .resultado { margin-top: 20px; padding: 15px; border-radius: 10px; font-weight: bold; border-left: 5px solid; }
+        .res-ok { background: #f0fdf4; color: #166534; border-color: var(--success); }
+        .res-fail { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
+        .res-warn { background: #eff6ff; color: #1e40af; border-color: var(--primary); }
+        
+        /* ESTILOS NODOS */
+        .nodo-box { background: #f1f5f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); }
+        .nodo-title { font-weight: bold; margin-bottom: 10px; color: #1e293b; text-transform: uppercase; font-size: 0.85rem; }
+        .grid-nodos { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .res-nodos-container { margin-top: 20px; background: #e0f2fe; padding: 15px; border-radius: 10px; border: 1px solid #bae6fd; }
+        .res-nodos-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #7dd3fc; font-size: 0.85rem; }
 
-        /* RESULTADOS */
-        .res-nodos { margin-top: 20px; padding: 15px; border-radius: 10px; background: #eef2ff; border-left: 5px solid #4f46e5; }
-        .res-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e0e7ff; font-size: 0.9rem; }
-        .res-line:last-child { border: none; font-weight: bold; color: #1e1b4b; }
-
-        iframe { width: 100%; height: 75vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
+        iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <div id="login-wrapper">
     <div class="login-card">
-        <img src="logo.png" alt="Logo LINSTELEC" class="login-logo">
+        <img src="logo.png" alt="Logo Linstelec" class="login-logo">
         <input type="text" id="userInput" placeholder="Usuario">
         <input type="password" id="passInput" placeholder="Contraseña">
-        <button class="btn-calc" onclick="checkLogin()">INGRESAR</button>
+        <button class="btn-calc" onclick="checkLogin()">Ingresar</button>
         <p id="error-msg" style="color:var(--danger); display:none; font-size:14px; margin-top:10px;">Acceso denegado</p>
     </div>
 </div>
 
-<div id="main-app" style="display:none;">
+<div id="main-app">
     <nav class="navbar">
         <div class="nav-brand">
-            <img src="logo.png" alt="Logo LINSTELEC" class="nav-logo">
+            <img src="logo.png" alt="Logo Linstelec" class="nav-logo">
         </div>
-        <div id="user-display" style="font-size: 14px; opacity: 0.9; font-weight: bold;"></div>
-        <a href="#" onclick="location.reload()" style="color:white; text-decoration:none;"><i class="fas fa-power-off"></i></a>
+        <div id="user-display" style="font-size: 14px; opacity: 0.9;"></div>
+        <a href="#" onclick="location.reload()" style="color:white; text-decoration:none;"><i class="fas fa-sign-out-alt"></i></a>
     </nav>
 
-    <div class="main-container" id="container" style="display:block;">
+    <div class="main-container" id="container">
         <div class="calc-tabs">
-            <button class="tab-btn active" onclick="showTab(event, 'nodos-tab')"><i class="fas fa-network-wired"></i> CÁLCULO DE NODOS</button>
-            <button class="tab-btn" onclick="showTab(event, 'tension')"><i class="fas fa-wave-square"></i> CAÍDA TENSIÓN</button>
-            <button class="tab-btn" onclick="showTab(event, 'sgc')"><i class="fas fa-project-diagram"></i> ESQUEMA SGC</button>
-            <button class="tab-btn" onclick="showTab(event, 'biblioteca')"><i class="fas fa-book"></i> BIBLIOTECA RIC</button>
+            <button class="tab-btn active" onclick="showTab(event, 'tension')"><i class="fas fa-wave-square"></i> Caída Tensión</button>
+            <button class="tab-btn" onclick="showTab(event, 'ohm')"><i class="fas fa-bolt"></i> Ley de Ohm</button>
+            <button class="tab-btn" onclick="showTab(event, 'nodos')"><i class="fas fa-network-wired"></i> Calculadora Nodos</button>
+            <button class="tab-btn" onclick="showTab(event, 'tuberia')"><i class="fas fa-circle"></i> Ductos RIC 07</button>
+            <button class="tab-btn" onclick="showTab(event, 'sgc')"><i class="fas fa-project-diagram"></i> Esquema SGC</button>
+            <button class="tab-btn" onclick="showTab(event, 'biblioteca')"><i class="fas fa-book"></i> Biblioteca RIC</button>
             <button class="tab-btn" style="background:var(--luis); color:white;" onclick="showTab(event, 'luis-ia')"><i class="fas fa-robot"></i> PREGÚNTALE A LUIS</button>
         </div>
 
-        <div id="nodos-tab" class="card active">
-            <h2><i class="fas fa-microchip"></i> Impedancia y Cortocircuito Acumulativo</h2>
-            <div class="nodo-box" style="background: #fff4e6; border-color: #ffd8a8;">
-                <div class="nodo-header">DATOS DE LA FUENTE (RED)</div>
-                <div class="form-group">
-                    <label>Icc Inicial en Empalme (kA):</label>
-                    <input type="number" id="icc-fuente" value="6" step="0.1">
+        <div id="tension" class="card active">
+            <h2>Calculadora Caída de Tensión (RIC 04)</h2>
+            <div class="form-group">
+                <label>Distancia (m):</label>
+                <input type="number" id="dist" value="10">
+            </div>
+            <div class="form-group">
+                <label>Corriente (A):</label>
+                <input type="number" id="amp" value="16">
+            </div>
+            <div class="form-group">
+                <label>Sección Conductor (mm²):</label>
+                <select id="sec">
+                    <option value="1.5">1.5 mm²</option>
+                    <option value="2.5">2.5 mm²</option>
+                    <option value="4">4 mm²</option>
+                    <option value="6" selected>6 mm²</option>
+                    <option value="10">10 mm²</option>
+                </select>
+            </div>
+            <button class="btn-calc" onclick="calcTension()">Calcular Pérdida</button>
+            <div id="res-tension"></div>
+        </div>
+
+        <div id="ohm" class="card">
+            <h2>Calculadora Ley de Ohm</h2>
+            <div class="form-group">
+                <label>Potencia (Watts):</label>
+                <input type="number" id="watt-ohm" placeholder="Ej: 3680">
+            </div>
+            <div class="form-group">
+                <label>Voltaje (V):</label>
+                <input type="number" id="volt-ohm" value="220">
+            </div>
+            <button class="btn-calc" style="background:var(--dark)" onclick="calcOhm()">Calcular Amperaje</button>
+            <div id="res-ohm"></div>
+        </div>
+
+        <div id="nodos" class="card">
+            <h2>Calculadora de Cortocircuito (Nodos)</h2>
+            
+            <div class="nodo-box" style="border-color: #f59e0b;">
+                <div class="nodo-title">a) Impedancia Nodo 1 (Empalme)</div>
+                <div class="grid-nodos">
+                    <div><label>Icc n.1 (kA):</label><input type="number" id="icc1" value="6.00" step="0.01"></div>
+                    <div><label>Zcc n.1 (mΩ):</label><input type="number" id="zcc1" value="36.67" step="0.01"></div>
                 </div>
             </div>
 
             <div class="nodo-box">
-                <div class="nodo-header">1. TRAMO: FUENTE → EMPALME</div>
-                <div class="nodo-inputs">
-                    <div class="form-group"><label>Longitud (m):</label><input type="number" id="L1" value="5"></div>
-                    <div class="form-group">
-                        <label>Sección (mm²):</label>
-                        <select id="S1"><option value="6">6 mm²</option><option value="10">10 mm²</option><option value="16">16 mm²</option></select>
-                    </div>
+                <div class="nodo-title">b) Impedancia Nodo 2 (TDF Voltex)</div>
+                <div class="grid-nodos">
+                    <div><label>Longitud AL-01 (m):</label><input type="number" id="L2" value="2"></div>
+                    <div><label>Sección (mm²):</label><input type="number" id="S2" value="6"></div>
                 </div>
             </div>
 
             <div class="nodo-box">
-                <div class="nodo-header">2. TRAMO: EMPALME → TDF VOLTEX</div>
-                <div class="nodo-inputs">
-                    <div class="form-group"><label>Longitud (m):</label><input type="number" id="L2" value="10"></div>
-                    <div class="form-group">
-                        <label>Sección (mm²):</label>
-                        <select id="S2"><option value="6" selected>6 mm²</option><option value="10">10 mm²</option><option value="4">4 mm²</option></select>
-                    </div>
+                <div class="nodo-title">c) Impedancia Nodo 3 (SAVE.01)</div>
+                <div class="grid-nodos">
+                    <div><label>Longitud CR-01 (m):</label><input type="number" id="L3" value="12"></div>
+                    <div><label>Sección (mm²):</label><input type="number" id="S3" value="6"></div>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="nodo-box">
-                    <div class="nodo-header">3. TDF → SAVE.01</div>
-                    <label>Longitud (m):</label><input type="number" id="L3" value="12">
-                    <label>Sección (mm²):</label><select id="S3"><option value="6">6 mm²</option><option value="4">4 mm²</option></select>
-                </div>
-                <div class="nodo-box">
-                    <div class="nodo-header">4. TDF → TDA HOGAR</div>
-                    <label>Longitud (m):</label><input type="number" id="L4" value="8">
-                    <label>Sección (mm²):</label><select id="S4"><option value="2.5">2.5 mm²</option><option value="4">4 mm²</option></select>
+            <div class="nodo-box">
+                <div class="nodo-title">d) Impedancia Nodo 4 (TDA Hogar)</div>
+                <div class="grid-nodos">
+                    <div><label>Longitud Sub-alim (m):</label><input type="number" id="L4" value="2"></div>
+                    <div><label>Sección (mm²):</label><input type="number" id="S4" value="6"></div>
                 </div>
             </div>
 
-            <button class="btn-calc" onclick="calcularNodos()">CALCULAR NODOS LINSTELEC</button>
+            <button class="btn-calc" onclick="generarInformeNodos()">CALCULAR CORTOCIRCUITO</button>
 
-            <div id="resultado-nodos" class="res-nodos" style="display:none;">
-                <h4 style="margin:0 0 10px 0;">INFORME DE IMPEDANCIA (Z) Y FALLA (kA)</h4>
-                <div id="nodos-list"></div>
+            <div id="informe-nodos" class="res-nodos-container" style="display:none;">
+                <div id="detalle-nodos"></div>
             </div>
         </div>
 
-        <div id="tension" class="card">
-            <h2>Calculadora RIC 04</h2>
-            <div class="form-group"><label>Distancia (m):</label><input type="number" id="dist" value="10"></div>
-            <div class="form-group"><label>Corriente (A):</label><input type="number" id="amp" value="16"></div>
-            <button class="btn-calc" onclick="calcTension()">CALCULAR PÉRDIDA</button>
-            <div id="res-tension"></div>
+        <div id="tuberia" class="card">
+            <h2>Análisis de Ductos EMT (RIC 07)</h2>
+            <div class="form-group">
+                <label>Cable RVK:</label>
+                <select id="cable-tipo">
+                    <option value="52.8">6mm² (8.2mm Ø)</option>
+                    <option value="81.7">10mm² (10.2mm Ø)</option>
+                    <option value="109.4">16mm² (11.8mm Ø)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Cantidad de cables:</label>
+                <input type="number" id="cable-cant" value="1">
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" id="utp-check"> Incluir Cable UTP Cat6 (+32mm²)</label>
+            </div>
+            <button class="btn-calc" style="background:var(--success)" onclick="calcDucto()">Analizar Tubería</button>
+            <div id="res-ducto"></div>
         </div>
 
         <div id="sgc" class="card" style="text-align:center;">
             <h2>Esquema de Control SGC</h2>
-            <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" style="background:#fff; border-radius:10px; border:1px solid #ddd;">
-                <text x="95" y="30" font-weight="bold" fill="#2c3e50">SGC (Control)</text>
-                <text x="280" y="30" font-weight="bold" fill="#2c3e50">CARGADOR</text>
+            <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" style="background:#fff; border-radius:10px;">
+                <text x="95" y="30" font-weight="bold">SGC</text><text x="310" y="30" font-weight="bold">CARGADOR</text>
+                
+                <text x="35" y="85" font-size="10">3</text><text x="75" y="85" font-size="10">4</text>
+                <text x="115" y="85" font-size="10">5</text><text x="155" y="85" font-size="10">6</text>
+                
                 <circle cx="35" cy="100" r="7" fill="#2ecc71"/><circle cx="75" cy="100" r="7" fill="#3498db"/>
-                <circle cx="290" cy="100" r="7" fill="#8b4513"/><circle cx="330" cy="100" r="7" fill="#2ecc71"/>
-                <path d="M 35 100 L 35 130 L 330 130 L 330 107" stroke="#2ecc71" fill="none" stroke-width="2.5"/>
-                <path d="M 75 107 L 75 235 L 290 235 L 290 107" stroke="#3498db" fill="none" stroke-width="2.5"/>
+                <circle cx="115" cy="100" r="7" fill="#2ecc71"/><circle cx="155" cy="100" r="7" fill="#8b4513"/>
+                
+                <circle cx="250" cy="100" r="7" fill="#bdc3c7"/><circle cx="290" cy="100" r="7" fill="#8b4513"/>
+                <circle cx="330" cy="100" r="7" fill="#2ecc71"/><circle cx="370" cy="100" r="7" fill="#3498db"/>
+                
+                <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/>
+                <path d="M 155 107 L 155 160 L 290 160 L 290 107" stroke="#8b4513" fill="none" stroke-width="2"/>
+                <path d="M 115 130 L 115 200 L 330 200 L 330 107" stroke="#2ecc71" fill="none" stroke-width="2"/>
+                <path d="M 75 107 L 75 235 L 370 235 L 370 107" stroke="#3498db" fill="none" stroke-width="2"/>
             </svg>
         </div>
 
         <div id="biblioteca" class="card">
-            <h2>Normativa RIC Vigente</h2>
-            <select onchange="document.getElementById('pdf-view').src = this.value" style="margin-bottom:15px;">
+            <h2>Biblioteca Pliegos RIC (01-19 + 15.1)</h2>
+            <select onchange="document.getElementById('pdf-view').src = this.value">
                 <option value="">-- Seleccionar Pliego --</option>
-                <option value="RIC01.pdf">RIC 01: Empalmes</option><option value="RIC02.pdf">RIC 02: Tableros</option>
-                <option value="RIC15.pdf">RIC 15: Carga VE</option><option value="RIC15.1.pdf">RIC 15.1: Interoperabilidad</option>
+                <option value="RIC01.pdf">RIC 01: Empalmes</option>
+                <option value="RIC02.pdf">RIC 02: Tableros</option>
+                <option value="RIC03.pdf">RIC 03: Alimentadores</option>
+                <option value="RIC04.pdf">RIC 04: Canalizaciones</option>
+                <option value="RIC05.pdf">RIC 05: Protecciones</option>
+                <option value="RIC06.pdf">RIC 06: Puesta a Tierra</option>
+                <option value="RIC07.pdf">RIC 07: Instalaciones Interiores</option>
+                <option value="RIC08.pdf">RIC 08: Sistemas de Emergencia</option>
+                <option value="RIC09.pdf">RIC 09: Hospitales</option>
+                <option value="RIC10.pdf">RIC 10: Lugares de reunión</option>
+                <option value="RIC11.pdf">RIC 11: Zonas Peligrosas</option>
+                <option value="RIC12.pdf">RIC 12: Ambientes Especiales</option>
+                <option value="RIC13.pdf">RIC 13: Maquinaria</option>
+                <option value="RIC14.pdf">RIC 14: Alumbrado Público</option>
+                <option value="RIC15.pdf">RIC 15: Carga VE</option>
+                <option value="RIC15.1.pdf">RIC 15.1: Operación e Interoperabilidad</option>
+                <option value="RIC16.pdf">RIC 16: Autogeneración</option>
+                <option value="RIC17.pdf">RIC 17: Redes Inteligentes</option>
+                <option value="RIC18.pdf">RIC 18: Instalaciones Provisionales</option>
                 <option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
             </select>
             <iframe id="pdf-view" src=""></iframe>
         </div>
 
         <div id="luis-ia" class="card">
-            <h2>🤖 PREGÚNTALE A LUIS</h2>
+            <h2>🤖 PREGÚNTALE A LUIS (Experto RIC)</h2>
             <iframe src="https://brayaton-asistente-ric-pro.hf.space"></iframe>
         </div>
     </div>
 </div>
 
 <script>
-    const USERS = [{id:"Padilla",pass:"1648",name:"Padilla"},{id:"Isaias",pass:"2071",name:"Isaias"},{id:"Brayan",pass:"2025",name:"B. Barraza"}];
+    const USERS = [
+        { id: "Rodrigo", pass: "1648", name: "Rodrigo Padilla" },
+        { id: "Isaias", pass: "2071", name: "Isaias Echeverria" },
+        { id: "Brayan", pass: "2025", name: "Brayan Barraza" },
+    ];
 
     function checkLogin() {
-        const u = document.getElementById('userInput').value, p = document.getElementById('passInput').value;
+        const u = document.getElementById('userInput').value;
+        const p = document.getElementById('passInput').value;
         const found = USERS.find(user => user.id === u && user.pass === p);
         if(found) {
-            document.getElementById('login-wrapper').style.display='none';
-            document.getElementById('main-app').style.display='block';
+            document.getElementById('login-wrapper').style.display = 'none';
+            document.getElementById('container').style.display = 'block';
             document.getElementById('user-display').innerText = "👷 " + found.name;
             iniciarChatbase();
-        } else { document.getElementById('error-msg').style.display='block'; }
+        } else {
+            document.getElementById('error-msg').style.display = 'block';
+        }
     }
 
     function showTab(evt, name) {
@@ -197,43 +281,79 @@
         evt.currentTarget.classList.add("active");
     }
 
-    // --- LÓGICA DE NODOS ACUMULATIVA ---
-    function calcularNodos() {
-        const V = 220, rho = 0.0185;
-        const icc_f = parseFloat(document.getElementById('icc-fuente').value);
-        let Z_red = V / (icc_f * 1000); // Impedancia inicial en Ohms
+    // FUNCION LÓGICA DE NODOS
+    function generarInformeNodos() {
+        const rho = 0.0185, V = 220;
+        const zcc1 = parseFloat(document.getElementById('zcc1').value);
+        const icc1 = parseFloat(document.getElementById('icc1').value);
+        
+        const calcZ = (L, S) => ((rho / S) * L * 2) * 1000;
 
-        function getZcable(L, S) { return (rho * L * 2) / S; }
+        const z2 = zcc1 + calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
+        const icc2 = V / (z2 / 1000) / 1000;
 
-        // 1. Fuente a Empalme
-        let z1 = Z_red + getZcable(parseFloat(document.getElementById('L1').value), parseFloat(document.getElementById('S1').value));
-        // 2. Fuente a TDF
-        let z2 = z1 + getZcable(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
-        // 3. Fuente a SAVE
-        let z3 = z2 + getZcable(parseFloat(document.getElementById('L3').value), parseFloat(document.getElementById('S3').value));
-        // 4. Fuente a TDA
-        let z4 = z2 + getZcable(parseFloat(document.getElementById('L4').value), parseFloat(document.getElementById('S4').value));
+        const z3 = z2 + calcZ(parseFloat(document.getElementById('L3').value), parseFloat(document.getElementById('S3').value));
+        const icc3 = V / (z3 / 1000) / 1000;
 
-        const resDiv = document.getElementById('nodos-list');
-        resDiv.innerHTML = `
-            <div class="res-line"><span>Z Fuente-Empalme:</span><span>${z1.toFixed(4)} Ω (${(V/(z1*1000)).toFixed(2)} kA)</span></div>
-            <div class="res-line"><span>Z Fuente-TDF Voltex:</span><span>${z2.toFixed(4)} Ω (${(V/(z2*1000)).toFixed(2)} kA)</span></div>
-            <div class="res-line"><span>Z Fuente-SAVE.01:</span><span>${z3.toFixed(4)} Ω (${(V/(z3*1000)).toFixed(2)} kA)</span></div>
-            <div class="res-line"><span>Z Fuente-TDA Hogar:</span><span>${z4.toFixed(4)} Ω (${(V/(z4*1000)).toFixed(2)} kA)</span></div>
+        const z4 = z2 + calcZ(parseFloat(document.getElementById('L4').value), parseFloat(document.getElementById('S4').value));
+        const icc4 = V / (z4 / 1000) / 1000;
+
+        document.getElementById('detalle-nodos').innerHTML = `
+            <div class="res-nodos-item"><span>Nodo 1 (Empalme):</span> <b>${icc1.toFixed(2)} kA</b></div>
+            <div class="res-nodos-item"><span>Nodo 2 (TDF Voltex):</span> <b>${icc2.toFixed(2)} kA</b></div>
+            <div class="res-nodos-item"><span>Nodo 3 (SAVE.01):</span> <b>${icc3.toFixed(2)} kA</b></div>
+            <div class="res-nodos-item"><span>Nodo 4 (TDA Hogar):</span> <b>${icc4.toFixed(2)} kA</b></div>
         `;
-        document.getElementById('resultado-nodos').style.display = 'block';
+        document.getElementById('informe-nodos').style.display = 'block';
+    }
+
+    function calcOhm() {
+        let w = parseFloat(document.getElementById('watt-ohm').value);
+        let v = parseFloat(document.getElementById('volt-ohm').value);
+        let res = document.getElementById('res-ohm');
+        if (w && v) {
+            let a = w / v;
+            res.className = "resultado res-ok";
+            res.innerHTML = `Corriente Resultante: ${a.toFixed(2)} Amperes`;
+        } else {
+            res.className = "resultado res-fail";
+            res.innerHTML = "Ingrese Potencia y Voltaje";
+        }
     }
 
     function calcTension() {
-        let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / 6;
+        let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / parseFloat(document.getElementById('sec').value);
         let p = (dv / 220) * 100;
-        document.getElementById('res-tension').innerHTML = `<div class="resultado ${p<=3?'res-ok':'res-fail'}">Pérdida: ${p.toFixed(2)}%</div>`;
+        let res = document.getElementById('res-tension');
+        res.className = "resultado " + (p <= 3 ? "res-ok" : "res-fail");
+        res.innerHTML = `Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%) - ${p <= 3 ? 'CUMPLE RIC' : 'FUERA DE NORMA'}`;
+    }
+
+    function calcDucto() {
+        let areaT = (parseFloat(document.getElementById('cable-tipo').value) * parseInt(document.getElementById('cable-cant').value)) + (document.getElementById('utp-check').checked ? 32 : 0);
+        let nTotal = parseInt(document.getElementById('cable-cant').value) + (document.getElementById('utp-check').checked ? 1 : 0);
+        let f = nTotal === 1 ? 0.53 : (nTotal === 2 ? 0.31 : 0.40);
+        let ductos = [{n:"25mm", d:24.3}, {n:"32mm", d:32.5}, {n:"40mm", d:38.4}, {n:"50mm", d:50.1}];
+        let html = `<div class="resultado res-warn">Área requerida: ${areaT.toFixed(1)} mm²</div>`, yaRec = false;
+        ductos.forEach(t => {
+            let cap = ((Math.PI * Math.pow(t.d, 2)) / 4) * f;
+            if (cap >= areaT) {
+                if (!yaRec) { html += `<div class="resultado res-ok">${t.n}: RECOMENDADO ✅</div>`; yaRec = true; }
+                else { html += `<div class="resultado res-warn">${t.n}: EXCESIVO 🔵</div>`; }
+            } else { html += `<div class="resultado res-fail">${t.n}: SOBRECARGADO ❌</div>`; }
+        });
+        document.getElementById('res-ducto').innerHTML = html;
     }
 
     function iniciarChatbase() {
+        if(!window.chatbase){
+            window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};
+            window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}});
+        }
         const s = document.createElement("script");
         s.src = "https://www.chatbase.co/embed.min.js";
         s.id = "HZBhzPxQtpDaw6ZlcBzEA";
+        s.domain = "www.chatbase.co";
         document.body.appendChild(s);
     }
 </script>
