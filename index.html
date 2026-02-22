@@ -53,12 +53,12 @@
         .res-fail { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
         .res-warn { background: #eff6ff; color: #1e40af; border-color: var(--primary); }
         
-        /* ESTILOS NODOS */
+        /* ESTILOS NODOS INTERACTIVOS */
         .nodo-box { background: #f1f5f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); }
         .nodo-title { font-weight: bold; margin-bottom: 10px; color: #1e293b; text-transform: uppercase; font-size: 0.85rem; }
-        .grid-nodos { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .res-nodos-container { margin-top: 20px; background: #e0f2fe; padding: 15px; border-radius: 10px; border: 1px solid #bae6fd; }
-        .res-nodos-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #7dd3fc; font-size: 0.85rem; }
+        .grid-nodos { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
+        .ecuacion-box { display: none; margin-top: 15px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #334155; line-height: 1.5; }
+        .math-res { color: var(--danger); font-weight: bold; }
 
         iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
     </style>
@@ -134,10 +134,10 @@
         </div>
 
         <div id="nodos" class="card">
-            <h2>Calculadora de Cortocircuito (Nodos)</h2>
+            <h2>Cálculo de Impedancia y Cortocircuito</h2>
             
             <div class="nodo-box" style="border-color: #f59e0b;">
-                <div class="nodo-title">a) Impedancia Nodo 1 (Empalme)</div>
+                <div class="nodo-title">a) Nodo 1 (Empalme)</div>
                 <div class="grid-nodos">
                     <div><label>Icc n.1 (kA):</label><input type="number" id="icc1" value="6.00" step="0.01"></div>
                     <div><label>Zcc n.1 (mΩ):</label><input type="number" id="zcc1" value="36.67" step="0.01"></div>
@@ -145,33 +145,33 @@
             </div>
 
             <div class="nodo-box">
-                <div class="nodo-title">b) Impedancia Nodo 2 (TDF Voltex)</div>
+                <div class="nodo-title">b) Nodo 2 (TDF Voltex)</div>
                 <div class="grid-nodos">
-                    <div><label>Longitud AL-01 (m):</label><input type="number" id="L2" value="2"></div>
+                    <div><label>L AL-01 (m):</label><input type="number" id="L2" value="2"></div>
                     <div><label>Sección (mm²):</label><input type="number" id="S2" value="6"></div>
                 </div>
+                <button class="btn-calc" onclick="calcNodoInteractivo(2)">CALCULAR Y VER ECUACIÓN</button>
+                <div id="ecu-2" class="ecuacion-box"></div>
             </div>
 
             <div class="nodo-box">
-                <div class="nodo-title">c) Impedancia Nodo 3 (SAVE.01)</div>
+                <div class="nodo-title">c) Nodo 3 (SAVE.01)</div>
                 <div class="grid-nodos">
-                    <div><label>Longitud CR-01 (m):</label><input type="number" id="L3" value="12"></div>
+                    <div><label>L CR-01 (m):</label><input type="number" id="L3" value="12"></div>
                     <div><label>Sección (mm²):</label><input type="number" id="S3" value="6"></div>
                 </div>
+                <button class="btn-calc" onclick="calcNodoInteractivo(3)">CALCULAR Y VER ECUACIÓN</button>
+                <div id="ecu-3" class="ecuacion-box"></div>
             </div>
 
             <div class="nodo-box">
-                <div class="nodo-title">d) Impedancia Nodo 4 (TDA Hogar)</div>
+                <div class="nodo-title">d) Nodo 4 (TDA Hogar)</div>
                 <div class="grid-nodos">
-                    <div><label>Longitud Sub-alim (m):</label><input type="number" id="L4" value="2"></div>
+                    <div><label>L Sub-alim (m):</label><input type="number" id="L4" value="2"></div>
                     <div><label>Sección (mm²):</label><input type="number" id="S4" value="6"></div>
                 </div>
-            </div>
-
-            <button class="btn-calc" onclick="generarInformeNodos()">CALCULAR CORTOCIRCUITO</button>
-
-            <div id="informe-nodos" class="res-nodos-container" style="display:none;">
-                <div id="detalle-nodos"></div>
+                <button class="btn-calc" onclick="calcNodoInteractivo(4)">CALCULAR Y VER ECUACIÓN</button>
+                <div id="ecu-4" class="ecuacion-box"></div>
             </div>
         </div>
 
@@ -281,30 +281,45 @@
         evt.currentTarget.classList.add("active");
     }
 
-    // FUNCION LÓGICA DE NODOS
-    function generarInformeNodos() {
+    function calcNodoInteractivo(nodo) {
         const rho = 0.0185, V = 220;
         const zcc1 = parseFloat(document.getElementById('zcc1').value);
-        const icc1 = parseFloat(document.getElementById('icc1').value);
-        
         const calcZ = (L, S) => ((rho / S) * L * 2) * 1000;
+        let resHTML = "", z_acum = 0, z_cable = 0, icc = 0, label_cable = "";
 
-        const z2 = zcc1 + calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
-        const icc2 = V / (z2 / 1000) / 1000;
-
-        const z3 = z2 + calcZ(parseFloat(document.getElementById('L3').value), parseFloat(document.getElementById('S3').value));
-        const icc3 = V / (z3 / 1000) / 1000;
-
-        const z4 = z2 + calcZ(parseFloat(document.getElementById('L4').value), parseFloat(document.getElementById('S4').value));
-        const icc4 = V / (z4 / 1000) / 1000;
-
-        document.getElementById('detalle-nodos').innerHTML = `
-            <div class="res-nodos-item"><span>Nodo 1 (Empalme):</span> <b>${icc1.toFixed(2)} kA</b></div>
-            <div class="res-nodos-item"><span>Nodo 2 (TDF Voltex):</span> <b>${icc2.toFixed(2)} kA</b></div>
-            <div class="res-nodos-item"><span>Nodo 3 (SAVE.01):</span> <b>${icc3.toFixed(2)} kA</b></div>
-            <div class="res-nodos-item"><span>Nodo 4 (TDA Hogar):</span> <b>${icc4.toFixed(2)} kA</b></div>
-        `;
-        document.getElementById('informe-nodos').style.display = 'block';
+        if (nodo === 2) {
+            z_cable = calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
+            z_acum = zcc1 + z_cable;
+            icc = V / (z_acum / 1000) / 1000;
+            label_cable = "AL-01";
+            resHTML = `<strong>PASO 1: Resistencia Conductor (${label_cable})</strong><br>
+                R = (ρ / S) * L * 2 = (0.0185 / ${document.getElementById('S2').value}) * ${document.getElementById('L2').value} * 2<br>
+                R = ${z_cable.toFixed(2)} mΩ<br><br>
+                <strong>PASO 2: Impedancia Acumulada</strong><br>
+                Zcc = Zcc_n1 + R = ${zcc1} + ${z_cable.toFixed(2)}<br>
+                Zcc = <span class="math-res">${z_acum.toFixed(2)} mΩ</span><br><br>
+                <strong>PASO 3: Cortocircuito Nodo 2</strong><br>
+                Icc = V / Zcc = 220 / (${z_acum.toFixed(2)} / 1000)<br>
+                Icc = <span class="math-res">${icc.toFixed(2)} kA</span>`;
+        } 
+        else {
+            const z_tdf = zcc1 + calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
+            const L = document.getElementById(nodo === 3 ? 'L3' : 'L4').value;
+            const S = document.getElementById(nodo === 3 ? 'S3' : 'S4').value;
+            z_cable = calcZ(parseFloat(L), parseFloat(S));
+            z_acum = z_tdf + z_cable;
+            icc = V / (z_acum / 1000) / 1000;
+            label_cable = (nodo === 3) ? "CR-01" : "Sub-alim";
+            resHTML = `<strong>PASO 1: Resistencia Conductor (${label_cable})</strong><br>
+                R = (0.0185 / ${S}) * ${L} * 2 = ${z_cable.toFixed(2)} mΩ<br><br>
+                <strong>PASO 2: Impedancia Acumulada (desde TDF)</strong><br>
+                Zcc = Zcc_TDF (${z_tdf.toFixed(2)}) + R = <span class="math-res">${z_acum.toFixed(2)} mΩ</span><br><br>
+                <strong>PASO 3: Cortocircuito Nodo ${nodo}</strong><br>
+                Icc = 220 / (${z_acum.toFixed(2)} / 1000) = <span class="math-res">${icc.toFixed(2)} kA</span>`;
+        }
+        const box = document.getElementById(`ecu-${nodo}`);
+        box.innerHTML = resHTML;
+        box.style.display = (box.style.display === 'block') ? 'none' : 'block';
     }
 
     function calcOhm() {
