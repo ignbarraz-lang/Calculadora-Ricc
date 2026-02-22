@@ -8,21 +8,40 @@
     <style>
         :root { --primary: #3498db; --dark: #1a252f; --bg: #f1f5f9; --white: #ffffff; --success: #27ae60; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; }
+
+        /* LOGIN */
         #login-wrapper { height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--dark); position: fixed; width: 100%; z-index: 2000; }
         .login-card { background: var(--white); padding: 40px; border-radius: 20px; text-align: center; width: 320px; }
+        .login-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+
+        /* NAVBAR */
         .navbar { background: var(--dark); color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+
+        /* CONTENEDOR Y TABS */
         .main-container { max-width: 1000px; margin: 15px auto; padding: 0 15px; display: none; }
         .tabs { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
         .tab-btn { padding: 10px 18px; border: none; border-radius: 50px; background: #cbd5e1; cursor: pointer; font-weight: bold; white-space: nowrap; font-size: 13px; }
         .tab-btn.active { background: var(--primary); color: white; }
-        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: none; margin-bottom: 20px; }
+
+        /* TARJETAS */
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: none; margin-bottom: 20px; border: 1px solid #e2e8f0; }
         .card.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* IFRAMES */
         .ia-frame { width: 100%; height: 75vh; border: none; border-radius: 12px; }
+
+        /* CALCULADORAS */
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input, .input-group select { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ddd; }
         .btn-calc { background: var(--primary); color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        #chat-bubble { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; cursor: pointer; z-index: 1500; }
-        #chat-window { position: fixed; bottom: 90px; right: 20px; width: 350px; height: 550px; max-width: 90vw; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 1500; border: 1px solid #ddd; }
+
+        /* BURBUJA FLOTANTE (QWEN) */
+        #chat-bubble { position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1500; transition: transform 0.3s; }
+        #chat-bubble:active { transform: scale(0.9); }
+        #chat-window { position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; max-width: 90vw; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; z-index: 1500; border: 1px solid #ddd; }
         #chat-window.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -30,68 +49,89 @@
 <div id="login-wrapper">
     <div class="login-card">
         <i class="fas fa-bolt" style="font-size: 40px; color: var(--primary);"></i>
-        <h2>Sistema RIC Pro</h2>
-        <input type="text" id="u" placeholder="Usuario" style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ddd;">
-        <input type="password" id="p" placeholder="Contraseña" style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ddd;">
+        <h2>ElectriCalc Pro</h2>
+        <input type="text" id="u" placeholder="Usuario">
+        <input type="password" id="p" placeholder="Contraseña">
         <button class="btn-calc" onclick="login()">ENTRAR</button>
     </div>
 </div>
 
 <div id="app" style="display:none;">
     <nav class="navbar">
-        <div style="font-weight:bold;"><i class="fas fa-shield-bolt"></i> B. Barraza - SGC</div>
-        <div id="user-display"></div>
+        <div style="font-weight:bold;"><i class="fas fa-shield-bolt"></i> Sistema RIC - B. Barraza</div>
+        <div id="user-display" style="font-size: 14px;"></div>
     </nav>
 
     <div class="main-container" style="display:block;">
         <div class="tabs">
-            <button class="tab-btn active" onclick="showTab(event, 'tab-chatbase')">IA DOCUMENTOS</button>
-            <button class="tab-btn" onclick="showTab(event, 'tab-esquema')">ESQUEMA SGC</button>
-            <button class="tab-btn" onclick="showTab(event, 'tab-calc')">CÁLCULOS</button>
-            <button class="tab-btn" onclick="showTab(event, 'tab-pdf')">PLIEGOS RIC</button>
+            <button class="tab-btn active" onclick="showTab(event, 'chatbase')">IA DOCUMENTOS</button>
+            <button class="tab-btn" onclick="showTab(event, 'esquemas')">ESQUEMAS SGC</button>
+            <button class="tab-btn" onclick="showTab(event, 'calculos')">CALCULADORAS</button>
+            <button class="tab-btn" onclick="showTab(event, 'pliegos')">PLIEGOS RIC</button>
         </div>
 
-        <div id="tab-chatbase" class="card active">
+        <div id="chatbase" class="card active">
+            <h3 style="margin-top:0">Asistente Chatbase (Consultas RIC)</h3>
             <iframe src="https://www.chatbase.co/chatbot-iframe/TU_ID_AQUI" class="ia-frame"></iframe>
         </div>
 
-        <div id="tab-esquema" class="card">
-            <h3>Esquema Sistema de Gestión de Carga (SGC)</h3>
-            <p>Conexión de medidores inteligentes y control dinámico según RIC 15.</p>
-            
-            <div style="background:#f8fafc; padding:15px; border-radius:10px; border-left:4px solid #3498db; margin-top:15px;">
-                <strong>Nota Técnica:</strong> El SGC debe asegurar que la suma de potencias no exceda la capacidad del empalme, priorizando consumos domésticos.
+        <div id="esquemas" class="card">
+            <h3>Esquema SGC (Gestión de Carga)</h3>
+            <img src="https://images.squarespace-cdn.com/content/v1/5f3d4d3d3b7f1a3d3d3d3d3d/1620311234567-XYZ/SGC_EV_Diagram.jpg" alt="Esquema SGC" style="width:100%; border-radius:10px;">
+            <h3 style="margin-top:20px">Esquema Unilineal Protecciones</h3>
+            <img src="https://www.electricidat.com/wp-content/uploads/2021/01/esquema-unilineal-vivienda.jpg" alt="Esquema Unilineal" style="width:100%; border-radius:10px;">
+        </div>
+
+        <div id="calculos" class="card">
+            <div style="border-bottom: 1px solid #eee; margin-bottom: 20px; padding-bottom: 10px;">
+                <h3>Cálculo de Ductos (RIC 07)</h3>
+                <div class="input-group">
+                    <label>Sección RVK (mm²):</label>
+                    <select id="cable">
+                        <option value="52.8">2.5 mm²</option>
+                        <option value="63.6">4.0 mm²</option>
+                        <option value="81.7">6.0 mm²</option>
+                        <option value="113.1">10 mm²</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Cantidad:</label>
+                    <input type="number" id="cant" value="3">
+                </div>
+                <button class="btn-calc" onclick="calcDucto()">CALCULAR DUCTO</button>
+                <div id="resDucto" style="margin-top:10px; font-weight:bold; color:var(--success);"></div>
+            </div>
+
+            <div>
+                <h3>Ley de Ohm</h3>
+                <div class="input-group">
+                    <label>Potencia (W):</label>
+                    <input type="number" id="v_w" placeholder="Ej: 3680">
+                </div>
+                <div class="input-group">
+                    <label>Voltaje (V):</label>
+                    <input type="number" id="v_v" value="220">
+                </div>
+                <button class="btn-calc" onclick="calcOhm()" style="background:#34495e;">CALCULAR AMPERAJE</button>
+                <div id="resOhm" style="margin-top:10px; font-weight:bold; color:var(--success);"></div>
             </div>
         </div>
 
-        <div id="tab-calc" class="card">
-            <h3>Calculadora de Ductos (RIC 07)</h3>
-            <label>Cable RVK (mm²):</label>
-            <select id="cable" style="width:100%; padding:10px; margin-bottom:15px;">
-                <option value="52.8">2.5 mm²</option>
-                <option value="81.7">6.0 mm²</option>
-                <option value="113.1">10 mm²</option>
-            </select>
-            <label>Cantidad:</label>
-            <input type="number" id="cant" value="3" style="width:100%; padding:10px; margin-bottom:15px;">
-            <button class="btn-calc" onclick="calcular()">CALCULAR</button>
-            <div id="res" style="margin-top:15px; font-weight:bold; color:var(--success); display:none;"></div>
-        </div>
-
-        <div id="tab-pdf" class="card">
-            <select onchange="document.getElementById('visor').src=this.value" style="width:100%; padding:10px; margin-bottom:10px;">
-                <option value="RIC15.pdf">RIC 15 - Carga VE</option>
+        <div id="pliegos" class="card">
+            <select onchange="document.getElementById('visor').src=this.value" style="width:100%; padding:10px; border-radius:10px; margin-bottom:10px;">
+                <option value="RIC15.pdf">RIC 15 - Infraestructura Carga VE</option>
                 <option value="RIC02.pdf">RIC 02 - Tableros</option>
+                <option value="RIC10.pdf">RIC 10 - Puesta a Tierra</option>
             </select>
-            <iframe id="visor" src="RIC15.pdf" class="ia-frame"></iframe>
+            <iframe id="visor" src="RIC15.pdf" style="width:100%; height:65vh; border:none; border-radius:10px;"></iframe>
         </div>
     </div>
 </div>
 
 <div id="chat-bubble" onclick="toggleChat()"><i class="fas fa-robot"></i></div>
 <div id="chat-window">
-    <div style="background:var(--dark); color:white; padding:12px; display:flex; justify-content:space-between;">
-        <span>Asistente Rápido</span>
+    <div style="background:var(--dark); color:white; padding:12px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-weight:bold; font-size:14px;">Asistente Qwen Rápido</span>
         <i class="fas fa-times" onclick="toggleChat()" style="cursor:pointer;"></i>
     </div>
     <iframe src="https://brayaton-asistente-ric-pro.hf.space" style="width:100%; height:100%; border:none;"></iframe>
@@ -106,6 +146,7 @@
             document.getElementById('user-display').innerText = "👷 " + u;
         }
     }
+
     function showTab(e, id) {
         let c=document.getElementsByClassName("card"), b=document.getElementsByClassName("tab-btn");
         for(let x of c) x.classList.remove("active");
@@ -113,12 +154,18 @@
         document.getElementById(id).classList.add("active");
         e.currentTarget.classList.add("active");
     }
+
     function toggleChat() { document.getElementById('chat-window').classList.toggle('active'); }
-    function calcular() {
+
+    function calcDucto() {
         const t = parseFloat(document.getElementById('cable').value) * parseInt(document.getElementById('cant').value);
-        let d = t > 110 ? "25mm" : "20mm";
-        document.getElementById('res').innerText = "Ducto Sugerido: Conduit " + d;
-        document.getElementById('res').style.display = 'block';
+        let d = t > 190 ? "32mm" : (t > 110 ? "25mm" : "20mm");
+        document.getElementById('resDucto').innerText = "Ducto Sugerido: Conduit " + d;
+    }
+
+    function calcOhm() {
+        const w = parseFloat(document.getElementById('v_w').value), v = parseFloat(document.getElementById('v_v').value);
+        if(w && v) document.getElementById('resOhm').innerText = "Corriente: " + (w/v).toFixed(2) + " Amperes";
     }
 </script>
 </body>
