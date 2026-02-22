@@ -18,8 +18,9 @@
         .login-card { background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); text-align: center; width: 100%; max-width: 350px; }
         
         /* LOGO EN LOGIN */
-        .login-logo { width: 120px; height: auto; margin-bottom: 25px; background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        
+        .login-logo { width: 120px; height: auto; margin-bottom: 10px; background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .welcome-text { color: var(--dark); font-weight: bold; margin-bottom: 20px; font-size: 1.2rem; }
+
         .login-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
         
         /* NAVBAR */
@@ -68,6 +69,7 @@
 <div id="login-wrapper">
     <div class="login-card">
         <img src="logo.png" alt="Logo Linstelec" class="login-logo">
+        <div class="welcome-text">¡Bienvenido!</div>
         <input type="text" id="userInput" placeholder="Usuario">
         <input type="password" id="passInput" placeholder="Contraseña">
         <button class="btn-calc" onclick="checkLogin()">Ingresar</button>
@@ -257,9 +259,9 @@
 
 <script>
     const USERS = [
-        { id: "Rodrigo", pass: "1648", name: "Rodrigo Padilla" },
-        { id: "Isaias", pass: "2071", name: "Isaias Echeverria" },
-        { id: "Brayan", pass: "2025", name: "Brayan Barraza" },
+        { id: "Rodrigo", pass: "1648", name: "Rodrigo Padilla", clase: "Clase D" },
+        { id: "Isaias", pass: "2071", name: "Isaias Echeverria", clase: "Clase C" },
+        { id: "Brayan", pass: "2025", name: "Brayan Barraza", clase: "Clase D" },
     ];
 
     function checkLogin() {
@@ -268,7 +270,7 @@
         if(found) {
             document.getElementById('login-wrapper').style.display = 'none';
             document.getElementById('container').style.display = 'block';
-            document.getElementById('user-display').innerText = "👷 " + found.name;
+            document.getElementById('user-display').innerHTML = "👷 " + found.name + " - <strong>" + found.clase + "</strong>";
             iniciarChatbase();
         } else { document.getElementById('error-msg').style.display = 'block'; }
     }
