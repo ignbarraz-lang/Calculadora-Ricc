@@ -49,25 +49,25 @@
         .btn-calc { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
         
         /* RESULTS */
-        .resultado { margin-top: 20px; padding: 15px; border-radius: 10px; font-weight: bold; border-left: 5px solid; transition: 0.3s; }
+        .resultado { margin-top: 20px; padding: 15px; border-radius: 10px; font-weight: bold; border-left: 5px solid; }
         .res-ok { background: #f0fdf4; color: #166534; border-color: var(--success); }
         .res-fail { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
         .res-warn { background: #eff6ff; color: #1e40af; border-color: var(--primary); }
-        
-        /* INVENTARIO */
-        .inv-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
-        .inv-table th, .inv-table td { padding: 12px; border: 1px solid #e2e8f0; text-align: left; }
-        .inv-table th { background: #f8fafc; font-weight: 600; }
-        .inv-qty-box { display: flex; align-items: center; gap: 5px; }
-        .inv-qty-input { width: 60px !important; padding: 5px !important; text-align: center; margin: 0 !important; }
-        .btn-small { padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; }
-        .install-list-box { background: #f0f9ff; border: 1px solid #bae6fd; padding: 15px; border-radius: 10px; margin-top: 20px; }
         
         /* ESTILOS NODOS INTERACTIVOS */
         .nodo-box { background: #f1f5f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); }
         .nodo-title { font-weight: bold; margin-bottom: 10px; color: #1e293b; text-transform: uppercase; font-size: 0.85rem; }
         .grid-nodos { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
-        .ecuacion-box { display: none; margin-top: 15px; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.5; border-left: 5px solid; }
+        .ecuacion-box { display: none; margin-top: 15px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #334155; line-height: 1.5; }
+        .math-res { color: var(--danger); font-weight: bold; }
+
+        /* ESTILOS INVENTARIO */
+        .inv-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .inv-table th, .inv-table td { padding: 12px; border: 1px solid #e2e8f0; text-align: left; }
+        .inv-table th { background: #f8fafc; font-size: 0.8rem; text-transform: uppercase; }
+        .qty-input { width: 70px !important; padding: 5px !important; text-align: center; margin: 0 !important; }
+        .install-list { background: #eef2ff; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #d1d5db; }
+        .action-btns { display: flex; gap: 5px; }
 
         iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
     </style>
@@ -99,10 +99,10 @@
             <button class="tab-btn active" onclick="showTab(event, 'tension')"><i class="fas fa-wave-square"></i> Caída Tensión</button>
             <button class="tab-btn" onclick="showTab(event, 'ohm')"><i class="fas fa-bolt"></i> Ley de Ohm</button>
             <button class="tab-btn" onclick="showTab(event, 'nodos')"><i class="fas fa-network-wired"></i> Calculadora Nodos</button>
-            <button class="tab-btn" onclick="showTab(event, 'inventario')"><i class="fas fa-boxes"></i> Inventario</button>
             <button class="tab-btn" onclick="showTab(event, 'tuberia')"><i class="fas fa-circle"></i> Ductos RIC 07</button>
             <button class="tab-btn" onclick="showTab(event, 'sgc')"><i class="fas fa-project-diagram"></i> Esquema SGC</button>
             <button class="tab-btn" onclick="showTab(event, 'biblioteca')"><i class="fas fa-book"></i> Biblioteca RIC</button>
+            <button class="tab-btn" onclick="showTab(event, 'inventario')"><i class="fas fa-boxes"></i> Inventario</button>
             <button class="tab-btn" style="background:var(--luis); color:white;" onclick="showTab(event, 'luis-ia')"><i class="fas fa-robot"></i> PREGÚNTALE A LUIS</button>
         </div>
 
@@ -185,26 +185,6 @@
             </div>
         </div>
 
-        <div id="inventario" class="card">
-            <h2>Gestión de Inventario</h2>
-            <div class="form-group" style="display: grid; grid-template-columns: 1fr 100px 100px; gap: 10px;">
-                <input type="text" id="new-item-name" placeholder="Nombre del material">
-                <input type="number" id="new-item-stock" placeholder="Stock Inicial">
-                <button class="btn-calc" onclick="addItem()" style="padding: 0;">Agregar</button>
-            </div>
-            <table class="inv-table">
-                <thead><tr><th>Material</th><th>Stock Actual</th><th>Operación</th><th>Acción</th></tr></thead>
-                <tbody id="inv-body"></tbody>
-            </table>
-            <div class="install-list-box">
-                <h3>Plantilla de Instalación</h3>
-                <input type="text" id="project-name" placeholder="Nombre del Proyecto / Cliente" style="margin-bottom: 10px;">
-                <div id="install-items-list"></div>
-                <hr>
-                <button class="btn-calc" style="background: var(--success);" onclick="finishProject()">Finalizar y Descargar Guía</button>
-            </div>
-        </div>
-
         <div id="tuberia" class="card">
             <h2>Análisis de Ductos EMT (RIC 07)</h2>
             <div class="form-group">
@@ -214,6 +194,13 @@
                     <option value="81.7">10mm² (10.2mm Ø)</option>
                     <option value="109.4">16mm² (11.8mm Ø)</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label>Cantidad de cables:</label>
+                <input type="number" id="cable-cant" value="1">
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" id="utp-check"> Incluir Cable UTP Cat6 (+32mm²)</label>
             </div>
             <button class="btn-calc" style="background:var(--success)" onclick="calcDucto()">Analizar Tubería</button>
             <div id="res-ducto"></div>
@@ -233,13 +220,42 @@
         </div>
 
         <div id="biblioteca" class="card">
-            <h2>Biblioteca Pliegos RIC</h2>
+            <h2>Biblioteca Pliegos RIC (01-19 + 15.1)</h2>
             <select onchange="document.getElementById('pdf-view').src = this.value">
                 <option value="">-- Seleccionar Pliego --</option>
                 <option value="RIC01.pdf">RIC 01: Empalmes</option>
                 <option value="RIC15.pdf">RIC 15: Carga VE</option>
             </select>
             <iframe id="pdf-view" src=""></iframe>
+        </div>
+
+        <div id="inventario" class="card">
+            <h2>Gestión de Bodega LINSTELEC</h2>
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 100px 100px; gap: 10px;">
+                <input type="text" id="new-mat-name" placeholder="Nombre del Material">
+                <input type="number" id="new-mat-qty" placeholder="Stock">
+                <button onclick="addMaterialToSystem()" class="btn-calc" style="padding:0;">+</button>
+            </div>
+
+            <table class="inv-table">
+                <thead>
+                    <tr>
+                        <th>Material</th>
+                        <th>Stock Bodega</th>
+                        <th>Cant. a Usar</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="inv-body"></tbody>
+            </table>
+
+            <div class="install-list">
+                <h3>Plantilla de Salida (Instalación)</h3>
+                <input type="text" id="install-name" placeholder="Nombre del Proyecto / Cliente" style="margin-bottom: 10px;">
+                <div id="bag-items"></div>
+                <hr>
+                <button class="btn-calc btn-success" onclick="finishAndDownload()">Generar Archivo y Descontar</button>
+            </div>
         </div>
 
         <div id="luis-ia" class="card">
@@ -256,8 +272,8 @@
         { id: "Brayan", pass: "2025", name: "Brayan Barraza", clase: "Clase D" },
     ];
 
-    let inventory = JSON.parse(localStorage.getItem('linstelec_inventory')) || [];
-    let installList = [];
+    let inventory = JSON.parse(localStorage.getItem('linstelec_inv_v2')) || [];
+    let bag = [];
 
     function checkLogin() {
         const u = document.getElementById('userInput').value, p = document.getElementById('passInput').value;
@@ -266,7 +282,7 @@
             document.getElementById('login-wrapper').style.display = 'none';
             document.getElementById('container').style.display = 'block';
             document.getElementById('user-display').innerHTML = "👷 " + found.name + " - <strong>" + found.clase + "</strong>";
-            renderInventory();
+            renderInventoryTable();
             iniciarChatbase();
         } else { document.getElementById('error-msg').style.display = 'block'; }
     }
@@ -279,98 +295,117 @@
         evt.currentTarget.classList.add("active");
     }
 
-    /* INVENTARIO */
-    function renderInventory() {
+    // --- INVENTARIO ---
+    function addMaterialToSystem() {
+        const name = document.getElementById('new-mat-name').value;
+        const qty = parseInt(document.getElementById('new-mat-qty').value);
+        if(!name || isNaN(qty)) return;
+        inventory.push({ name, stock: qty });
+        document.getElementById('new-mat-name').value = "";
+        document.getElementById('new-mat-qty').value = "";
+        renderInventoryTable();
+    }
+
+    function renderInventoryTable() {
         const body = document.getElementById('inv-body');
-        body.innerHTML = '';
-        inventory.forEach((item, index) => {
-            body.innerHTML += `<tr><td>${item.name}</td><td>${item.stock}</td><td><div class="inv-qty-box"><input type="number" id="op-qty-${index}" class="inv-qty-input" value="1"><button class="btn-calc btn-small" style="background: var(--success); width:auto;" onclick="updateStock(${index})">+</button><button class="btn-calc btn-small" style="background: var(--primary); width:auto;" onclick="addToInstall(${index})">Ocupar</button></div></td><td><button class="btn-calc btn-small" style="background: var(--danger); width:auto;" onclick="deleteItem(${index})"><i class="fas fa-trash"></i></button></td></tr>`;
+        body.innerHTML = "";
+        inventory.forEach((item, idx) => {
+            body.innerHTML += `
+                <tr>
+                    <td>${item.name}</td>
+                    <td><input type="number" value="${item.stock}" onchange="updateStock(${idx}, this.value)" class="qty-input"></td>
+                    <td><input type="number" id="use-qty-${idx}" value="1" min="1" class="qty-input"></td>
+                    <td class="action-btns">
+                        <button onclick="addToBag(${idx})" class="tab-btn" style="padding:5px 10px; font-size:12px; background:var(--primary); color:white;">Ocupar</button>
+                        <button onclick="deleteMat(${idx})" class="btn-calc" style="background:var(--danger); padding:5px 10px; width:auto;"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `;
         });
-        localStorage.setItem('linstelec_inventory', JSON.stringify(inventory));
+        localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
     }
 
-    function addItem() {
-        const name = document.getElementById('new-item-name').value;
-        const stock = parseInt(document.getElementById('new-item-stock').value);
-        if(name && !isNaN(stock)) { inventory.push({ name, stock }); document.getElementById('new-item-name').value = ''; document.getElementById('new-item-stock').value = ''; renderInventory(); }
+    function updateStock(idx, val) { inventory[idx].stock = parseInt(val); localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory)); }
+    function deleteMat(idx) { if(confirm("¿Eliminar material?")) { inventory.splice(idx, 1); renderInventoryTable(); } }
+
+    function addToBag(idx) {
+        const item = inventory[idx];
+        const useQty = parseInt(document.getElementById(`use-qty-${idx}`).value);
+        if(isNaN(useQty) || useQty <= 0) return;
+        const exist = bag.find(b => b.name === item.name);
+        if(exist) exist.qty += useQty; else bag.push({ name: item.name, qty: useQty, originalIdx: idx });
+        renderBag();
     }
 
-    function updateStock(index) {
-        const qty = parseInt(document.getElementById(`op-qty-${index}`).value);
-        if(isNaN(qty)) return;
-        inventory[index].stock += qty; renderInventory();
+    function renderBag() {
+        const div = document.getElementById('bag-items');
+        div.innerHTML = "";
+        bag.forEach(item => {
+            div.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.9rem;"><span>${item.name}</span><strong>Cant: ${item.qty}</strong></div>`;
+        });
     }
 
-    function deleteItem(index) { if(confirm('¿Eliminar?')) { inventory.splice(index, 1); renderInventory(); } }
-
-    function addToInstall(index) {
-        const qty = parseInt(document.getElementById(`op-qty-${index}`).value);
-        if(isNaN(qty) || qty > inventory[index].stock) return alert('Stock insuficiente');
-        const existing = installList.find(i => i.name === inventory[index].name);
-        if(existing) existing.qty += qty; else installList.push({ name: inventory[index].name, qty, originalIdx: index });
-        renderInstallList();
+    function finishAndDownload() {
+        if(bag.length === 0) return alert("Lista vacía");
+        const proj = document.getElementById('install-name').value || "Instalacion";
+        let content = `LINSTELEC CHILE - MATERIALES UTILIZADOS\nPROYECTO: ${proj}\nFECHA: ${new Date().toLocaleDateString()}\n---------------------------\n`;
+        bag.forEach(item => {
+            content += `- ${item.name}: ${item.qty}\n`;
+            inventory[item.originalIdx].stock -= item.qty;
+        });
+        const blob = new Blob([content], {type: 'text/plain'});
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `${proj}_Materiales.txt`;
+        a.click();
+        bag = []; renderBag(); renderInventoryTable();
+        alert("Stock actualizado y archivo descargado.");
     }
 
-    function renderInstallList() {
-        const list = document.getElementById('install-items-list');
-        list.innerHTML = '';
-        installList.forEach(item => { list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${item.name}</span><strong>x${item.qty}</strong></div>`; });
-    }
-
-    function finishProject() {
-        if(installList.length === 0) return;
-        const proj = document.getElementById('project-name').value || "Instalacion";
-        let docContent = `LINSTELEC CHILE - GUIA DE RETIRO\nPROYECTO: ${proj}\nFECHA: ${new Date().toLocaleDateString()}\n--------------------------\n`;
-        installList.forEach(item => { docContent += `- ${item.name}: ${item.qty} unidades\n`; inventory[item.originalIdx].stock -= item.qty; });
-        const blob = new Blob([docContent], {type: 'text/plain'});
-        const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `Materiales_${proj}.txt`; a.click();
-        installList = []; renderInstallList(); renderInventory(); alert('Stock actualizado y guía generada.');
-    }
-
-    /* NODOS CON COLORES */
+    // --- FUNCIONES ORIGINALES ---
     function calcNodoInteractivo(nodo) {
-        const rho = 0.0185, V = 220;
-        const zcc1 = parseFloat(document.getElementById('zcc1').value);
+        const rho = 0.0185, V = 220, zcc1 = parseFloat(document.getElementById('zcc1').value);
         const calcZ = (L, S) => ((rho / S) * L * 2) * 1000;
         let resHTML = "", z_acum = 0, z_cable = 0, icc = 0;
-        
         if (nodo === 2) {
             z_cable = calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
             z_acum = zcc1 + z_cable;
             icc = V / (z_acum / 1000) / 1000;
-            resHTML = `R = ${z_cable.toFixed(2)} mΩ<br>Zcc = <span style="color:var(--primary); font-weight:bold;">${z_acum.toFixed(2)} mΩ</span><br>Icc = <span style="color:var(--danger); font-weight:bold;">${icc.toFixed(2)} kA</span>`;
+            resHTML = `R = ${z_cable.toFixed(2)} mΩ<br>Zcc = ${z_acum.toFixed(2)} mΩ<br>Icc = ${icc.toFixed(2)} kA`;
         } else {
             const z_tdf = zcc1 + calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
             let L = document.getElementById(nodo === 3 ? 'L3' : 'L4').value, S = document.getElementById(nodo === 3 ? 'S3' : 'S4').value;
             z_cable = calcZ(parseFloat(L), parseFloat(S));
             z_acum = z_tdf + z_cable;
             icc = V / (z_acum / 1000) / 1000;
-            resHTML = `R = ${z_cable.toFixed(2)} mΩ<br>Zcc = <span style="color:var(--primary); font-weight:bold;">${z_acum.toFixed(2)} mΩ</span><br>Icc = <span style="color:var(--danger); font-weight:bold;">${icc.toFixed(2)} kA</span>`;
+            resHTML = `R = ${z_cable.toFixed(2)} mΩ<br>Zcc = ${z_acum.toFixed(2)} mΩ<br>Icc = ${icc.toFixed(2)} kA`;
         }
-        const box = document.getElementById(`ecu-${nodo}`);
-        box.innerHTML = resHTML;
-        box.className = "ecuacion-box " + (icc > 4.5 ? "res-fail" : "res-ok");
-        box.style.display = 'block';
+        document.getElementById(`ecu-${nodo}`).innerHTML = resHTML;
+        document.getElementById(`ecu-${nodo}`).style.display = 'block';
     }
 
-    /* TENSION CON COLORES */
+    function calcOhm() {
+        let w = parseFloat(document.getElementById('watt-ohm').value), v = parseFloat(document.getElementById('volt-ohm').value);
+        if (w && v) document.getElementById('res-ohm').innerHTML = `<div class="resultado res-ok">I: ${(w/v).toFixed(2)} A</div>`;
+    }
+
     function calcTension() {
         let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / parseFloat(document.getElementById('sec').value);
         let p = (dv / 220) * 100;
-        const res = document.getElementById('res-tension');
-        res.className = "resultado " + (p <= 3 ? "res-ok" : "res-fail");
-        res.innerHTML = `Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%) - ${p <= 3 ? 'CUMPLE RIC ✅' : 'FUERA DE NORMA ❌'}`;
+        document.getElementById('res-tension').innerHTML = `<div class="resultado ${p<=3?'res-ok':'res-fail'}">Pérdida: ${p.toFixed(2)}%</div>`;
     }
 
-    /* OHM CON COLORES */
-    function calcOhm() {
-        let w = parseFloat(document.getElementById('watt-ohm').value), v = parseFloat(document.getElementById('volt-ohm').value);
-        const res = document.getElementById('res-ohm');
-        if (w && v) {
-            let amp = (w/v).toFixed(2);
-            res.className = "resultado " + (amp > 16 ? "res-warn" : "res-ok");
-            res.innerHTML = `Corriente Resultante: ${amp} Amperes`;
-        } else { res.className = "resultado res-fail"; res.innerHTML = "Ingrese Potencia y Voltaje"; }
+    function calcDucto() {
+        let areaT = (parseFloat(document.getElementById('cable-tipo').value) * parseInt(document.getElementById('cable-cant').value)) + (document.getElementById('utp-check').checked ? 32 : 0);
+        let nTotal = parseInt(document.getElementById('cable-cant').value) + (document.getElementById('utp-check').checked ? 1 : 0);
+        let f = nTotal === 1 ? 0.53 : (nTotal === 2 ? 0.31 : 0.40);
+        let ductos = [{n:"25mm", d:24.3}, {n:"32mm", d:32.5}, {n:"40mm", d:38.4}, {n:"50mm", d:50.1}];
+        let html = `Área: ${areaT.toFixed(1)} mm²<br>`;
+        ductos.forEach(t => {
+            let cap = ((Math.PI * Math.pow(t.d, 2)) / 4) * f;
+            html += `${t.n}: ${cap >= areaT ? 'OK' : 'FAIL'}<br>`;
+        });
+        document.getElementById('res-ducto').innerHTML = html;
     }
 
     function iniciarChatbase() {
