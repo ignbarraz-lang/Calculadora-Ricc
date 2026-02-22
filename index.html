@@ -16,22 +16,17 @@
         /* LOGIN */
         #login-wrapper { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--dark) 0%, #1a252f 100%); }
         .login-card { background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); text-align: center; width: 100%; max-width: 350px; }
-        
-        /* LOGO EN LOGIN */
         .login-logo { width: 120px; height: auto; margin-bottom: 10px; background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .welcome-text { color: var(--dark); font-weight: bold; margin-bottom: 20px; font-size: 1.2rem; }
-
         .login-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
         
         /* NAVBAR */
         .navbar { background: var(--dark); color: white; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         .nav-brand { display: flex; align-items: center; }
-        
-        /* LOGO EN NAVBAR */
         .nav-logo { height: 40px; width: auto; background: white; padding: 4px; border-radius: 6px; }
 
         /* CONTAINER & TABS */
-        .main-container { max-width: 900px; margin: 20px auto; padding: 0 20px; display: none; }
+        .main-container { max-width: 1000px; margin: 20px auto; padding: 0 20px; display: none; }
         .calc-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
         .tab-btn { padding: 12px 20px; border: none; border-radius: 12px; background: var(--white); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); white-space: nowrap; }
         .tab-btn.active { background: var(--primary); color: white; }
@@ -41,25 +36,13 @@
         .card.active { display: block; }
         .card h2 { margin-top: 0; font-size: 1.25rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 20px; }
         
-        /* FORM ELEMENTS */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
-        select, input[type="number"], input[type="text"] { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
-        
-        .btn-calc { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
-        
-        /* RESULTS */
-        .resultado { margin-top: 20px; padding: 15px; border-radius: 10px; font-weight: bold; border-left: 5px solid; }
-        .res-ok { background: #f0fdf4; color: #166534; border-color: var(--success); }
-        .res-fail { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
-        .res-warn { background: #eff6ff; color: #1e40af; border-color: var(--primary); }
-        
-        /* INVENTARIO ESTILOS */
+        /* INVENTARIO */
         .inv-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .inv-table th, .inv-table td { padding: 12px; border: 1px solid #e2e8f0; text-align: left; }
         .inv-table th { background: #f8fafc; font-size: 0.8rem; text-transform: uppercase; }
-        .qty-input { width: 70px !important; padding: 5px !important; text-align: center; }
+        .qty-input { width: 80px !important; padding: 5px !important; text-align: center; margin: 0; }
         .install-list { background: #eef2ff; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #d1d5db; }
+        .action-btns { display: flex; gap: 5px; }
 
         /* ESTILOS NODOS INTERACTIVOS */
         .nodo-box { background: #f1f5f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); }
@@ -86,9 +69,7 @@
 
 <div id="main-app">
     <nav class="navbar">
-        <div class="nav-brand">
-            <img src="logo.png" alt="Logo Linstelec" class="nav-logo">
-        </div>
+        <div class="nav-brand"><img src="logo.png" alt="Logo Linstelec" class="nav-logo"></div>
         <div id="user-display" style="font-size: 14px; opacity: 0.9;"></div>
         <a href="#" onclick="location.reload()" style="color:white; text-decoration:none;"><i class="fas fa-sign-out-alt"></i></a>
     </nav>
@@ -154,19 +135,19 @@
         </div>
 
         <div id="inventario" class="card">
-            <h2>Gestión de Inventario LINSTELEC</h2>
+            <h2>Gestión de Bodega LINSTELEC</h2>
             <div class="form-group" style="display: grid; grid-template-columns: 1fr 100px 100px; gap: 10px;">
                 <input type="text" id="new-mat-name" placeholder="Nombre del Material">
                 <input type="number" id="new-mat-qty" placeholder="Cant.">
-                <button onclick="addMaterialToSystem()" class="tab-btn" style="background:var(--dark); color:white;">+</button>
+                <button onclick="addMaterialToSystem()" class="btn-calc" style="padding:0;">+</button>
             </div>
 
             <table class="inv-table">
                 <thead>
                     <tr>
                         <th>Material</th>
-                        <th>Stock Actual</th>
-                        <th>Ocupar</th>
+                        <th>Stock Bodega</th>
+                        <th>Cant. a Usar</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
@@ -174,11 +155,11 @@
             </table>
 
             <div class="install-list">
-                <h3>Plantilla de Instalación</h3>
-                <input type="text" id="install-name" placeholder="Nombre del Proyecto" style="margin-bottom: 10px;">
+                <h3>Plantilla de Salida (Instalación)</h3>
+                <input type="text" id="install-name" placeholder="Nombre del Proyecto / Cliente" style="margin-bottom: 10px;">
                 <div id="bag-items"></div>
                 <hr>
-                <button class="btn-calc btn-success" onclick="finishAndDownload()">Generar y Descontar</button>
+                <button class="btn-calc btn-success" onclick="finishAndDownload()">Generar Archivo y Descontar</button>
             </div>
         </div>
 
@@ -196,7 +177,6 @@
         { id: "Brayan", pass: "2025", name: "Brayan Barraza", clase: "Clase D" },
     ];
 
-    // INVENTARIO DINAMICO
     let inventory = JSON.parse(localStorage.getItem('linstelec_inv_v2')) || [];
     let bag = [];
 
@@ -220,7 +200,7 @@
         evt.currentTarget.classList.add("active");
     }
 
-    // --- FUNCIONES INVENTARIO ---
+    // --- INVENTARIO ---
     function addMaterialToSystem() {
         const name = document.getElementById('new-mat-name').value;
         const qty = parseInt(document.getElementById('new-mat-qty').value);
@@ -239,21 +219,27 @@
                 <tr>
                     <td>${item.name}</td>
                     <td><input type="number" value="${item.stock}" onchange="updateStock(${idx}, this.value)" class="qty-input"></td>
-                    <td><button onclick="addToBag(${idx})" class="tab-btn" style="padding:5px 10px; font-size:12px;">Ocupar</button></td>
-                    <td><button onclick="deleteMat(${idx})" class="btn-calc" style="background:var(--danger); padding:5px 10px; width:auto;"><i class="fas fa-trash"></i></button></td>
+                    <td><input type="number" id="use-qty-${idx}" value="1" min="1" class="qty-input"></td>
+                    <td class="action-btns">
+                        <button onclick="addToBag(${idx})" class="tab-btn" style="padding:5px 10px; font-size:12px; background:var(--primary); color:white;">Ocupar</button>
+                        <button onclick="deleteMat(${idx})" class="btn-calc" style="background:var(--danger); padding:5px 10px; width:auto;"><i class="fas fa-trash"></i></button>
+                    </td>
                 </tr>
             `;
         });
         localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
     }
 
-    function updateStock(idx, val) { inventory[idx].stock = parseInt(val); renderInventoryTable(); }
+    function updateStock(idx, val) { inventory[idx].stock = parseInt(val); localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory)); }
     function deleteMat(idx) { if(confirm("¿Eliminar material?")) { inventory.splice(idx, 1); renderInventoryTable(); } }
 
     function addToBag(idx) {
         const item = inventory[idx];
+        const useQty = parseInt(document.getElementById(`use-qty-${idx}`).value);
+        if(isNaN(useQty) || useQty <= 0) return;
+        
         const exist = bag.find(b => b.name === item.name);
-        if(exist) exist.qty++; else bag.push({ name: item.name, qty: 1, originalIdx: idx });
+        if(exist) exist.qty += useQty; else bag.push({ name: item.name, qty: useQty, originalIdx: idx });
         renderBag();
     }
 
@@ -261,14 +247,14 @@
         const div = document.getElementById('bag-items');
         div.innerHTML = "";
         bag.forEach(item => {
-            div.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${item.name}</span><strong>x${item.qty}</strong></div>`;
+            div.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:0.9rem;"><span>${item.name}</span><strong>Cant: ${item.qty}</strong></div>`;
         });
     }
 
     function finishAndDownload() {
         if(bag.length === 0) return alert("Lista vacía");
         const proj = document.getElementById('install-name').value || "Instalacion";
-        let content = `LINSTELEC CHILE - MATERIALES\nPROYECTO: ${proj}\n-----------------\n`;
+        let content = `LINSTELEC CHILE - MATERIALES UTILIZADOS\nPROYECTO: ${proj}\nFECHA: ${new Date().toLocaleDateString()}\n---------------------------\n`;
         bag.forEach(item => {
             content += `- ${item.name}: ${item.qty}\n`;
             inventory[item.originalIdx].stock -= item.qty;
@@ -283,10 +269,10 @@
         bag = [];
         renderBag();
         renderInventoryTable();
-        alert("Stock descontado y archivo generado.");
+        alert("Stock actualizado y archivo descargado.");
     }
 
-    // --- FUNCIONES EXISTENTES ---
+    // --- CÁLCULOS ---
     function calcNodoInteractivo(nodo) {
         const rho = 0.0185, V = 220, zcc1 = parseFloat(document.getElementById('zcc1').value);
         const calcZ = (L, S) => ((rho / S) * L * 2) * 1000;
