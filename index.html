@@ -97,6 +97,9 @@
 
         <div id="tension" class="card active">
             <h2>Calculadora Caída de Tensión (RIC 04)</h2>
+            <p style="font-size: 0.8rem; color: #64748b; margin: -15px 0 15px 0;">
+                <i class="fas fa-info-circle"></i> Cálculo basado en resistividad del cobre ρ = 0.018
+            </p>
             <div class="form-group">
                 <label>Distancia (m):</label>
                 <input type="number" id="dist" value="10">
@@ -260,17 +263,14 @@
     ];
 
     function checkLogin() {
-        const u = document.getElementById('userInput').value;
-        const p = document.getElementById('passInput').value;
+        const u = document.getElementById('userInput').value, p = document.getElementById('passInput').value;
         const found = USERS.find(user => user.id === u && user.pass === p);
         if(found) {
             document.getElementById('login-wrapper').style.display = 'none';
             document.getElementById('container').style.display = 'block';
             document.getElementById('user-display').innerText = "👷 " + found.name;
             iniciarChatbase();
-        } else {
-            document.getElementById('error-msg').style.display = 'block';
-        }
+        } else { document.getElementById('error-msg').style.display = 'block'; }
     }
 
     function showTab(evt, name) {
@@ -285,37 +285,19 @@
         const rho = 0.0185, V = 220;
         const zcc1 = parseFloat(document.getElementById('zcc1').value);
         const calcZ = (L, S) => ((rho / S) * L * 2) * 1000;
-        let resHTML = "", z_acum = 0, z_cable = 0, icc = 0, label_cable = "";
+        let resHTML = "", z_tdf = zcc1 + calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
 
         if (nodo === 2) {
-            z_cable = calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
-            z_acum = zcc1 + z_cable;
-            icc = V / (z_acum / 1000) / 1000;
-            label_cable = "AL-01";
-            resHTML = `<strong>PASO 1: Resistencia Conductor (${label_cable})</strong><br>
-                R = (ρ / S) * L * 2 = (0.0185 / ${document.getElementById('S2').value}) * ${document.getElementById('L2').value} * 2<br>
-                R = ${z_cable.toFixed(2)} mΩ<br><br>
-                <strong>PASO 2: Impedancia Acumulada</strong><br>
-                Zcc = Zcc_n1 + R = ${zcc1} + ${z_cable.toFixed(2)}<br>
-                Zcc = <span class="math-res">${z_acum.toFixed(2)} mΩ</span><br><br>
-                <strong>PASO 3: Cortocircuito Nodo 2</strong><br>
-                Icc = V / Zcc = 220 / (${z_acum.toFixed(2)} / 1000)<br>
-                Icc = <span class="math-res">${icc.toFixed(2)} kA</span>`;
-        } 
-        else {
-            const z_tdf = zcc1 + calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
-            const L = document.getElementById(nodo === 3 ? 'L3' : 'L4').value;
-            const S = document.getElementById(nodo === 3 ? 'S3' : 'S4').value;
-            z_cable = calcZ(parseFloat(L), parseFloat(S));
-            z_acum = z_tdf + z_cable;
-            icc = V / (z_acum / 1000) / 1000;
-            label_cable = (nodo === 3) ? "CR-01" : "Sub-alim";
-            resHTML = `<strong>PASO 1: Resistencia Conductor (${label_cable})</strong><br>
-                R = (0.0185 / ${S}) * ${L} * 2 = ${z_cable.toFixed(2)} mΩ<br><br>
-                <strong>PASO 2: Impedancia Acumulada (desde TDF)</strong><br>
-                Zcc = Zcc_TDF (${z_tdf.toFixed(2)}) + R = <span class="math-res">${z_acum.toFixed(2)} mΩ</span><br><br>
-                <strong>PASO 3: Cortocircuito Nodo ${nodo}</strong><br>
-                Icc = 220 / (${z_acum.toFixed(2)} / 1000) = <span class="math-res">${icc.toFixed(2)} kA</span>`;
+            let z_cable = calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
+            let z_acum = zcc1 + z_cable;
+            let icc = V / (z_acum / 1000) / 1000;
+            resHTML = `<strong>PASO 1: Resistencia Conductor (AL-01)</strong><br>R = (0.0185 / ${document.getElementById('S2').value}) * ${document.getElementById('L2').value} * 2 = ${z_cable.toFixed(2)} mΩ<br><br><strong>PASO 2: Impedancia Acumulada</strong><br>Zcc = ${zcc1} + ${z_cable.toFixed(2)} = <span class="math-res">${z_acum.toFixed(2)} mΩ</span><br><br><strong>PASO 3: Cortocircuito Nodo 2</strong><br>Icc = 220 / (${z_acum.toFixed(2)} / 1000) = <span class="math-res">${icc.toFixed(2)} kA</span>`;
+        } else {
+            let L = document.getElementById(nodo === 3 ? 'L3' : 'L4').value, S = document.getElementById(nodo === 3 ? 'S3' : 'S4').value;
+            let z_cable = calcZ(parseFloat(L), parseFloat(S));
+            let z_acum = z_tdf + z_cable;
+            let icc = V / (z_acum / 1000) / 1000;
+            resHTML = `<strong>PASO 1: Resistencia Conductor (${nodo === 3 ? 'CR-01' : 'Sub-alim'})</strong><br>R = (0.0185 / ${S}) * ${L} * 2 = ${z_cable.toFixed(2)} mΩ<br><br><strong>PASO 2: Impedancia Acumulada (desde TDF)</strong><br>Zcc = ${z_tdf.toFixed(2)} + ${z_cable.toFixed(2)} = <span class="math-res">${z_acum.toFixed(2)} mΩ</span><br><br><strong>PASO 3: Cortocircuito Nodo ${nodo}</strong><br>Icc = 220 / (${z_acum.toFixed(2)} / 1000) = <span class="math-res">${icc.toFixed(2)} kA</span>`;
         }
         const box = document.getElementById(`ecu-${nodo}`);
         box.innerHTML = resHTML;
@@ -323,17 +305,12 @@
     }
 
     function calcOhm() {
-        let w = parseFloat(document.getElementById('watt-ohm').value);
-        let v = parseFloat(document.getElementById('volt-ohm').value);
+        let w = parseFloat(document.getElementById('watt-ohm').value), v = parseFloat(document.getElementById('volt-ohm').value);
         let res = document.getElementById('res-ohm');
         if (w && v) {
-            let a = w / v;
             res.className = "resultado res-ok";
-            res.innerHTML = `Corriente Resultante: ${a.toFixed(2)} Amperes`;
-        } else {
-            res.className = "resultado res-fail";
-            res.innerHTML = "Ingrese Potencia y Voltaje";
-        }
+            res.innerHTML = `Corriente Resultante: ${(w/v).toFixed(2)} Amperes`;
+        } else { res.className = "resultado res-fail"; res.innerHTML = "Ingrese Potencia y Voltaje"; }
     }
 
     function calcTension() {
