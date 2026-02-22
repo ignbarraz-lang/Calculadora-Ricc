@@ -3,188 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElectriCalc Chile - Brayan Barraza</title>
+    <title>Calculadora Eléctrica & RIC Chile</title>
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { --primary: #3498db; --dark: #2c3e50; --success: #27ae60; --danger: #e74c3c; --bg: #f4f7f6; --google: #4285f4; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        
-        /* LOGIN ESTILO PRO */
-        #login-screen { width: 100%; max-width: 380px; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; border-top: 8px solid var(--primary); }
-        .login-icon { font-size: 50px; color: var(--primary); margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1.5px solid #dce4ec; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
-        
-        /* APP CONTAINER */
-        .container { width: 100%; max-width: 900px; padding: 20px; display: none; }
-        .navbar { background: var(--dark); color: white; padding: 15px 25px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        
-        /* BOTONES Y TABS */
-        .tabs { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 10px; }
-        .tab-btn { padding: 12px 20px; border: none; border-radius: 10px; cursor: pointer; background: white; font-weight: 600; color: var(--dark); box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 8px; white-space: nowrap; transition: 0.3s; }
-        .tab-btn.active { background: var(--primary); color: white; }
-        
-        /* TARJETAS */
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; display: none; border-left: 5px solid var(--primary); }
-        .card.active { display: block; }
-        h2 { margin-top: 0; color: var(--dark); font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
-        
-        .main-btn { background: var(--primary); color: white; padding: 15px; border: none; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; }
-        .res { margin-top: 15px; padding: 15px; border-radius: 10px; font-weight: bold; border-left: 6px solid; }
-        .recomendado { background: #d4edda; color: #155724; border-color: var(--success); }
-        .falla { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
-        .excesivo { background: #e7f3ff; color: #004085; border-color: var(--primary); }
-        iframe { width: 100%; height: 75vh; border: 1.5px solid #dce4ec; border-radius: 12px; }
-    </style>
 </head>
 <body>
-
-<div id="login-screen">
-    <div class="login-icon"><i class="fas fa-bolt"></i></div>
-    <h2>ElectriCalc Pro</h2>
-    <p>Ingresa tus credenciales técnicas</p>
-    <input type="text" id="userInput" placeholder="Usuario">
-    <input type="password" id="passInput" placeholder="Contraseña">
-    <button class="main-btn" onclick="checkLogin()">ACCEDER AL SISTEMA</button>
-    <p id="login-error" style="color:var(--danger); display:none; margin-top:15px; font-weight:bold;">Usuario o clave incorrecta</p>
-</div>
-
-<div id="app-content" class="container">
+    <!-- Navegación -->
     <nav class="navbar">
-        <div style="font-weight: bold; display: flex; align-items: center; gap: 10px;">
-            <i class="fas fa-user-circle"></i> <span id="welcome-msg"></span>
+        <div class="nav-brand">
+            <i class="fas fa-bolt"></i>
+            <span>ElectriCalc Chile</span>
         </div>
-        <div onclick="location.reload()" style="cursor:pointer;"><i class="fas fa-sign-out-alt"></i> Salir</div>
+        <ul class="nav-menu">
+            <li><a href="#calculadora" class="active"><i class="fas fa-calculator"></i> Calculadoras</a></li>
+            <li><a href="#ric"><i class="fas fa-book"></i> RIC Chile</a></li>
+        </ul>
     </nav>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'calc')"><i class="fas fa-calculator"></i> Calculadoras</button>
-        <button class="tab-btn" onclick="openTab(event, 'esquema')"><i class="fas fa-project-diagram"></i> Esquema SGC</button>
-        <button class="tab-btn" onclick="openTab(event, 'normativa')"><i class="fas fa-book"></i> Biblioteca RIC</button>
-        <button class="tab-btn" style="background:var(--google); color:white;" onclick="openTab(event, 'ia-backup')"><i class="fas fa-robot"></i> IA SIN LÍMITES</button>
+    <!-- Sección Calculadoras -->
+    <section id="calculadora" class="section active">
+        <div class="container">
+            <h1><i class="fas fa-bolt"></i> Calculadoras Eléctricas</h1>
+            
+            <!-- Tabs de calculadoras -->
+            <div class="calc-tabs">
+                <button class="tab-btn active" onclick="showCalc('tension')">
+                    <i class="fas fa-wave-square"></i> Caída de Tensión
+                </button>
+                <button class="tab-btn" onclick="showCalc('tuberia')">
+                    <i class="fas fa-circle"></i> Diámetro Tubería
+                </button>
+            </div>
+
+            <!-- Calculadora Caída de Tensión -->
+            <div id="tension" class="calc-content active">
+                <div class="card">
+                    <h2>Calculadora de Caída de Tensión</h2>
+                    <p class="subtitle">Según norma NCh Elec 4/2003</p>
+                    
+                    <div class="form-group">
+                        <label>Tensión (V):</label>
+                        <select id="tension-tipo">
+                            <option value="220">220V Monofásico</option>
+                            <option value="380">380V Trifásico</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Corriente (A):</label>
+                        <input type="number" id="corriente" placeholder="Ej: 25" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Longitud (m):</label>
+                        <input type="number" id="longitud" placeholder="Ej: 30" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Material:</label>
+                        <select id="material">
+                            <option value="56">Cobre (ρ=56)</option>
+                            <option value="35">Aluminio (ρ=35)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sección del conductor (mm²):</label>
+                        <select id="seccion">
+                            <option value="1.5">1.5 mm²</option>
+                            <option value="2.5">2.5 mm²</option>
+                            <option value="4">4 mm²</option>
+                            <option value="6">6 mm²</option>
+                            <option value="10">10 mm²</option>
+                            <option value="16">16 mm²</option>
+                            <option value="25">25 mm²</option>
+                            <option value="35">35 mm²</option>
+                            <option value="50">50 mm²</option>
+                            <option value="70">70 mm²</option>
+                            <option value="95">95 mm²</option>
+                        </select>
+                    </div>
+
+                    <button onclick="calcularCaidaTension()" class="btn-calc">
+                        <i class="fas fa-calculator"></i> Calcular
+                    </button>
+
+                    <div id="resultado-tension" class="resultado"></div>
+                </div>
+            </div>
+
+            <!-- Calculadora Diámetro Tubería -->
+            <div id="tuberia" class="calc-content">
+                <div class="card">
+                    <h2>Calculadora de Diámetro de Tubería</h2>
+                    <p class="subtitle">Para cables eléctricos según RIC</p>
+
+                    <div class="form-group">
+                        <label>Tipo de cable:</label>
+                        <select id="tipo-cable">
+                            <option value="unipolar">Cable Unipolar</option>
+                            <option value="multipolar">Cable Multipolar</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cantidad de cables:</label>
+                        <input type="number" id="cantidad-cables" placeholder="Ej: 3" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sección de cada cable (mm²):</label>
+                        <select id="seccion-cable">
+                            <option value="1.5">1.5 mm²</option>
+                            <option value="2.5">2.5 mm²</option>
+                            <option value="4">4 mm²</option>
+                            <option value="6">6 mm²</option>
+                            <option value="10">10 mm²</option>
+                            <option value="16">16 mm²</option>
+                            <option value="25">25 mm²</option>
+                            <option value="35">35 mm²</option>
+                            <option value="50">50 mm²</option>
+                            <option value="70">70 mm²</option>
+                            <option value="95">95 mm²</option>
+                            <option value="120">120 mm²</option>
+                            <option value="150">150 mm²</option>
+                            <option value="185">185 mm²</option>
+                            <option value="240">240 mm²</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Ocupación máxima (%):</label>
+                        <select id="ocupacion">
+                            <option value="53">53% - 1 cable</option>
+                            <option value="43">43% - 2 cables</option>
+                            <option value="40" selected>40% - 3+ cables</option>
+                        </select>
+                    </div>
+
+                    <button onclick="calcularTuberia()" class="btn-calc">
+                        <i class="fas fa-calculator"></i> Calcular Diámetro
+                    </button>
+
+                    <div id="resultado-tuberia" class="resultado"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección RIC -->
+    <section id="ric" class="section">
+        <div class="container">
+            <h1><i class="fas fa-book-open"></i> RIC - Reglamento de Instalaciones de Consumo</h1>
+            
+            <div class="ric-busqueda">
+                <input type="text" id="ric-search" placeholder="Buscar artículo o palabra clave..." onkeyup="buscarRIC()">
+                <i class="fas fa-search"></i>
+            </div>
+
+            <div class="ric-contenido" id="ric-contenido">
+                <!-- Contenido cargado dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot RIC -->
+    <div class="chatbot-container">
+        <div class="chatbot-bubble" onclick="toggleChat()">
+            <i class="fas fa-robot"></i>
+            <span>Asistente RIC</span>
+        </div>
+        
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <i class="fas fa-robot"></i>
+                <span>Asistente RIC Chile</span>
+                <button onclick="toggleChat()" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bot">
+                    ¡Hola! Soy tu asistente especializado en el RIC de Chile. 
+                    Puedo responder preguntas sobre el Reglamento de Instalaciones de Consumo. 
+                    ¿En qué puedo ayudarte?
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Escribe tu pregunta sobre RIC..." onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
     </div>
 
-    <div id="calc" class="card active">
-        <h2><i class="fas fa-wave-square"></i> Caída de Tensión (RIC 04)</h2>
-        <input type="number" id="dist" placeholder="Distancia (m)" value="10">
-        <input type="number" id="amp" placeholder="Amperaje (A)" value="16">
-        <input type="number" id="sec" placeholder="Sección (mm²)" value="6">
-        <button class="main-btn" onclick="calcCaida()">CALCULAR AHORA</button>
-        <div id="outCaida"></div>
-        <hr style="margin:25px 0; opacity:0.2;">
-        <h2><i class="fas fa-circle"></i> Llenado de Ductos (RIC 07)</h2>
-        <select id="cable">
-            <option value="52.8">6mm² RVK</option>
-            <option value="81.7">10mm² RVK</option>
-            <option value="109.4">16mm² RVK</option>
-        </select>
-        <input type="number" id="cant" placeholder="Cantidad" value="1">
-        <label style="display:block; margin:10px 0;"><input type="checkbox" id="utp"> Incluir UTP Cat6 (+32mm²)</label>
-        <button class="main-btn" style="background:var(--success)" onclick="calcDuctos()">ANALIZAR DUCTO</button>
-        <div id="outDucto"></div>
-    </div>
-
-    <div id="esquema" class="card">
-        <h2><i class="fas fa-project-diagram"></i> Conexión SGC Detallada</h2>
-        <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg" style="background:white; border-radius:10px;">
-            <text x="95" y="30" font-weight="bold" font-size="14">CARGADOR</text>
-            <text x="310" y="30" font-weight="bold" font-size="14">SGC</text>
-            <circle cx="35" cy="100" r="7" fill="#2ecc71"/><circle cx="75" cy="100" r="7" fill="#3498db"/>
-            <circle cx="115" cy="100" r="7" fill="#2ecc71"/><circle cx="155" cy="100" r="7" fill="#8b4513"/>
-            <circle cx="250" cy="100" r="7" fill="#bdc3c7"/><circle cx="290" cy="100" r="7" fill="#8b4513"/>
-            <circle cx="330" cy="100" r="7" fill="#2ecc71"/><circle cx="370" cy="100" r="7" fill="#3498db"/>
-            <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/>
-            <path d="M 155 107 L 155 160 L 290 160 L 290 107" stroke="#8b4513" fill="none" stroke-width="2"/>
-            <path d="M 115 130 L 115 200 L 330 200 L 330 107" stroke="#2ecc71" fill="none" stroke-width="2"/>
-            <path d="M 75 107 L 75 235 L 370 235 L 370 107" stroke="#3498db" fill="none" stroke-width="2"/>
-        </svg>
-    </div>
-
-    <div id="normativa" class="card">
-        <h2><i class="fas fa-book"></i> Pliegos RIC Completos</h2>
-        <select onchange="document.getElementById('pdfFrame').src = this.value">
-            <option value="">-- Seleccionar Pliego --</option>
-            <option value="RIC01.pdf">RIC 01: Empalmes</option>
-            <option value="RIC02.pdf">RIC 02: Tableros</option>
-            <option value="RIC04.pdf">RIC 04: Canalizaciones</option>
-            <option value="RIC15.pdf">RIC 15: Carga VE</option>
-            <option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
-        </select>
-        <iframe id="pdfFrame" src=""></iframe>
-    </div>
-
-    <div id="ia-backup" class="card">
-        <h2><i class="fas fa-robot"></i> Asistente RIC Pro (NotebookLM)</h2>
-        <iframe id="iaFrame" src="https://notebooklm.google.com/notebook/63479e8e-c4db-4437-b715-fa48c58a2d93?authuser=1"></iframe>
-    </div>
-</div>
-
-<script>
-    const USERS = [
-        { id: "Padilla", pass: "1648", name: "Padilla" },
-        { id: "Isaias", pass: "2071", name: "Isaias" },
-        { id: "Brayan", pass: "2025", name: "Brayan Barraza" },
-        { id: "1234", pass: "adminRIC", name: "Admin" }
-    ];
-
-    function checkLogin() {
-        const u = document.getElementById('userInput').value;
-        const p = document.getElementById('passInput').value;
-        const user = USERS.find(x => x.id === u && x.pass === p);
-        if(user) {
-            document.getElementById('login-screen').style.display='none';
-            document.getElementById('app-content').style.display='block';
-            document.getElementById('welcome-msg').innerText = user.name;
-            document.body.style.alignItems = "flex-start";
-            iniciarChatbase();
-        } else {
-            document.getElementById('login-error').style.display='block';
-        }
-    }
-
-    function iniciarChatbase() {
-        if(!window.chatbase){
-            window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};
-            window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}});
-        }
-        const s = document.createElement("script");
-        s.src = "https://www.chatbase.co/embed.min.js";
-        s.id = "HZBhzPxQtpDaw6ZlcBzEA";
-        s.domain = "www.chatbase.co";
-        document.body.appendChild(s);
-    }
-
-    function openTab(evt, tabName) {
-        let i, cards = document.getElementsByClassName("card"), btns = document.getElementsByClassName("tab-btn");
-        for (i=0; i<cards.length; i++) cards[i].classList.remove("active");
-        for (i=0; i<btns.length; i++) btns[i].classList.remove("active");
-        document.getElementById(tabName).classList.add("active");
-        evt.currentTarget.classList.add("active");
-    }
-
-    function calcCaida() {
-        let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / parseFloat(document.getElementById('sec').value);
-        let p = (dv / 220) * 100;
-        document.getElementById('outCaida').innerHTML = `<div class="res ${p<=3?'recomendado':'falla'}">Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%)</div>`;
-    }
-
-    function calcDuctos() {
-        let areaU = parseFloat(document.getElementById('cable').value);
-        let n = parseInt(document.getElementById('cant').value);
-        let areaT = (areaU * n) + (document.getElementById('utp').checked ? 32 : 0);
-        let totalC = n + (document.getElementById('utp').checked ? 1 : 0);
-        let f = totalC === 1 ? 0.53 : (totalC === 2 ? 0.31 : 0.40);
-        let ductos = [{n:"25mm", d:24.3}, {n:"32mm", d:32.5}, {n:"40mm", d:38.4}];
-        let html = `<div class="res" style="background:#fff3cd">Área Cables: ${areaT.toFixed(1)} mm²</div>`;
-        let yaRec = false;
-        ductos.forEach(t => {
-            let cap = ((Math.PI * Math.pow(t.d, 2)) / 4) * f;
-            if (cap >= areaT) {
-                if (!yaRec) { html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`; yaRec = true; }
-                else { html += `<div class="res excesivo">${t.n}: DISPONIBLE 🔵</div>`; }
-            } else { html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`; }
-        });
-        document.getElementById('outDucto').innerHTML = html;
-    }
-</script>
+    <script src="js/ric-data.js"></script>
+    <script src="js/calculadora.js"></script>
+    <script src="js/chatbot.js"></script>
 </body>
 </html>
