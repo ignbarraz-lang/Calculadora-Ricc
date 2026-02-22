@@ -5,24 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema RIC Pro - Brayan Barraza</title>
     <style>
-        :root { --primary: #3498db; --success: #27ae60; --danger: #e74c3c; --bg: #f0f4f8; }
+        :root { --primary: #3498db; --success: #27ae60; --danger: #e74c3c; --bg: #f0f4f8; --google: #4285f4; }
         body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: #333; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 850px; padding: 15px; display: none; }
-        
         #login-screen { max-width: 400px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center; border-top: 6px solid var(--primary); }
         input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccd1d9; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        
-        .tabs { display: flex; margin-bottom: 20px; gap: 5px; overflow-x: auto; }
+        .tabs { display: flex; margin-bottom: 20px; gap: 5px; overflow-x: auto; padding-bottom: 5px; }
         .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; background: #cbd5e1; font-weight: bold; white-space: nowrap; }
         .tab-btn.active { background: var(--primary); color: white; }
         .content { display: none; }
         .content.active { display: block; }
-
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; border-top: 4px solid var(--primary); }
         h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; font-size: 1.1rem; }
         label { display: block; margin: 10px 0 5px; font-weight: bold; font-size: 14px; text-align: left; }
         .main-btn { background: var(--primary); color: white; padding: 15px; border: none; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        
         .res { margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: bold; border-left: 6px solid; }
         .recomendado { background: #d4edda; color: #155724; border-color: var(--success); }
         .falla { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
@@ -35,9 +31,10 @@
 
 <div id="login-screen">
     <h1 style="font-size: 1.4rem;">🔐 Acceso Autorizado</h1>
-    <input type="text" id="userInput" placeholder="Nombre de Usuario">
+    <input type="text" id="userInput" placeholder="Usuario">
     <input type="password" id="passInput" placeholder="Contraseña">
     <button class="main-btn" onclick="checkLogin()">ENTRAR AL SISTEMA</button>
+    <p id="login-error" style="color:red; display:none; margin-top:10px;">⚠️ Credenciales incorrectas</p>
 </div>
 
 <div id="app-content" class="container">
@@ -46,6 +43,7 @@
         <button class="tab-btn active" onclick="openTab(event, 'calc')">Calculadoras</button>
         <button class="tab-btn" onclick="openTab(event, 'esquema')">Esquema SGC</button>
         <button class="tab-btn" onclick="openTab(event, 'normativa')">Biblioteca RIC</button>
+        <button class="tab-btn" style="background: var(--google); color: white;" onclick="window.open('https://notebooklm.google.com/notebook/63479e8e-c4db-4437-b715-fa48c58a2d93?authuser=1', '_blank')">IA SIN LÍMITES</button>
         <button class="tab-btn" style="background:#95a5a6; color:white;" onclick="location.reload()">Salir</button>
     </div>
 
@@ -58,14 +56,13 @@
             <button class="main-btn" onclick="calcCaida()">CALCULAR</button>
             <div id="outCaida"></div>
         </div>
-
         <div class="card">
             <h2>🕳️ Ductos EMT (RIC 07)</h2>
             <label>Cable de Fuerza (RVK):</label>
             <select id="cable">
-                <option value="52.8">6mm² (Ø 8.2mm)</option>
-                <option value="81.7">10mm² (Ø 10.2mm)</option>
-                <option value="109.4">16mm² (Ø 11.8mm)</option>
+                <option value="52.8">6mm²</option>
+                <option value="81.7">10mm²</option>
+                <option value="109.4">16mm²</option>
             </select>
             <label>Cantidad:</label> <input type="number" id="cant" value="1">
             <label><input type="checkbox" id="utp"> <b>Incluir UTP Cat6 (+32mm²)</b></label>
@@ -80,22 +77,10 @@
             <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" style="background: #fff; border-radius: 8px;">
                 <text x="95" y="30" font-family="Arial" font-size="16" font-weight="bold" fill="#2c3e50" text-anchor="middle">CARGADOR</text>
                 <text x="310" y="30" font-family="Arial" font-size="16" font-weight="bold" fill="#2c3e50" text-anchor="middle">SGC</text>
-                
-                <text x="35" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">3</text>
-                <text x="75" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">4</text>
-                <text x="115" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">5</text>
-                <text x="155" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">6</text>
-                
-                <text x="250" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">--</text>
-                <text x="290" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">4</text>
-                <text x="330" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">3</text>
-                <text x="370" y="85" font-family="Arial" font-size="12" font-weight="bold" text-anchor="middle">4</text>
-
                 <circle cx="35" cy="100" r="7" fill="#2ecc71"/><circle cx="75" cy="100" r="7" fill="#3498db"/>
                 <circle cx="115" cy="100" r="7" fill="#2ecc71"/><circle cx="155" cy="100" r="7" fill="#8b4513"/>
                 <circle cx="250" cy="100" r="7" fill="#bdc3c7"/><circle cx="290" cy="100" r="7" fill="#8b4513"/>
                 <circle cx="330" cy="100" r="7" fill="#2ecc71"/><circle cx="370" cy="100" r="7" fill="#3498db"/>
-                
                 <path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/>
                 <path d="M 155 107 L 155 160 L 290 160 L 290 107" stroke="#8b4513" fill="none" stroke-width="2"/>
                 <path d="M 115 130 L 115 200 L 330 200 L 330 107" stroke="#2ecc71" fill="none" stroke-width="2"/>
@@ -106,28 +91,14 @@
 
     <div id="normativa" class="content">
         <div class="card">
-            <h2>📚 Biblioteca Pliegos RIC (Completos 01-19)</h2>
+            <h2>📚 Biblioteca Pliegos RIC (01-19)</h2>
             <select onchange="loadPDF(this.value)">
-                <option value="">-- Seleccionar Pliego Técnico --</option>
+                <option value="">-- Seleccionar Pliego --</option>
                 <option value="RIC01.pdf">RIC 01: Empalmes</option>
-                <option value="RIC02.pdf">RIC 02: Tableros Eléctricos</option>
-                <option value="RIC03.pdf">RIC 03: Alimentadores y Subalimentadores</option>
-                <option value="RIC04.pdf">RIC 04: Conductores y Canalizaciones</option>
-                <option value="RIC05.pdf">RIC 05: Medidas de Protección</option>
-                <option value="RIC06.pdf">RIC 06: Puesta a Tierra</option>
-                <option value="RIC07.pdf">RIC 07: Instalaciones de Uso General</option>
-                <option value="RIC08.pdf">RIC 08: Sistemas de Emergencia</option>
-                <option value="RIC09.pdf">RIC 09: Sistemas de Autogeneración</option>
-                <option value="RIC10.pdf">RIC 10: Áreas Peligrosas</option>
-                <option value="RIC11.pdf">RIC 11: Reunión de Personas</option>
-                <option value="RIC12.pdf">RIC 12: Instalaciones Deportivas</option>
-                <option value="RIC13.pdf">RIC 13: Recintos de Espectáculos</option>
-                <option value="RIC14.pdf">RIC 14: Servicentros</option>
-                <option value="RIC15.pdf">RIC 15: Carga de Vehículos Eléctricos</option>
-                <option value="RIC15.1.pdf">RIC 15.1: Especificaciones IRVE</option>
-                <option value="RIC16.pdf">RIC 16: Generación Local</option>
-                <option value="RIC17.pdf">RIC 17: Operación y Mantenimiento</option>
-                <option value="RIC18.pdf">RIC 18: Presentación de Proyectos</option>
+                <option value="RIC02.pdf">RIC 02: Tableros</option>
+                <option value="RIC03.pdf">RIC 03: Alimentadores</option>
+                <option value="RIC04.pdf">RIC 04: Canalizaciones</option>
+                <option value="RIC15.pdf">RIC 15: Carga VE</option>
                 <option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
             </select>
             <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe>
@@ -140,6 +111,7 @@
         { id: "Padilla", pass: "1648", name: "Padilla" },
         { id: "Isaias", pass: "2071", name: "Isaias" },
         { id: "Brayan", pass: "2025", name: "Brayan" },
+        { id: "1234", pass: "adminRIC", name: "Administrador" }
     ];
 
     function checkLogin() {
@@ -149,8 +121,10 @@
         if(user) {
             document.getElementById('login-screen').style.display='none';
             document.getElementById('app-content').style.display='block';
-            document.getElementById('welcome-msg').innerText = "⚡ Profesional: " + user.name;
+            document.getElementById('welcome-msg').innerText = "⚡ Sesión: " + user.name;
             iniciarIA();
+        } else {
+            document.getElementById('login-error').style.display='block';
         }
     }
 
@@ -188,36 +162,20 @@
         let utp = document.getElementById('utp').checked;
         let areaT = (areaU * n) + (utp ? 32 : 0);
         let totalCond = n + (utp ? 1 : 0);
-        
         let f = totalCond === 1 ? 0.53 : (totalCond === 2 ? 0.31 : 0.40);
-        let ductos = [
-            {n:"25mm (1\")", d:24.3}, 
-            {n:"32mm (1 1/4\")", d:32.5}, 
-            {n:"40mm (1 1/2\")", d:38.4},
-            {n:"50mm (2\")", d:50.1}
-        ];
-        
-        let html = `<div class="res" style="background:#fff3cd; color:#856404;">Área Total: ${areaT.toFixed(1)} mm²</div>`;
+        let ductos = [{n:"25mm", d:24.3}, {n:"32mm", d:32.5}, {n:"40mm", d:38.4}, {n:"50mm", d:50.1}];
+        let html = `<div class="res" style="background:#fff3cd">Área Cables: ${areaT.toFixed(1)} mm²</div>`;
         let yaRec = false;
-        
         ductos.forEach(t => {
             let areaDucto = (Math.PI * Math.pow(t.d, 2)) / 4;
             let capUtil = areaDucto * f;
             if (capUtil >= areaT) {
-                if (!yaRec) { 
-                    html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`; 
-                    yaRec = true; 
-                } else { 
-                    html += `<div class="res excesivo">${t.n}: EXCESIVO 🔵</div>`; 
-                }
-            } else { 
-                html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`; 
-            }
+                if (!yaRec) { html += `<div class="res recomendado">${t.n}: RECOMENDADO ✅</div>`; yaRec = true; }
+                else { html += `<div class="res excesivo">${t.n}: EXCESIVO 🔵</div>`; }
+            } else { html += `<div class="res falla">${t.n}: SOBRECARGADO ❌</div>`; }
         });
         document.getElementById('outDucto').innerHTML = html;
     }
 </script>
 </body>
 </html>
-
-
