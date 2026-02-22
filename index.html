@@ -62,9 +62,9 @@
         .math-res { color: var(--danger); font-weight: bold; }
 
         /* ESTILOS INVENTARIO */
-        .inv-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .inv-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .inv-table th, .inv-table td { padding: 10px; border: 1px solid #e2e8f0; text-align: left; }
-        .inv-table th { background: #f8fafc; font-size: 0.8rem; }
+        .inv-table th { background: #f8fafc; }
         .qty-input { width: 70px !important; padding: 5px !important; text-align: center; margin: 0 !important; }
         .install-list { background: #f0f9ff; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #bae6fd; }
 
@@ -259,10 +259,10 @@
         </div>
 
         <div id="inventario" class="card">
-            <h2>Gestión de Inventario</h2>
+            <h2>Gestión de Bodega LINSTELEC</h2>
             <div class="form-group" style="display: grid; grid-template-columns: 1fr 100px 80px; gap: 10px;">
-                <input type="text" id="new-item-name" placeholder="Nombre del Material">
-                <input type="number" id="new-item-qty" placeholder="Cant.">
+                <input type="text" id="new-mat-name" placeholder="Nombre del Material">
+                <input type="number" id="new-mat-qty" placeholder="Cant.">
                 <button onclick="addMaterial()" class="btn-calc" style="padding:0;">+</button>
             </div>
 
@@ -280,7 +280,7 @@
 
             <div class="install-list">
                 <h3>Plantilla de Salida (Instalación)</h3>
-                <input type="text" id="install-proj" placeholder="Nombre Proyecto" style="margin-bottom:10px; width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+                <input type="text" id="install-proj" placeholder="Nombre Proyecto" style="margin-bottom:10px; width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:1rem;">
                 <div id="bag-items"></div>
                 <hr>
                 <button class="btn-calc" style="background:var(--success);" onclick="generateFile()">Generar Archivo y Descontar</button>
@@ -324,7 +324,7 @@
         evt.currentTarget.classList.add("active");
     }
 
-    // --- INVENTARIO ---
+    // --- LOGICA INVENTARIO ---
     function addMaterial() {
         const name = document.getElementById('new-item-name').value;
         const qty = parseInt(document.getElementById('new-item-qty').value);
@@ -354,7 +354,7 @@
     }
 
     function updateStock(idx, val) { inventory[idx].stock = parseInt(val); localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory)); }
-    function delMat(idx) { if(confirm("Eliminar?")) { inventory.splice(idx, 1); renderInv(); } }
+    function delMat(idx) { if(confirm("¿Eliminar material?")) { inventory.splice(idx, 1); renderInv(); } }
 
     function addToBag(idx) {
         const useQty = parseInt(document.getElementById(`use-qty-${idx}`).value);
@@ -367,13 +367,13 @@
     function renderBag() {
         const div = document.getElementById('bag-items');
         div.innerHTML = "";
-        bag.forEach(item => { div.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${item.name}</span><strong>Cant: ${item.qty}</strong></div>`; });
+        bag.forEach(item => { div.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; background:white; padding:5px; border-radius:5px; font-size:0.9rem;"><span>${item.name}</span><strong>Cant: ${item.qty}</strong></div>`; });
     }
 
     function generateFile() {
-        if(bag.length === 0) return;
-        const proj = document.getElementById('install-proj').value || "Salida";
-        let txt = `LINSTELEC - MATERIALES\nPROYECTO: ${proj}\nFECHA: ${new Date().toLocaleDateString()}\n-------------------\n`;
+        if(bag.length === 0) return alert("Selecciona materiales primero");
+        const proj = document.getElementById('install-proj').value || "Salida_Materiales";
+        let txt = `LINSTELEC - GUIA DE MATERIALES\nPROYECTO: ${proj}\nFECHA: ${new Date().toLocaleDateString()}\n-------------------\n`;
         bag.forEach(item => {
             txt += `- ${item.name}: ${item.qty}\n`;
             inventory[item.originIdx].stock -= item.qty;
@@ -384,9 +384,10 @@
         a.download = `${proj}_Materiales.txt`;
         a.click();
         bag = []; renderBag(); renderInv();
+        alert("Archivo generado y stock actualizado.");
     }
 
-    // --- FUNCIONES ORIGINALES ---
+    // --- FUNCIONES EXISTENTES ---
     function calcNodoInteractivo(nodo) {
         const rho = 0.0185, V = 220, zcc1 = parseFloat(document.getElementById('zcc1').value);
         const calcZ = (L, S) => ((rho / S) * L * 2) * 1000;
@@ -395,14 +396,14 @@
             z_cable = calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
             z_acum = zcc1 + z_cable;
             icc = V / (z_acum / 1000) / 1000;
-            resHTML = `<strong>PASO 1: Resistencia Conductor</strong><br>R = ${z_cable.toFixed(2)} mΩ<br><strong>PASO 2: Impedancia</strong><br>Zcc = ${z_acum.toFixed(2)} mΩ<br><strong>PASO 3: Icc</strong><br>Icc = ${icc.toFixed(2)} kA`;
+            resHTML = `R = ${z_cable.toFixed(2)} mΩ<br>Zcc = ${z_acum.toFixed(2)} mΩ<br>Icc = ${icc.toFixed(2)} kA`;
         } else {
             const z_tdf = zcc1 + calcZ(parseFloat(document.getElementById('L2').value), parseFloat(document.getElementById('S2').value));
             let L = document.getElementById(nodo === 3 ? 'L3' : 'L4').value, S = document.getElementById(nodo === 3 ? 'S3' : 'S4').value;
             z_cable = calcZ(parseFloat(L), parseFloat(S));
             z_acum = z_tdf + z_cable;
             icc = V / (z_acum / 1000) / 1000;
-            resHTML = `<strong>PASO 1: Resistencia Conductor</strong><br>R = ${z_cable.toFixed(2)} mΩ<br><strong>PASO 2: Impedancia</strong><br>Zcc = ${z_acum.toFixed(2)} mΩ<br><strong>PASO 3: Icc</strong><br>Icc = ${icc.toFixed(2)} kA`;
+            resHTML = `R = ${z_cable.toFixed(2)} mΩ<br>Zcc = ${z_acum.toFixed(2)} mΩ<br>Icc = ${icc.toFixed(2)} kA`;
         }
         document.getElementById(`ecu-${nodo}`).innerHTML = resHTML;
         document.getElementById(`ecu-${nodo}`).style.display = 'block';
