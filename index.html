@@ -49,6 +49,9 @@
         .res-warn { background: #eff6ff; color: #1e40af; border-color: var(--primary); }
         
         /* NODOS ECUACIONES */
+        .nodo-box { background: #f1f5f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); }
+        .nodo-title { font-weight: bold; margin-bottom: 10px; color: #1e293b; text-transform: uppercase; font-size: 0.85rem; }
+        .grid-nodos { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
         .ecuacion-box { display: none; margin-top: 15px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #334155; line-height: 1.5; }
         .math-res { color: var(--danger); font-weight: bold; }
 
@@ -141,16 +144,7 @@
             <h2>Biblioteca Pliegos RIC (01-19 + 15.1)</h2>
             <select onchange="document.getElementById('pdf-view').src = this.value">
                 <option value="">-- Seleccionar Pliego --</option>
-                <option value="RIC01.pdf">RIC 01: Empalmes</option><option value="RIC02.pdf">RIC 02: Tableros</option>
-                <option value="RIC03.pdf">RIC 03: Alimentadores</option><option value="RIC04.pdf">RIC 04: Canalizaciones</option>
-                <option value="RIC05.pdf">RIC 05: Protecciones</option><option value="RIC06.pdf">RIC 06: Puesta a Tierra</option>
-                <option value="RIC07.pdf">RIC 07: Instalaciones Interiores</option><option value="RIC08.pdf">RIC 08: Sistemas de Emergencia</option>
-                <option value="RIC09.pdf">RIC 09: Hospitales</option><option value="RIC10.pdf">RIC 10: Lugares de reunión</option>
-                <option value="RIC11.pdf">RIC 11: Zonas Peligrosas</option><option value="RIC12.pdf">RIC 12: Ambientes Especiales</option>
-                <option value="RIC13.pdf">RIC 13: Maquinaria</option><option value="RIC14.pdf">RIC 14: Alumbrado Público</option>
-                <option value="RIC15.pdf">RIC 15: Carga VE</option><option value="RIC15.1.pdf">RIC 15.1: Operación e Interoperabilidad</option>
-                <option value="RIC16.pdf">RIC 16: Autogeneración</option><option value="RIC17.pdf">RIC 17: Redes Inteligentes</option>
-                <option value="RIC18.pdf">RIC 18: Instalaciones Provisionales</option><option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
+                <option value="RIC01.pdf">RIC 01: Empalmes</option><option value="RIC02.pdf">RIC 02: Tableros</option><option value="RIC03.pdf">RIC 03: Alimentadores</option><option value="RIC04.pdf">RIC 04: Canalizaciones</option><option value="RIC05.pdf">RIC 05: Protecciones</option><option value="RIC06.pdf">RIC 06: Puesta a Tierra</option><option value="RIC07.pdf">RIC 07: Instalaciones Interiores</option><option value="RIC08.pdf">RIC 08: Sistemas de Emergencia</option><option value="RIC09.pdf">RIC 09: Hospitales</option><option value="RIC10.pdf">RIC 10: Lugares de reunión</option><option value="RIC11.pdf">RIC 11: Zonas Peligrosas</option><option value="RIC12.pdf">RIC 12: Ambientes Especiales</option><option value="RIC13.pdf">RIC 13: Maquinaria</option><option value="RIC14.pdf">RIC 14: Alumbrado Público</option><option value="RIC15.pdf">RIC 15: Carga VE</option><option value="RIC15.1.pdf">RIC 15.1: Operación e Interoperabilidad</option><option value="RIC16.pdf">RIC 16: Autogeneración</option><option value="RIC17.pdf">RIC 17: Redes Inteligentes</option><option value="RIC18.pdf">RIC 18: Instalaciones Provisionales</option><option value="RIC19.pdf">RIC 19: Puesta en Servicio</option>
             </select>
             <iframe id="pdf-view" src=""></iframe>
         </div>
@@ -158,7 +152,7 @@
         <div id="inventario" class="card">
             <h2>Gestión de Bodega LINSTELEC</h2>
             <div class="form-group" style="display: grid; grid-template-columns: 1fr 100px 80px; gap: 10px;">
-                <input type="text" id="new-item-name" placeholder="Nombre Material"><input type="number" id="new-item-qty" placeholder="Cant."><button onclick="addMaterial()" class="btn-calc" style="padding:0;">+</button>
+                <input type="text" id="new-item-name" placeholder="Nombre Material"><input type="number" id="new-item-qty" placeholder="Stock"><button onclick="addMaterial()" class="btn-calc" style="padding:0;">+</button>
             </div>
             <table class="inv-table">
                 <thead><tr><th>Material</th><th>Bodega</th><th>Usar</th><th>Acción</th></tr></thead>
@@ -166,7 +160,7 @@
             </table>
             <div class="install-list">
                 <h3>Plantilla de Salida (Instalación)</h3>
-                <input type="text" id="install-proj" placeholder="Nombre Proyecto" style="margin-bottom:10px; width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:1rem;">
+                <input type="text" id="install-proj" placeholder="Nombre Proyecto" style="margin-bottom:10px; width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
                 <div id="bag-items"></div><hr>
                 <button class="btn-calc btn-success" style="background:var(--success);" onclick="generateFile()">Generar Archivo y Descontar Stock</button>
             </div>
@@ -203,7 +197,7 @@
         evt.currentTarget.classList.add("active");
     }
 
-    /* NODOS ECUACIONES */
+    /* NODOS CON ECUACIONES COMPLETAS RESTAURADAS */
     function calcNodoInteractivo(nodo) {
         const rho = 0.0185, V = 220, zcc1 = parseFloat(document.getElementById('zcc1').value);
         const calcZ = (L, S) => ((rho / S) * L * 2) * 1000;
@@ -251,7 +245,7 @@
         document.getElementById('res-ducto').innerHTML = html;
     }
 
-    /* INVENTARIO LOGICA */
+    /* LOGICA INVENTARIO */
     function addMaterial() {
         const n = document.getElementById('new-item-name').value, q = parseInt(document.getElementById('new-item-qty').value);
         if(n && !isNaN(q)) { inventory.push({ name: n, stock: q }); document.getElementById('new-item-name').value = ""; document.getElementById('new-item-qty').value = ""; renderInv(); }
@@ -264,7 +258,8 @@
         localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
     }
     function updateStock(idx, val) { inventory[idx].stock = parseInt(val); localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory)); }
-    function delMat(idx) { if(confirm("¿Eliminar?")) { inventory.splice(idx, 1); renderInv(); } }
+    function delMat(idx) { if(confirm("¿Eliminar material?")) { inventory.splice(idx, 1); renderInv(); } }
+    
     function addToBag(idx) {
         const useQty = parseInt(document.getElementById(`use-qty-${idx}`).value);
         if(isNaN(useQty) || useQty <= 0) return;
@@ -277,24 +272,28 @@
         bag.forEach(item => { div.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; background:white; padding:5px; border-radius:5px; font-size:0.9rem;"><span>${item.name}</span><strong>Cant: ${item.qty}</strong></div>`; });
     }
     
+    // FUNCION DE GENERACION DE ARCHIVO CORREGIDA
     function generateFile() {
         if(bag.length === 0) return alert("Selecciona materiales primero");
         const proj = document.getElementById('install-proj').value || "Salida_Materiales";
-        let txt = `LINSTELEC - GUIA DE MATERIALES\nPROYECTO: ${proj}\nFECHA: ${new Date().toLocaleDateString()}\n-------------------\n`;
+        let txt = `LINSTELEC CHILE - GUIA DE MATERIALES\nPROYECTO: ${proj}\nFECHA: ${new Date().toLocaleDateString()}\n-------------------\n`;
         bag.forEach(item => {
             txt += `- ${item.name}: ${item.qty}\n`;
             inventory[item.originalIdx].stock -= item.qty;
         });
 
+        // BLOQUE DE DESCARGA FORZADA
         const link = document.createElement('a');
         const file = new Blob([txt], {type: 'text/plain'});
         link.href = URL.createObjectURL(file);
         link.download = `${proj}_Materiales.txt`;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
         URL.revokeObjectURL(link.href);
 
         bag = []; renderBag(); renderInv();
-        alert("Archivo generado.");
+        alert("Archivo generado y stock actualizado.");
     }
 
     function iniciarChatbase() {
