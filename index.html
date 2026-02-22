@@ -16,13 +16,19 @@
         /* LOGIN */
         #login-wrapper { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--dark) 0%, #1a252f 100%); }
         .login-card { background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); text-align: center; width: 100%; max-width: 350px; }
-        .login-card i { font-size: 50px; color: var(--primary); margin-bottom: 20px; }
+        
+        /* LOGO EN LOGIN */
+        .login-logo { width: 120px; height: auto; margin-bottom: 15px; background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        
         .login-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
         
         /* NAVBAR */
-        .navbar { background: var(--dark); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .nav-brand { font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+        .navbar { background: var(--dark); color: white; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .nav-brand { font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; gap: 12px; }
         
+        /* LOGO EN NAVBAR */
+        .nav-logo { height: 40px; width: auto; background: white; padding: 4px; border-radius: 6px; }
+
         /* CONTAINER & TABS */
         .main-container { max-width: 900px; margin: 20px auto; padding: 0 20px; display: none; }
         .calc-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
@@ -54,7 +60,7 @@
 
 <div id="login-wrapper">
     <div class="login-card">
-        <i class="fas fa-bolt"></i>
+        <img src="logo.png" alt="Logo Linstelec" class="login-logo">
         <h2>LINSTELEC CHILE</h2>
         <input type="text" id="userInput" placeholder="Usuario">
         <input type="password" id="passInput" placeholder="Contraseña">
@@ -65,7 +71,10 @@
 
 <div id="main-app">
     <nav class="navbar">
-        <div class="nav-brand"><i class="fas fa-bolt"></i> LINSTELEC CHILE</div>
+        <div class="nav-brand">
+            <img src="logo.png" alt="Logo Linstelec" class="nav-logo">
+            <span>LINSTELEC CHILE</span>
+        </div>
         <div id="user-display" style="font-size: 14px; opacity: 0.9;"></div>
         <a href="#" onclick="location.reload()" style="color:white; text-decoration:none;"><i class="fas fa-sign-out-alt"></i></a>
     </nav>
