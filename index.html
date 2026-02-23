@@ -55,17 +55,18 @@
         .ecuacion-box { display: none; margin-top: 15px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #334155; line-height: 1.5; }
         .math-res { color: var(--danger); font-weight: bold; }
 
-        /* TABLAS TECNICAS */
-        .tech-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 20px; }
-        .tech-table th, .tech-table td { padding: 10px; border: 1px solid #e2e8f0; text-align: left; }
-        .tech-table th { background: var(--dark); color: white; }
-        .tech-category { background: #f1f5f9; font-weight: bold; }
-
         /* INVENTARIO */
         .inv-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .inv-table th, .inv-table td { padding: 10px; border: 1px solid #e2e8f0; text-align: left; }
+        .inv-table th { background: #f8fafc; }
         .qty-input { width: 70px !important; padding: 5px !important; text-align: center; margin: 0 !important; }
         .install-list { background: #f0f9ff; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #bae6fd; }
+
+        /* TABLA CONDUCTORES Y EMPALME EXCLUSIVA */
+        .tech-display-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .tech-display-table th, .tech-display-table td { padding: 10px; border: 1px solid #e2e8f0; }
+        .tech-display-table th { background: var(--dark); color: white; }
+        .tech-category { background: #e2e8f0; font-weight: bold; color: var(--dark); }
 
         iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
     </style>
@@ -97,7 +98,7 @@
             <button class="tab-btn" onclick="showTab(event, 'nodos')"><i class="fas fa-network-wired"></i> Calculadora Nodos</button>
             <button class="tab-btn" onclick="showTab(event, 'tuberia')"><i class="fas fa-circle"></i> Ductos RIC 07</button>
             <button class="tab-btn" onclick="showTab(event, 'sgc')"><i class="fas fa-project-diagram"></i> Esquema SGC</button>
-            <button class="tab-btn" onclick="showTab(event, 'conductores')"><i class="fas fa-bolt"></i> Conductores y Empalme</button>
+            <button class="tab-btn" onclick="showTab(event, 'tab-cond')"><i class="fas fa-bolt"></i> Conductores y Empalme</button>
             <button class="tab-btn" onclick="showTab(event, 'biblioteca')"><i class="fas fa-book"></i> Biblioteca RIC</button>
             <button class="tab-btn" onclick="showTab(event, 'inventario')"><i class="fas fa-boxes"></i> Inventario</button>
             <button class="tab-btn" style="background:var(--luis); color:white;" onclick="showTab(event, 'luis-ia')"><i class="fas fa-robot"></i> PREGÚNTALE A LUIS</button>
@@ -147,28 +148,26 @@
             <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" style="background:#fff; border-radius:10px;"><text x="95" y="30" font-weight="bold">SGC</text><text x="310" y="30" font-weight="bold">CARGADOR</text><circle cx="35" cy="100" r="7" fill="#2ecc71"/><circle cx="75" cy="100" r="7" fill="#3498db"/><circle cx="115" cy="100" r="7" fill="#2ecc71"/><circle cx="155" cy="100" r="7" fill="#8b4513"/><circle cx="250" cy="100" r="7" fill="#bdc3c7"/><circle cx="290" cy="100" r="7" fill="#8b4513"/><circle cx="330" cy="100" r="7" fill="#2ecc71"/><circle cx="370" cy="100" r="7" fill="#3498db"/><path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/><path d="M 155 107 L 155 160 L 290 160 L 290 107" stroke="#8b4513" fill="none" stroke-width="2"/><path d="M 115 130 L 115 200 L 330 200 L 330 107" stroke="#2ecc71" fill="none" stroke-width="2"/><path d="M 75 107 L 75 235 L 370 235 L 370 107" stroke="#3498db" fill="none" stroke-width="2"/></svg>
         </div>
 
-        <div id="conductores" class="card">
-            <h2>Referencia Técnica: Conductores y Empalme</h2>
-            <table class="tech-table">
-                <thead><tr><th>CONDUCTORES</th><th>Mts / Detalle</th></tr></thead>
-                <tbody>
-                    <tr class="tech-category"><td colspan="2">Cordon RV-K</td></tr>
-                    <tr><td>RV-K 3x6mm2</td><td>Metros</td></tr>
-                    <tr><td>RV-K 3x10mm2</td><td>Metros</td></tr>
-                    <tr><td>RV-K 5x6mm2</td><td>Metros</td></tr>
-                    <tr><td>RV-K 5x10mm2</td><td>Metros</td></tr>
-                    <tr class="tech-category"><td colspan="2">Alambre Eva (Libre Halógeno)</td></tr>
-                    <tr><td>Eva 1,5mm2 (V-B-R-A-N)</td><td>Metros</td></tr>
-                    <tr><td>Eva 2,5mm2 (V-B-R-A-N)</td><td>Metros</td></tr>
-                    <tr><td>Eva 4mm2 (V-B-R-A-N)</td><td>Metros</td></tr>
-                    <tr><td>Eva 6mm2 (V-B-R-A-N)</td><td>Metros</td></tr>
-                    <tr class="tech-category"><td colspan="2">SISTEMA DE EMPALME Y PUESTA A TIERRA</td></tr>
-                    <tr><td>SPT Barra Copperweld 1,5m</td><td>N/A</td></tr>
-                    <tr><td>Camarilla De Registro</td><td>N/A</td></tr>
-                    <tr><td>Conector Barra-Cable</td><td>N/A</td></tr>
-                    <tr><td>Caja Metalica de Empalme (100x65 / 100x100)</td><td>N/A</td></tr>
-                </tbody>
-            </table>
+        <div id="tab-cond" class="card">
+            <h2>Tabla de Conductores y Empalme</h2>
+            <div style="overflow-x:auto;">
+                <table class="tech-display-table">
+                    <thead><tr><th>Descripción Material</th><th>Detalle / Unidad</th></tr></thead>
+                    <tbody>
+                        <tr class="tech-category"><td colspan="2">CONDUCTORES DE POTENCIA</td></tr>
+                        <tr><td>Cordon RV-K 3x6mm2 / 3x10mm2</td><td>Metros</td></tr>
+                        <tr><td>Cordon RV-K 5x6mm2 / 5x10mm2</td><td>Metros</td></tr>
+                        <tr><td>Alambre Eva 1,5mm2 (V-B-R-A-N)</td><td>Metros</td></tr>
+                        <tr><td>Alambre Eva 2,5mm2 (V-B-R-A-N)</td><td>Metros</td></tr>
+                        <tr><td>Alambre Eva 4mm2 / 6mm2</td><td>Metros</td></tr>
+                        <tr class="tech-category"><td colspan="2">SISTEMA DE EMPALME Y TIERRA</td></tr>
+                        <tr><td>SPT Barra Copperweld 1,5m</td><td>N/A</td></tr>
+                        <tr><td>Camarilla De Registro Circular / Cuadrada</td><td>N/A</td></tr>
+                        <tr><td>Conector Barra-Cable</td><td>N/A</td></tr>
+                        <tr><td>Caja Metalica Empalme (100x65 / 100x100)</td><td>N/A</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="biblioteca" class="card">
@@ -200,7 +199,7 @@
             </table>
             <div class="install-list">
                 <h3>Plantilla de Salida (Instalación)</h3>
-                <input type="text" id="install-proj" placeholder="Nombre Proyecto" style="margin-bottom:10px; width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; font-size:1rem;">
+                <input type="text" id="install-proj" placeholder="Nombre Proyecto / Cliente" style="margin-bottom:10px; width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
                 <div id="bag-items"></div><hr>
                 <button class="btn-calc btn-success" style="background:var(--success);" onclick="generateFile()">Generar Archivo y Descontar Stock</button>
             </div>
@@ -237,7 +236,6 @@
         evt.currentTarget.classList.add("active");
     }
 
-    /* NODOS CON ECUACIONES */
     function calcNodoInteractivo(nodo) {
         const rho = 0.0185, V = 220, zcc1 = parseFloat(document.getElementById('zcc1').value);
         const calcZ = (L, S) => ((rho / S) * L * 2) * 1000;
@@ -285,7 +283,7 @@
         document.getElementById('res-ducto').innerHTML = html;
     }
 
-    /* INVENTARIO */
+    /* INVENTARIO LOGICA */
     function addMaterial() {
         const n = document.getElementById('new-item-name').value, q = parseInt(document.getElementById('new-item-qty').value);
         if(n && !isNaN(q)) { inventory.push({ name: n, stock: q }); document.getElementById('new-item-name').value = ""; document.getElementById('new-item-qty').value = ""; renderInv(); }
@@ -298,7 +296,7 @@
         localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
     }
     function updateStock(idx, val) { inventory[idx].stock = parseInt(val); localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory)); }
-    function delMat(idx) { if(confirm("¿Eliminar?")) { inventory.splice(idx, 1); renderInv(); } }
+    function delMat(idx) { if(confirm("¿Eliminar material?")) { inventory.splice(idx, 1); renderInv(); } }
     function addToBag(idx) {
         const useQty = parseInt(document.getElementById(`use-qty-${idx}`).value);
         if(isNaN(useQty) || useQty <= 0) return;
