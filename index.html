@@ -63,6 +63,44 @@
         .install-list { background: #f0f9ff; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #bae6fd; }
 
         iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
+
+        /* 🎵 ESTILOS REPRODUCTOR MP3 (AGREGADO) */
+        #ventanaAres {
+            position: fixed; top: 80px; right: 20px; width: 300px;
+            background: #ECE9D8; border: 2px outset #fff;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.4); z-index: 9999;
+            display: none; flex-direction: column;
+            font-family: Tahoma, Verdana, sans-serif;
+        }
+        #ventanaAres.visible { display: flex; }
+        #barraTituloAres {
+            background: linear-gradient(90deg, #FF9900, #CC6600);
+            color: white; padding: 5px 10px; font-weight: bold;
+            font-size: 12px; cursor: move; display: flex;
+            justify-content: space-between; user-select: none;
+        }
+        .btn-control-ares {
+            width: 18px; height: 18px; background: #ECE9D8;
+            border: 1px outset #fff; text-align: center;
+            line-height: 16px; font-size: 12px; cursor: pointer;
+        }
+        .btn-control-ares:active { border-style: inset; }
+        #contenidoVentanaAres {
+            padding: 12px; border: 2px inset #fff;
+            margin: 4px; background: #fff; text-align: center;
+        }
+        #mp3Player { width: 100%; margin-top: 8px; }
+        .song-info { font-size: 11px; color: #666; margin-bottom: 8px; }
+        #barraEstadoAres {
+            font-size: 10px; padding: 3px 8px;
+            border-top: 1px solid #999; background: #ECE9D8;
+            display: flex; justify-content: space-between;
+        }
+        .status-dot {
+            display: inline-block; width: 8px; height: 8px;
+            background: #0f0; border: 1px inset #fff;
+            margin-right: 4px; vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -183,20 +221,60 @@
     </div>
 </div>
 
+<!-- 🎵 VENTANA REPRODUCTOR MP3 (AGREGADO) -->
+<div id="ventanaAres">
+    <div id="barraTituloAres">
+        <span>🎵 oldskul.mp3</span>
+        <span class="btn-control-ares" onclick="document.getElementById('ventanaAres').classList.remove('visible')">X</span>
+    </div>
+    <div id="contenidoVentanaAres">
+        <div class="song-info">
+            <strong>OldSkul</strong><br>
+            <span id="songStatus">Listo</span>
+        </div>
+        <audio id="mp3Player" controls>
+            <source src="oldskul.mp3" type="audio/mpeg">
+            Tu navegador no soporta audio.
+        </audio>
+    </div>
+    <div id="barraEstadoAres">
+        <span><span class="status-dot"></span>MP3</span>
+        <span>320kbps</span>
+    </div>
+</div>
+
 <script>
     const USERS = [{ id: "Rodrigo", pass: "1648", name: "Rodrigo Padilla", clase: "Clase D" },{ id: "Luis", pass: "2507", name: "Luis Rojo", clase: "Clase C" },{ id: "Isaias", pass: "2071", name: "Isaias Echeverria", clase: "Clase C" },{ id: "Brayan", pass: "2025", name: "Brayan Barraza", clase: "Clase D" }];
     let inventory = JSON.parse(localStorage.getItem('linstelec_inv_v2')) || [];
     let bag = [];
 
+    // 🎵 FUNCIÓN checkLogin MODIFICADA (solo esta parte cambió)
     function checkLogin() {
-        const u = document.getElementById('userInput').value, p = document.getElementById('passInput').value;
+        const u = document.getElementById('userInput').value.trim();
+        const p = document.getElementById('passInput').value;
         const found = USERS.find(user => user.id === u && user.pass === p);
+        
         if(found) {
             document.getElementById('login-wrapper').style.display = 'none';
             document.getElementById('container').style.display = 'block';
             document.getElementById('user-display').innerHTML = "👷 " + found.name + " - <strong>" + found.clase + "</strong>";
             renderInv(); iniciarChatbase();
-        } else { document.getElementById('error-msg').style.display = 'block'; }
+            
+            // 🎵 REPRODUCIR MÚSICA AL INICIAR SESIÓN (dentro del click = permitido)
+            const audio = document.getElementById('mp3Player');
+            const musicWin = document.getElementById('ventanaAres');
+            if(musicWin) musicWin.classList.add('visible');
+            if(audio) {
+                audio.play().then(() => {
+                    if(document.getElementById('songStatus')) {
+                        document.getElementById('songStatus').textContent = '▶ Reproduciendo';
+                    }
+                }).catch(err => console.log('Autoplay:', err));
+            }
+        } else { 
+            document.getElementById('error-msg').style.display = 'block';
+            setTimeout(() => { document.getElementById('error-msg').style.display = 'none'; }, 3000);
+        }
     }
 
     function showTab(evt, name) {
@@ -287,8 +365,6 @@
             txt += `- ${item.name}: ${item.qty}\n`;
             inventory[item.originIdx].stock -= item.qty;
         });
-
-        // DESCARGA MEJORADA: Compatible con todos los navegadores
         const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
         const link = document.createElement('a');
         const url = URL.createObjectURL(blob);
@@ -298,7 +374,6 @@
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        
         bag = []; renderBag(); renderInv();
         alert("Archivo generado y stock actualizado.");
     }
@@ -306,6 +381,23 @@
     function iniciarChatbase() {
         if(!window.chatbase){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}});}
         const s = document.createElement("script"); s.src = "https://www.chatbase.co/embed.min.js"; s.id = "HZBhzPxQtpDaw6ZlcBzEA"; s.domain = "www.chatbase.co"; document.body.appendChild(s);
+    }
+
+    // 🎵 DRAG & DROP PARA VENTANA MP3 (AGREGADO)
+    const vw = document.getElementById('ventanaAres'), vh = document.getElementById('barraTituloAres');
+    let drag = false, ox, oy;
+    if(vh) {
+        vh.onmousedown = e => { drag = true; ox = e.clientX - vw.offsetLeft; oy = e.clientY - vw.offsetTop; vw.style.transition = 'none'; };
+        document.onmousemove = e => { if(drag) { vw.style.left = (e.clientX - ox) + 'px'; vw.style.top = (e.clientY - oy) + 'px'; vw.style.right = 'auto'; } };
+        document.onmouseup = () => { drag = false; vw.style.transition = ''; };
+    }
+
+    // 🎵 EVENTOS DEL AUDIO (AGREGADO)
+    const audioEl = document.getElementById('mp3Player');
+    if(audioEl) {
+        audioEl.onplay = () => { if(document.getElementById('songStatus')) document.getElementById('songStatus').textContent = '▶ Reproduciendo'; };
+        audioEl.onpause = () => { if(document.getElementById('songStatus')) document.getElementById('songStatus').textContent = '⏸ Pausado'; };
+        audioEl.onended = () => { if(document.getElementById('songStatus')) document.getElementById('songStatus').textContent = '✓ Finalizado'; };
     }
 </script>
 </body>
