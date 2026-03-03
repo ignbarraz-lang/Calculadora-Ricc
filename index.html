@@ -64,7 +64,7 @@
 
         iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
 
-        /* 🎵 ESTILOS REPRODUCTOR MP3 (AGREGADO) */
+        /* 🎵 ESTILOS REPRODUCTOR MP3 */
         #ventanaAres {
             position: fixed; top: 80px; right: 20px; width: 300px;
             background: #ECE9D8; border: 2px outset #fff;
@@ -100,6 +100,53 @@
             display: inline-block; width: 8px; height: 8px;
             background: #0f0; border: 1px inset #fff;
             margin-right: 4px; vertical-align: middle;
+        }
+
+        /* 🎉 EFECTOS CAÍDA DE TENSIÓN (AGREGADO) */
+        #tension { position: relative; }
+        #successImg {
+            position: absolute; left: -100px; top: 50%;
+            transform: translateY(-50%); width: 80px;
+            display: none; animation: popIn 0.4s ease;
+            pointer-events: none; z-index: 10;
+        }
+        @keyframes popIn {
+            0% { transform: translateY(-50%) scale(0) rotate(-10deg); opacity: 0; }
+            60% { transform: translateY(-50%) scale(1.3) rotate(5deg); }
+            100% { transform: translateY(-50%) scale(1) rotate(0); opacity: 1; }
+        }
+        #dangerOverlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(231, 76, 60, 0.9);
+            display: none; justify-content: center; align-items: center;
+            flex-direction: column; z-index: 10000;
+            animation: flashRed 0.25s infinite; pointer-events: none;
+        }
+        @keyframes flashRed {
+            0%, 100% { background: rgba(231, 76, 60, 0.9); }
+            50% { background: rgba(192, 57, 43, 0.95); }
+        }
+        .danger-icon {
+            font-size: 100px; color: white; text-shadow: 0 0 30px rgba(0,0,0,0.6);
+            animation: shake 0.4s infinite;
+        }
+        .danger-text {
+            color: white; font-size: 28px; font-weight: bold;
+            margin-top: 20px; text-align: center; text-shadow: 0 3px 6px rgba(0,0,0,0.4);
+        }
+        .danger-subtext {
+            color: rgba(255,255,255,0.9); font-size: 16px;
+            margin-top: 10px;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) rotate(0); }
+            20% { transform: translateX(-8px) rotate(-3deg); }
+            40% { transform: translateX(8px) rotate(3deg); }
+            60% { transform: translateX(-6px) rotate(-2deg); }
+            80% { transform: translateX(6px) rotate(2deg); }
+        }
+        @keyframes confettiFall {
+            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
     </style>
 </head>
@@ -148,6 +195,16 @@
             </div>
             <button class="btn-calc" onclick="calcTension()">Calcular Pérdida</button>
             <div id="res-tension"></div>
+        </div>
+
+        <!-- 🎉 IMAGEN DE ÉXITO (AGREGADO) -->
+        <img id="successImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2327ae60'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" alt="✓">
+
+        <!-- ⚠️ OVERLAY DE PELIGRO (AGREGADO) -->
+        <div id="dangerOverlay">
+            <div class="danger-icon">⚠️</div>
+            <div class="danger-text">¡FUERA DE NORMA!</div>
+            <div class="danger-subtext">Revisar instalación eléctrica</div>
         </div>
 
         <div id="ohm" class="card">
@@ -221,7 +278,7 @@
     </div>
 </div>
 
-<!-- 🎵 VENTANA REPRODUCTOR MP3 (AGREGADO) -->
+<!-- 🎵 VENTANA REPRODUCTOR MP3 -->
 <div id="ventanaAres">
     <div id="barraTituloAres">
         <span>🎵 oldskul.mp3</span>
@@ -248,7 +305,7 @@
     let inventory = JSON.parse(localStorage.getItem('linstelec_inv_v2')) || [];
     let bag = [];
 
-    // 🎵 FUNCIÓN checkLogin MODIFICADA (solo esta parte cambió)
+    // 🎵 FUNCIÓN checkLogin
     function checkLogin() {
         const u = document.getElementById('userInput').value.trim();
         const p = document.getElementById('passInput').value;
@@ -260,7 +317,7 @@
             document.getElementById('user-display').innerHTML = "👷 " + found.name + " - <strong>" + found.clase + "</strong>";
             renderInv(); iniciarChatbase();
             
-            // 🎵 REPRODUCIR MÚSICA AL INICIAR SESIÓN (dentro del click = permitido)
+            // 🎵 REPRODUCIR MÚSICA AL INICIAR SESIÓN
             const audio = document.getElementById('mp3Player');
             const musicWin = document.getElementById('ventanaAres');
             if(musicWin) musicWin.classList.add('visible');
@@ -308,12 +365,50 @@
         else { document.getElementById('res-ohm').className = "resultado res-fail"; document.getElementById('res-ohm').innerHTML = "Ingrese Potencia y Voltaje"; }
     }
 
+    // 🎉 FUNCIÓN calcTension CON EFECTOS DIVERTIDOS (MODIFICADA)
     function calcTension() {
+        // Ocultar efectos previos
+        document.getElementById('successImg').style.display = 'none';
+        const danger = document.getElementById('dangerOverlay');
+        danger.style.display = 'none';
+        
+        // Cálculos originales
         let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / parseFloat(document.getElementById('sec').value);
         let p = (dv / 220) * 100;
         let res = document.getElementById('res-tension');
-        res.className = "resultado " + (p <= 3 ? "res-ok" : "res-fail");
-        res.innerHTML = `Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%) - ${p <= 3 ? 'CUMPLE RIC' : 'FUERA DE NORMA'}`;
+        
+        if (p <= 3) {
+            // ✅ CUMPLE - Mostrar imagen de éxito + confeti
+            res.className = "resultado res-ok";
+            res.innerHTML = `Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%) - ✓ CUMPLE RIC`;
+            document.getElementById('successImg').style.display = 'block';
+            
+            // Efecto confeti simple
+            for(let i=0; i<15; i++) {
+                setTimeout(() => {
+                    const c = document.createElement('span');
+                    c.textContent = ['🎉','✨','⚡','🔋','✅'][Math.floor(Math.random()*5)];
+                    c.style.cssText = `position:fixed; left:${Math.random()*100}vw; top:-30px; font-size:${18+Math.random()*15}px; animation:confettiFall ${2+Math.random()*2}s linear forwards; pointer-events:none; z-index:9999;`;
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 4000);
+                }, i*100);
+            }
+        } else {
+            // ❌ FUERA DE NORMA - Pantalla roja parpadeante por 6 segundos
+            res.className = "resultado res-fail";
+            res.innerHTML = `Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%) - ✗ FUERA DE NORMA`;
+            
+            // Mostrar overlay de peligro
+            danger.style.display = 'flex';
+            
+            // Vibración en móviles
+            if(navigator.vibrate) navigator.vibrate([300,100,300,100,300]);
+            
+            // Ocultar después de 6 segundos exactos
+            setTimeout(() => {
+                danger.style.display = 'none';
+            }, 6000);
+        }
     }
 
     function calcDucto() {
@@ -383,7 +478,7 @@
         const s = document.createElement("script"); s.src = "https://www.chatbase.co/embed.min.js"; s.id = "HZBhzPxQtpDaw6ZlcBzEA"; s.domain = "www.chatbase.co"; document.body.appendChild(s);
     }
 
-    // 🎵 DRAG & DROP PARA VENTANA MP3 (AGREGADO)
+    // 🎵 DRAG & DROP PARA VENTANA MP3
     const vw = document.getElementById('ventanaAres'), vh = document.getElementById('barraTituloAres');
     let drag = false, ox, oy;
     if(vh) {
@@ -392,7 +487,7 @@
         document.onmouseup = () => { drag = false; vw.style.transition = ''; };
     }
 
-    // 🎵 EVENTOS DEL AUDIO (AGREGADO)
+    // 🎵 EVENTOS DEL AUDIO
     const audioEl = document.getElementById('mp3Player');
     if(audioEl) {
         audioEl.onplay = () => { if(document.getElementById('songStatus')) document.getElementById('songStatus').textContent = '▶ Reproduciendo'; };
