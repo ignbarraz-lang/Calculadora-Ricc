@@ -42,6 +42,46 @@
         select, input[type="number"], input[type="text"] { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
         .btn-calc { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
         
+        /* RADIO BUTTONS PARA TIPO DE SISTEMA */
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .radio-option {
+            flex: 1;
+            min-width: 150px;
+        }
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+        .radio-option label {
+            display: block;
+            padding: 12px 20px;
+            background: var(--white);
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .radio-option input[type="radio"]:checked + label {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+        }
+        .radio-option label:hover {
+            border-color: var(--primary);
+        }
+        .radio-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
         /* RESULTS */
         .resultado { margin-top: 20px; padding: 15px; border-radius: 10px; font-weight: bold; border-left: 5px solid; }
         .res-ok { background: #f0fdf4; color: #166534; border-color: var(--success); }
@@ -232,19 +272,50 @@
         <div id="tension" class="card active">
             <h2>Calculadora Caída de Tensión (RIC 04)</h2>
             <p style="font-size: 0.8rem; color: #64748b; margin: -15px 0 15px 0;"><i class="fas fa-info-circle"></i> Cálculo basado en resistividad del cobre ρ = 0.018</p>
+            
+            <!-- 🔌 SELECTOR MONOFÁSICO/TRIFÁSICO -->
+            <div class="form-group">
+                <label>Tipo de Sistema:</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="monofasico" name="tipoSistema" value="monofasico" checked>
+                        <label for="monofasico">
+                            <span class="radio-icon">⚡</span>
+                            Monofásico<br>
+                            <small>(√2 = 1.414)</small>
+                        </label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="trifasico" name="tipoSistema" value="trifasico">
+                        <label for="trifasico">
+                            <span class="radio-icon">🔺</span>
+                            Trifásico<br>
+                            <small>(√3 = 1.732)</small>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
             <div class="form-group"><label>Distancia (m):</label><input type="number" id="dist" value="10"></div>
             <div class="form-group"><label>Corriente (A):</label><input type="number" id="amp" value="16"></div>
             <div class="form-group"><label>Sección Conductor (mm²):</label>
                 <select id="sec">
-                    <option value="1.5">1.5 mm²</option><option value="2.5">2.5 mm²</option>
-                    <option value="4">4 mm²</option><option value="6" selected>6 mm²</option><option value="10">10 mm²</option>
+                    <option value="1.5">1.5 mm²</option>
+                    <option value="2.5">2.5 mm²</option>
+                    <option value="4">4 mm²</option>
+                    <option value="6" selected>6 mm²</option>
+                    <option value="10">10 mm²</option>
+                    <option value="16">16 mm²</option>
+                    <option value="25">25 mm²</option>
+                    <option value="35">35 mm²</option>
+                    <option value="50">50 mm²</option>
                 </select>
             </div>
             <button class="btn-calc" onclick="calcTension()">Calcular Pérdida</button>
             <div id="res-tension"></div>
         </div>
 
-        <img id="successImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2327ae60'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" alt="✓">
+        <img id="successImg" src="image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2327ae60'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" alt="✓">
 
         <div id="dangerOverlay">
             <div class="danger-icon">⚠️</div>
@@ -799,35 +870,77 @@
         else { document.getElementById('res-ohm').className = "resultado res-fail"; document.getElementById('res-ohm').innerHTML = "Ingrese Potencia y Voltaje"; }
     }
 
+    // ⚡ CALCULADORA DE CAÍDA DE TENSIÓN - MONOFÁSICO/TRIFÁSICO
     function calcTension() {
         document.getElementById('successImg').style.display = 'none';
         const danger = document.getElementById('dangerOverlay');
         danger.style.display = 'none';
         
-        let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / parseFloat(document.getElementById('sec').value);
-        let p = (dv / 220) * 100;
+        // Obtener tipo de sistema
+        const tipoSistema = document.querySelector('input[name="tipoSistema"]:checked').value;
+        const esMonofasico = tipoSistema === 'monofasico';
+        
+        // Constantes
+        const rho = 0.018;  // Resistividad del cobre
+        const V = 220;       // Voltaje nominal
+        
+        // Obtener valores
+        const distancia = parseFloat(document.getElementById('dist').value);
+        const corriente = parseFloat(document.getElementById('amp').value);
+        const seccion = parseFloat(document.getElementById('sec').value);
+        
+        // Calcular según tipo de sistema
+        // Monofásico: √2 = 1.414
+        // Trifásico: √3 = 1.732
+        const factor = esMonofasico ? Math.sqrt(2) : Math.sqrt(3);
+        
+        // Fórmula: ΔV = (factor × L × I × ρ) / S
+        let dv = (factor * distancia * corriente * rho) / seccion;
+        let p = (dv / V) * 100;
+        
         let res = document.getElementById('res-tension');
+        let sistemaTexto = esMonofasico ? "MONOFÁSICO" : "TRIFÁSICO";
+        let factorTexto = esMonofasico ? "√2 (1.414)" : "√3 (1.732)";
         
         if (p <= 3) {
+            // ✅ CUMPLE - Mostrar imagen de éxito + confeti
             res.className = "resultado res-ok";
-            res.innerHTML = `Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%) - ✓ CUMPLE RIC`;
+            res.innerHTML = `
+                <strong>Sistema ${sistemaTexto}</strong> | Factor: ${factorTexto}<br>
+                Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%)<br>
+                ✓ CUMPLE RIC 04 (≤3%)
+            `;
             document.getElementById('successImg').style.display = 'block';
             
+            // Efecto confeti simple
             for(let i=0; i<15; i++) {
                 setTimeout(() => {
                     const c = document.createElement('span');
-                    c.textContent = ['🎉','✨','⚡','','✅'][Math.floor(Math.random()*5)];
+                    c.textContent = ['🎉','✨','⚡','🔋','✅'][Math.floor(Math.random()*5)];
                     c.style.cssText = `position:fixed; left:${Math.random()*100}vw; top:-30px; font-size:${18+Math.random()*15}px; animation:confettiFall ${2+Math.random()*2}s linear forwards; pointer-events:none; z-index:9999;`;
                     document.body.appendChild(c);
                     setTimeout(() => c.remove(), 4000);
                 }, i*100);
             }
         } else {
+            // ❌ FUERA DE NORMA - Pantalla roja parpadeante por 6 segundos
             res.className = "resultado res-fail";
-            res.innerHTML = `Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%) - ✗ FUERA DE NORMA`;
+            res.innerHTML = `
+                <strong>Sistema ${sistemaTexto}</strong> | Factor: ${factorTexto}<br>
+                Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%)<br>
+                ✗ FUERA DE NORMA (>3%)
+            `;
+            
+            // Mostrar overlay de peligro
             danger.style.display = 'flex';
+            
+            // Vibración en móviles
             if(navigator.vibrate) navigator.vibrate([300,100,300,100,300]);
-            setTimeout(() => { danger.style.display = 'none'; }, 6000);
+            
+            // Ocultar después de 6 segundos exactos
+            setTimeout(() => {
+                danger.style.display = 'none';
+            }, 6000);
         }
     }
 
