@@ -337,8 +337,8 @@
 <script>
     /* ========== 🔥 CONFIGURACIÓN JSONBIN - ¡EDITAR AQUÍ! ========== */
     const JSONBIN_CONFIG = {
-        apiKey: "$2a$10$S0SRRqkAOf.t5Tqo429eg.TXShDZqi/IOHYVDKPv7SYvCsujTpjQi",      // ← PEGA TU API KEY AQUÍ (empieza con $2b$10$)
-        binId: "69b37960c3097a1dd51edd41",               // ← PEGA TU BIN ID AQUÍ (ej: 67a1b2c3d4e5f6789012345)
+        masterKey: "$2a$10$d5wiwzZ.u1m2caXKKtWSGuo4.hnU4mEWvEiCaj9XFa6IpBOA0UP0a",  // ← PEGA TU X-Master-Key AQUÍ
+        binId: "69b37960c3097a1dd51edd41",                   // ← PEGA TU Bin ID AQUÍ
         baseUrl: "https://api.jsonbin.io/v3/b"
     };
 
@@ -356,29 +356,27 @@
 
     /* ========== 📡 FUNCIONES JSONBIN ========== */
 
-    // Actualizar indicador de estado
     function updateSyncStatus(status, message) {
         const el = document.getElementById('sync-status');
         if(!el) return;
         
         const statuses = {
-            ok: { class: 'sync-ok', icon: 'fa-check-circle', text: 'Sincronizado' },
-            pending: { class: 'sync-pending', icon: 'fa-circle', text: 'Sin sincronizar' },
-            error: { class: 'sync-error', icon: 'fa-exclamation-circle', text: 'Error' },
-            syncing: { class: 'sync-pending', icon: 'fa-spinner fa-spin', text: 'Sincronizando...' }
+            ok: { class: 'sync-status sync-ok', icon: 'fa-check-circle', text: 'Sincronizado' },
+            pending: { class: 'sync-status sync-pending', icon: 'fa-circle', text: 'Sin sincronizar' },
+            error: { class: 'sync-status sync-error', icon: 'fa-exclamation-circle', text: 'Error' },
+            syncing: { class: 'sync-status sync-pending', icon: 'fa-spinner fa-spin', text: 'Sincronizando...' }
         };
         
         const s = statuses[status] || statuses.pending;
-        el.className = `sync-status ${s.class}`;
+        el.className = s.class;
         el.innerHTML = `<i class="fas ${s.icon}"></i> ${message || s.text}`;
     }
 
-    // Cargar inventario desde la nube
     async function loadInventoryFromCloud() {
-        // Verificar si hay credenciales configuradas
-        if(JSONBIN_CONFIG.apiKey.includes('TU_API_KEY_AQUI') || JSONBIN_CONFIG.binId.includes('TU_BIN_ID_AQUI')) {
-            console.log("⚠️ JSONBin no configurado - Usando localStorage");
-            updateSyncStatus('pending', 'JSONBin no configurado');
+        if(!JSONBIN_CONFIG.masterKey || JSONBIN_CONFIG.masterKey.includes('PEGAR_AQUI') || 
+           !JSONBIN_CONFIG.binId || JSONBIN_CONFIG.binId.includes('TU_BIN_ID')) {
+            updateSyncStatus('pending', 'Sin configurar');
+            console.log("⚠️ JSONBin no configurado");
             return;
         }
 
@@ -386,14 +384,20 @@
         updateSyncStatus('syncing', 'Cargando...');
         
         try {
-            const response = await fetch(`${JSONBIN_CONFIG.baseUrl}/${JSONBIN_CONFIG.binId}/latest`, {
+            const url = `${JSONBIN_CONFIG.baseUrl}/${JSONBIN_CONFIG.binId}/latest`;
+            
+            const response = await fetch(url, {
+                method: 'GET',
                 headers: { 
-                    'X-Access-Key': JSONBIN_CONFIG.apiKey,
+                    'X-Master-Key': JSONBIN_CONFIG.masterKey,
                     'Content-Type': 'application/json'
                 }
             });
             
-            if(!response.ok) throw new Error(`HTTP ${response.status}`);
+            if(!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`${response.status}: ${errorData.message || 'Error'}`);
+            }
             
             const data = await response.json();
             
@@ -401,12 +405,16 @@
                 inventory = data.record.inventory;
                 localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
                 renderInv();
-                updateSyncStatus('ok', `Sincronizado ${new Date().toLocaleTimeString()}`);
-                console.log("✅ Inventario sincronizado desde la nube");
+                updateSyncStatus('ok', `✅ ${new Date().toLocaleTimeString()}`);
+                console.log("✅ Sincronizado desde la nube");
+            } else {
+                inventory = [];
+                await saveInventoryToCloud();
+                updateSyncStatus('ok', '✅ Bin inicializado');
             }
         } catch(error) {
-            console.log("⚠️ Error al cargar desde nube:", error);
-            updateSyncStatus('error', 'Error de sincronización');
+            console.error("❌ Error:", error);
+            updateSyncStatus('error', 'Error de conexión');
             inventory = JSON.parse(localStorage.getItem('linstelec_inv_v2')) || [];
             renderInv();
         } finally {
@@ -414,27 +422,24 @@
         }
     }
 
-    // Guardar inventario en la nube
     async function saveInventoryToCloud() {
-        // Verificar si hay credenciales configuradas
-        if(JSONBIN_CONFIG.apiKey.includes('TU_API_KEY_AQUI') || JSONBIN_CONFIG.binId.includes('TU_BIN_ID_AQUI')) {
-            console.log("⚠️ JSONBin no configurado - Solo guardando en localStorage");
+        if(!JSONBIN_CONFIG.masterKey || JSONBIN_CONFIG.masterKey.includes('PEGAR_AQUI')) {
             return;
         }
 
-        if(isSyncing) return; // Evitar múltiples llamadas simultáneas
+        if(isSyncing) return;
         
         try {
             const payload = {
                 inventory: inventory,
                 lastUpdate: new Date().toISOString(),
-                updatedBy: document.getElementById('user-display')?.textContent || 'Desconocido'
+                updatedBy: document.getElementById('user-display')?.textContent || 'Unknown'
             };
             
             const response = await fetch(`${JSONBIN_CONFIG.baseUrl}/${JSONBIN_CONFIG.binId}`, {
                 method: 'PUT',
                 headers: { 
-                    'X-Access-Key': JSONBIN_CONFIG.apiKey,
+                    'X-Master-Key': JSONBIN_CONFIG.masterKey,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
@@ -443,15 +448,15 @@
             if(!response.ok) throw new Error(`HTTP ${response.status}`);
             
             updateSyncStatus('ok', `Guardado ${new Date().toLocaleTimeString()}`);
-            console.log("✅ Inventario guardado en la nube");
+            console.log("✅ Guardado en la nube");
         } catch(error) {
-            console.log("⚠️ Error al guardar en nube:", error);
+            console.error("❌ Error al guardar:", error);
             updateSyncStatus('error', 'Error al guardar');
         }
     }
 
-    // Botón para actualizar manualmente
     async function refreshInventory() {
+        updateSyncStatus('syncing', 'Actualizando...');
         await loadInventoryFromCloud();
         alert("📡 Inventario actualizado desde la nube");
     }
@@ -657,10 +662,8 @@
             renderInv(); 
             iniciarChatbase();
             
-            // 🆕 Cargar inventario desde la nube al iniciar
             loadInventoryFromCloud();
             
-            // 🎵 REPRODUCIR MÚSICA AL INICIAR SESIÓN
             const audio = document.getElementById('mp3Player');
             const musicWin = document.getElementById('ventanaAres');
             if(musicWin) musicWin.classList.add('visible');
@@ -725,7 +728,7 @@
             for(let i=0; i<15; i++) {
                 setTimeout(() => {
                     const c = document.createElement('span');
-                    c.textContent = ['🎉','✨','⚡','🔋','✅'][Math.floor(Math.random()*5)];
+                    c.textContent = ['🎉','✨','⚡','','✅'][Math.floor(Math.random()*5)];
                     c.style.cssText = `position:fixed; left:${Math.random()*100}vw; top:-30px; font-size:${18+Math.random()*15}px; animation:confettiFall ${2+Math.random()*2}s linear forwards; pointer-events:none; z-index:9999;`;
                     document.body.appendChild(c);
                     setTimeout(() => c.remove(), 4000);
@@ -761,7 +764,6 @@
         const s = document.createElement("script"); s.src = "https://www.chatbase.co/embed.min.js"; s.id = "HZBhzPxQtpDaw6ZlcBzEA"; s.domain = "www.chatbase.co"; document.body.appendChild(s);
     }
 
-    // 🎵 DRAG & DROP PARA VENTANA MP3
     const vw = document.getElementById('ventanaAres'), vh = document.getElementById('barraTituloAres');
     let drag = false, ox, oy;
     if(vh) {
@@ -770,7 +772,6 @@
         document.onmouseup = () => { drag = false; vw.style.transition = ''; };
     }
 
-    // 🎵 EVENTOS DEL AUDIO
     const audioEl = document.getElementById('mp3Player');
     if(audioEl) {
         audioEl.onplay = () => { if(document.getElementById('songStatus')) document.getElementById('songStatus').textContent = '▶ Reproduciendo'; };
