@@ -62,6 +62,43 @@
         .qty-input { width: 70px !important; padding: 5px !important; text-align: center; margin: 0 !important; }
         .install-list { background: #f0f9ff; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #bae6fd; }
 
+        /* 🔍 BUSCADOR INVENTARIO */
+        .search-box {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+        .search-results {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 5px;
+            text-align: right;
+        }
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-style: italic;
+        }
+
         iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
 
         /* 🎵 ESTILOS REPRODUCTOR MP3 */
@@ -262,7 +299,7 @@
             <iframe id="pdf-view" src=""></iframe>
         </div>
 
-        <!-- 🔽 SECCIÓN INVENTARIO CON JSONBIN -->
+        <!-- 🔽 SECCIÓN INVENTARIO CON BUSCADOR -->
         <div id="inventario" class="card">
             <h2>Gestión de Bodega LINSTELEC 
                 <span id="sync-status" class="sync-status sync-pending">
@@ -289,6 +326,13 @@
                 </button>
             </div>
             <input type="file" id="importFile" accept=".txt,.json" style="display:none;" onchange="handleImport(this)">
+            
+            <!-- 🔍 BUSCADOR DE MATERIALES -->
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-inv" placeholder="🔍 Buscar material..." oninput="filterInventory()">
+                <div class="search-results" id="search-count"></div>
+            </div>
             
             <div class="form-group" style="display: grid; grid-template-columns: 1fr 100px 80px; gap: 10px;">
                 <input type="text" id="new-item-name" placeholder="Nombre Material"><input type="number" id="new-item-qty" placeholder="Stock Inicial"><button onclick="addMaterial()" class="btn-calc" style="padding:0;">+</button>
@@ -337,8 +381,8 @@
 <script>
     /* ========== 🔥 CONFIGURACIÓN JSONBIN - ¡EDITAR AQUÍ! ========== */
     const JSONBIN_CONFIG = {
-        masterKey: "$2a$10$d5wiwzZ.u1m2caXKKtWSGuo4.hnU4mEWvEiCaj9XFa6IpBOA0UP0a",  // ← PEGA TU X-Master-Key AQUÍ
-        binId: "69b37960c3097a1dd51edd41",                   // ← PEGA TU Bin ID AQUÍ
+        masterKey: "$2a$10$d5wiwzZ.u1m2caXKKtWSGuo4.hnU4mEWvEiCaj9XFa6IpBOA0UP0a",
+        binId: "69b37960c3097a1dd51edd41",
         baseUrl: "https://api.jsonbin.io/v3/b"
     };
 
@@ -459,6 +503,40 @@
         updateSyncStatus('syncing', 'Actualizando...');
         await loadInventoryFromCloud();
         alert("📡 Inventario actualizado desde la nube");
+    }
+
+    /* ========== 🔍 FUNCIONES DE BÚSQUEDA ========== */
+
+    function filterInventory() {
+        const searchTerm = document.getElementById('search-inv').value.toLowerCase().trim();
+        const rows = document.querySelectorAll('#inv-body tr');
+        let visibleCount = 0;
+        
+        rows.forEach(row => {
+            const materialName = row.cells[0]?.textContent.toLowerCase() || '';
+            if(materialName.includes(searchTerm)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        
+        // Actualizar contador de resultados
+        const countEl = document.getElementById('search-count');
+        if(searchTerm) {
+            countEl.textContent = `${visibleCount} resultado${visibleCount !== 1 ? 's' : ''} encontrado${visibleCount !== 1 ? 's' : ''}`;
+            if(visibleCount === 0) {
+                countEl.textContent = '❌ Sin resultados';
+            }
+        } else {
+            countEl.textContent = '';
+        }
+    }
+
+    function clearSearch() {
+        document.getElementById('search-inv').value = '';
+        filterInventory();
     }
 
     /* ========== FUNCIONES DE EXPORTACIÓN/IMPORTACIÓN ========== */
@@ -589,10 +667,20 @@
     function renderInv() {
         const body = document.getElementById('inv-body'); 
         body.innerHTML = "";
+        
+        if(inventory.length === 0) {
+            body.innerHTML = `<tr><td colspan="4" class="no-results">📦 No hay materiales registrados. ¡Agrega el primero!</td></tr>`;
+            document.getElementById('search-count').textContent = '';
+            return;
+        }
+        
         inventory.forEach((item, idx) => {
             body.innerHTML += `<tr><td>${item.name}</td><td><input type="number" value="${item.stock}" onchange="updateStock(${idx}, this.value)" class="qty-input"></td><td><input type="number" id="use-qty-${idx}" value="1" min="1" class="qty-input"></td><td><button onclick="addToBag(${idx})" class="tab-btn" style="padding:5px 10px; font-size:12px; background:var(--primary); color:white;">Ocupar</button> <button onclick="delMat(${idx})" style="background:var(--danger); border:none; color:white; padding:5px 8px; border-radius:5px; cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`;
         });
         localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
+        
+        // Actualizar contador después de renderizar
+        filterInventory();
     }
     
     function updateStock(idx, val) { 
@@ -781,4 +869,3 @@
 </script>
 </body>
 </html>
-
