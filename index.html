@@ -102,7 +102,7 @@
             margin-right: 4px; vertical-align: middle;
         }
 
-        /* 🎉 EFECTOS CAÍDA DE TENSIÓN (AGREGADO) */
+        /* 🎉 EFECTOS CAÍDA DE TENSIÓN */
         #tension { position: relative; }
         #successImg {
             position: absolute; left: -100px; top: 50%;
@@ -148,6 +148,16 @@
         @keyframes confettiFall {
             to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
+
+        /* 📡 INDICADOR DE SYNC */
+        .sync-status {
+            font-size: 12px; padding: 5px 10px; border-radius: 20px;
+            display: inline-flex; align-items: center; gap: 5px;
+            margin-left: 10px;
+        }
+        .sync-ok { background: #d1fae5; color: #065f46; }
+        .sync-pending { background: #fef3c7; color: #92400e; }
+        .sync-error { background: #fee2e2; color: #991b1b; }
     </style>
 </head>
 <body>
@@ -197,10 +207,8 @@
             <div id="res-tension"></div>
         </div>
 
-        <!-- 🎉 IMAGEN DE ÉXITO (AGREGADO) -->
         <img id="successImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2327ae60'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" alt="✓">
 
-        <!-- ⚠️ OVERLAY DE PELIGRO (AGREGADO) -->
         <div id="dangerOverlay">
             <div class="danger-icon">⚠️</div>
             <div class="danger-text">¡FUERA DE NORMA!</div>
@@ -241,7 +249,7 @@
             <select onchange="document.getElementById('pdf-view').src = this.value">
                 <option value="">-- Seleccionar Pliego --</option>
                 <option value="RIC01.pdf">RIC 01: Empalmes</option><option value="RIC02.pdf">RIC 02: Tableros Electricos</option>
-                <option value="RIC03.pdf">RIC 03: Alimentadores y interruptoes</option><option value="RIC04.pdf">RIC 04: Conductores y canalizaciones</option>
+                <option value="RIC03.pdf">RIC 03: Alimentadores y interruptores</option><option value="RIC04.pdf">RIC 04: Conductores y canalizaciones</option>
                 <option value="RIC05.pdf">RIC 05: Protecciones</option><option value="RIC06.pdf">RIC 06: Puesta a Tierra</option>
                 <option value="RIC07.pdf">RIC 07: Instalaciones de equipos</option><option value="RIC08.pdf">RIC 08: Sistemas de Emergencia y corte en punta</option>
                 <option value="RIC09.pdf">RIC 09: Sistemas de autogeneracion</option><option value="RIC10.pdf">RIC 10: Instalaciones de uso general</option>
@@ -254,11 +262,15 @@
             <iframe id="pdf-view" src=""></iframe>
         </div>
 
-        <!-- 🔽 SECCIÓN INVENTARIO MODIFICADA -->
+        <!-- 🔽 SECCIÓN INVENTARIO CON JSONBIN -->
         <div id="inventario" class="card">
-            <h2>Gestión de Bodega LINSTELEC</h2>
+            <h2>Gestión de Bodega LINSTELEC 
+                <span id="sync-status" class="sync-status sync-pending">
+                    <i class="fas fa-circle"></i> Sin sincronizar
+                </span>
+            </h2>
             
-            <!-- 🔽 BOTONES NUEVOS: Descargar, Imprimir, Exportar, Importar -->
+            <!-- 🔽 BOTONES: Descargar, Imprimir, Exportar, Importar, Actualizar -->
             <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
                 <button class="tab-btn" onclick="downloadInventory()" style="background:var(--success); color:white;">
                     <i class="fas fa-download"></i> Descargar Lista
@@ -271,6 +283,9 @@
                 </button>
                 <button class="tab-btn" onclick="importFromShare()" style="background:var(--luis); color:white;">
                     <i class="fas fa-upload"></i> Importar Lista
+                </button>
+                <button class="tab-btn" onclick="refreshInventory()" style="background:#95a5a6; color:white;">
+                    <i class="fas fa-sync"></i> Actualizar
                 </button>
             </div>
             <input type="file" id="importFile" accept=".txt,.json" style="display:none;" onchange="handleImport(this)">
@@ -320,11 +335,316 @@
 </div>
 
 <script>
-    const USERS = [{ id: "Rodrigo", pass: "1648", name: "Rodrigo Padilla", clase: "Clase D" },{ id: "Luis", pass: "2507", name: "Luis Rojo", clase: "Clase C" },{ id: "Isaias", pass: "2071", name: "Isaias Echeverria", clase: "Clase C" },{ id: "Brayan", pass: "2025", name: "Brayan Barraza", clase: "Clase D" }];
+    /* ========== 🔥 CONFIGURACIÓN JSONBIN - ¡EDITAR AQUÍ! ========== */
+    const JSONBIN_CONFIG = {
+        apiKey: "$2a$10$S0SRRqkAOf.t5Tqo429eg.TXShDZqi/IOHYVDKPv7SYvCsujTpjQi",      // ← PEGA TU API KEY AQUÍ (empieza con $2b$10$)
+        binId: "69b37960c3097a1dd51edd41",               // ← PEGA TU BIN ID AQUÍ (ej: 67a1b2c3d4e5f6789012345)
+        baseUrl: "https://api.jsonbin.io/v3/b"
+    };
+
+    /* ========== USUARIOS ========== */
+    const USERS = [
+        { id: "Rodrigo", pass: "1648", name: "Rodrigo Padilla", clase: "Clase D" },
+        { id: "Luis", pass: "2507", name: "Luis Rojo", clase: "Clase C" },
+        { id: "Isaias", pass: "2071", name: "Isaias Echeverria", clase: "Clase C" },
+        { id: "Brayan", pass: "2025", name: "Brayan Barraza", clase: "Clase D" }
+    ];
+
     let inventory = JSON.parse(localStorage.getItem('linstelec_inv_v2')) || [];
     let bag = [];
+    let isSyncing = false;
 
-    // 🎵 FUNCIÓN checkLogin
+    /* ========== 📡 FUNCIONES JSONBIN ========== */
+
+    // Actualizar indicador de estado
+    function updateSyncStatus(status, message) {
+        const el = document.getElementById('sync-status');
+        if(!el) return;
+        
+        const statuses = {
+            ok: { class: 'sync-ok', icon: 'fa-check-circle', text: 'Sincronizado' },
+            pending: { class: 'sync-pending', icon: 'fa-circle', text: 'Sin sincronizar' },
+            error: { class: 'sync-error', icon: 'fa-exclamation-circle', text: 'Error' },
+            syncing: { class: 'sync-pending', icon: 'fa-spinner fa-spin', text: 'Sincronizando...' }
+        };
+        
+        const s = statuses[status] || statuses.pending;
+        el.className = `sync-status ${s.class}`;
+        el.innerHTML = `<i class="fas ${s.icon}"></i> ${message || s.text}`;
+    }
+
+    // Cargar inventario desde la nube
+    async function loadInventoryFromCloud() {
+        // Verificar si hay credenciales configuradas
+        if(JSONBIN_CONFIG.apiKey.includes('TU_API_KEY_AQUI') || JSONBIN_CONFIG.binId.includes('TU_BIN_ID_AQUI')) {
+            console.log("⚠️ JSONBin no configurado - Usando localStorage");
+            updateSyncStatus('pending', 'JSONBin no configurado');
+            return;
+        }
+
+        isSyncing = true;
+        updateSyncStatus('syncing', 'Cargando...');
+        
+        try {
+            const response = await fetch(`${JSONBIN_CONFIG.baseUrl}/${JSONBIN_CONFIG.binId}/latest`, {
+                headers: { 
+                    'X-Access-Key': JSONBIN_CONFIG.apiKey,
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if(!response.ok) throw new Error(`HTTP ${response.status}`);
+            
+            const data = await response.json();
+            
+            if(data.record && data.record.inventory) {
+                inventory = data.record.inventory;
+                localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
+                renderInv();
+                updateSyncStatus('ok', `Sincronizado ${new Date().toLocaleTimeString()}`);
+                console.log("✅ Inventario sincronizado desde la nube");
+            }
+        } catch(error) {
+            console.log("⚠️ Error al cargar desde nube:", error);
+            updateSyncStatus('error', 'Error de sincronización');
+            inventory = JSON.parse(localStorage.getItem('linstelec_inv_v2')) || [];
+            renderInv();
+        } finally {
+            isSyncing = false;
+        }
+    }
+
+    // Guardar inventario en la nube
+    async function saveInventoryToCloud() {
+        // Verificar si hay credenciales configuradas
+        if(JSONBIN_CONFIG.apiKey.includes('TU_API_KEY_AQUI') || JSONBIN_CONFIG.binId.includes('TU_BIN_ID_AQUI')) {
+            console.log("⚠️ JSONBin no configurado - Solo guardando en localStorage");
+            return;
+        }
+
+        if(isSyncing) return; // Evitar múltiples llamadas simultáneas
+        
+        try {
+            const payload = {
+                inventory: inventory,
+                lastUpdate: new Date().toISOString(),
+                updatedBy: document.getElementById('user-display')?.textContent || 'Desconocido'
+            };
+            
+            const response = await fetch(`${JSONBIN_CONFIG.baseUrl}/${JSONBIN_CONFIG.binId}`, {
+                method: 'PUT',
+                headers: { 
+                    'X-Access-Key': JSONBIN_CONFIG.apiKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            if(!response.ok) throw new Error(`HTTP ${response.status}`);
+            
+            updateSyncStatus('ok', `Guardado ${new Date().toLocaleTimeString()}`);
+            console.log("✅ Inventario guardado en la nube");
+        } catch(error) {
+            console.log("⚠️ Error al guardar en nube:", error);
+            updateSyncStatus('error', 'Error al guardar');
+        }
+    }
+
+    // Botón para actualizar manualmente
+    async function refreshInventory() {
+        await loadInventoryFromCloud();
+        alert("📡 Inventario actualizado desde la nube");
+    }
+
+    /* ========== FUNCIONES DE EXPORTACIÓN/IMPORTACIÓN ========== */
+
+    function downloadInventory() {
+        if(inventory.length === 0) return alert("⚠️ No hay materiales en el inventario para descargar");
+        
+        let csv = "MATERIAL;STOCK DISPONIBLE\n";
+        inventory.forEach(item => {
+            csv += `"${item.name}";${item.stock}\n`;
+        });
+        
+        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `Inventario_LINSTELEC_${new Date().toISOString().slice(0,10)}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function printInventory() {
+        if(inventory.length === 0) return alert("⚠️ No hay materiales para imprimir");
+        
+        let content = `
+            <html><head><title>Inventario LINSTELEC</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+                th { background: #3498db; color: white; }
+                tr:nth-child(even) { background: #f9f9f9; }
+                .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }
+                @media print { body { padding: 0; } }
+            </style></head><body>
+            <h1>📦 Inventario de Materiales - LINSTELEC CHILE</h1>
+            <p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CL')} | <strong>Hora:</strong> ${new Date().toLocaleTimeString('es-CL')}</p>
+            <table>
+                <thead><tr><th>#</th><th>Material</th><th>Stock en Bodega</th></tr></thead>
+                <tbody>
+        `;
+        
+        inventory.forEach((item, idx) => {
+            content += `<tr><td>${idx + 1}</td><td>${item.name}</td><td><strong>${item.stock}</strong></td></tr>`;
+        });
+        
+        content += `</tbody></table><div class="footer">
+            Documento generado desde Sistema LINSTELEC - Uso interno<br>
+            Total de materiales: ${inventory.length}
+        </div></body></html>`;
+        
+        const printWindow = window.open('', '_blank', 'width=800,height=600');
+        printWindow.document.write(content);
+        printWindow.document.close();
+        printWindow.onload = () => { 
+            setTimeout(() => { printWindow.print(); }, 500); 
+        };
+    }
+
+    function exportForShare() {
+        if(inventory.length === 0) return alert("⚠️ No hay materiales para exportar");
+        
+        const exportData = {
+            version: "1.0",
+            date: new Date().toISOString(),
+            inventory: inventory
+        };
+        
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `LINSTELEC_Inventario_Compartir_${new Date().toISOString().slice(0,10)}.json`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        alert("✅ Archivo exportado exitosamente.\n\n📋 Instrucciones:\n1. Envía este archivo .json a tus compañeros\n2. Ellos deben usar 'Importar Lista' en su sistema\n3. ¡Listo! Tendrán el mismo inventario actualizado");
+    }
+
+    function importFromShare() {
+        document.getElementById('importFile').click();
+    }
+
+    function handleImport(input) {
+        const file = input.files[0];
+        if(!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if(data.inventory && Array.isArray(data.inventory)) {
+                    if(confirm(`⚠️ IMPORTAR INVENTARIO\n\nEsto reemplazará tu inventario actual con ${data.inventory.length} materiales.\n\n¿Deseas continuar?`)) {
+                        inventory = data.inventory;
+                        localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
+                        renderInv();
+                        saveInventoryToCloud();
+                        alert("✅ Inventario actualizado correctamente con " + inventory.length + " materiales");
+                    }
+                } else {
+                    alert("❌ Formato de archivo no válido.\nAsegúrate de usar un archivo .json exportado desde este sistema.");
+                }
+            } catch(err) {
+                alert("❌ Error al leer el archivo: " + err.message);
+            }
+            input.value = '';
+        };
+        reader.readAsText(file);
+    }
+
+    /* ========== FUNCIONES ORIGINALES DE INVENTARIO ========== */
+    function addMaterial() {
+        const n = document.getElementById('new-item-name').value, q = parseInt(document.getElementById('new-item-qty').value);
+        if(n && !isNaN(q)) { 
+            inventory.push({ name: n, stock: q }); 
+            document.getElementById('new-item-name').value = ""; 
+            document.getElementById('new-item-qty').value = ""; 
+            renderInv();
+            saveInventoryToCloud();
+        }
+    }
+    
+    function renderInv() {
+        const body = document.getElementById('inv-body'); 
+        body.innerHTML = "";
+        inventory.forEach((item, idx) => {
+            body.innerHTML += `<tr><td>${item.name}</td><td><input type="number" value="${item.stock}" onchange="updateStock(${idx}, this.value)" class="qty-input"></td><td><input type="number" id="use-qty-${idx}" value="1" min="1" class="qty-input"></td><td><button onclick="addToBag(${idx})" class="tab-btn" style="padding:5px 10px; font-size:12px; background:var(--primary); color:white;">Ocupar</button> <button onclick="delMat(${idx})" style="background:var(--danger); border:none; color:white; padding:5px 8px; border-radius:5px; cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`;
+        });
+        localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
+    }
+    
+    function updateStock(idx, val) { 
+        inventory[idx].stock = parseInt(val); 
+        localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
+        saveInventoryToCloud();
+    }
+    
+    function delMat(idx) { 
+        if(confirm("¿Eliminar?")) { 
+            inventory.splice(idx, 1); 
+            renderInv();
+            saveInventoryToCloud();
+        } 
+    }
+    
+    function addToBag(idx) {
+        const useQty = parseInt(document.getElementById(`use-qty-${idx}`).value);
+        if(isNaN(useQty) || useQty <= 0) return;
+        const exist = bag.find(b => b.name === inventory[idx].name);
+        if(exist) exist.qty += useQty; else bag.push({ name: inventory[idx].name, qty: useQty, originIdx: idx });
+        renderBag();
+    }
+    
+    function renderBag() {
+        const div = document.getElementById('bag-items'); 
+        div.innerHTML = "";
+        bag.forEach(item => { 
+            div.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; background:white; padding:5px; border-radius:5px; font-size:0.9rem;"><span>${item.name}</span><strong>Cant: ${item.qty}</strong></div>`; 
+        });
+    }
+    
+    function generateFile() {
+        if(bag.length === 0) return alert("Selecciona materiales primero");
+        const proj = document.getElementById('install-proj').value || "Salida_Materiales";
+        let txt = `LINSTELEC CHILE - GUIA DE MATERIALES\nPROYECTO: ${proj}\nFECHA: ${new Date().toLocaleDateString()}\n-------------------\n`;
+        bag.forEach(item => {
+            txt += `- ${item.name}: ${item.qty}\n`;
+            inventory[item.originIdx].stock -= item.qty;
+        });
+        const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `${proj}_Materiales.txt`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        bag = []; 
+        renderBag(); 
+        renderInv();
+        saveInventoryToCloud();
+        alert("Archivo generado y stock actualizado.");
+    }
+
+    /* ========== FUNCIONES DEL SISTEMA ========== */
     function checkLogin() {
         const u = document.getElementById('userInput').value.trim();
         const p = document.getElementById('passInput').value;
@@ -334,7 +654,11 @@
             document.getElementById('login-wrapper').style.display = 'none';
             document.getElementById('container').style.display = 'block';
             document.getElementById('user-display').innerHTML = "👷 " + found.name + " - <strong>" + found.clase + "</strong>";
-            renderInv(); iniciarChatbase();
+            renderInv(); 
+            iniciarChatbase();
+            
+            // 🆕 Cargar inventario desde la nube al iniciar
+            loadInventoryFromCloud();
             
             // 🎵 REPRODUCIR MÚSICA AL INICIAR SESIÓN
             const audio = document.getElementById('mp3Player');
@@ -384,25 +708,20 @@
         else { document.getElementById('res-ohm').className = "resultado res-fail"; document.getElementById('res-ohm').innerHTML = "Ingrese Potencia y Voltaje"; }
     }
 
-    // 🎉 FUNCIÓN calcTension CON EFECTOS DIVERTIDOS (MODIFICADA)
     function calcTension() {
-        // Ocultar efectos previos
         document.getElementById('successImg').style.display = 'none';
         const danger = document.getElementById('dangerOverlay');
         danger.style.display = 'none';
         
-        // Cálculos originales
         let dv = (2 * parseFloat(document.getElementById('dist').value) * parseFloat(document.getElementById('amp').value) * 0.018) / parseFloat(document.getElementById('sec').value);
         let p = (dv / 220) * 100;
         let res = document.getElementById('res-tension');
         
         if (p <= 3) {
-            // ✅ CUMPLE - Mostrar imagen de éxito + confeti
             res.className = "resultado res-ok";
             res.innerHTML = `Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%) - ✓ CUMPLE RIC`;
             document.getElementById('successImg').style.display = 'block';
             
-            // Efecto confeti simple
             for(let i=0; i<15; i++) {
                 setTimeout(() => {
                     const c = document.createElement('span');
@@ -413,20 +732,11 @@
                 }, i*100);
             }
         } else {
-            // ❌ FUERA DE NORMA - Pantalla roja parpadeante por 6 segundos
             res.className = "resultado res-fail";
             res.innerHTML = `Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%) - ✗ FUERA DE NORMA`;
-            
-            // Mostrar overlay de peligro
             danger.style.display = 'flex';
-            
-            // Vibración en móviles
             if(navigator.vibrate) navigator.vibrate([300,100,300,100,300]);
-            
-            // Ocultar después de 6 segundos exactos
-            setTimeout(() => {
-                danger.style.display = 'none';
-            }, 6000);
+            setTimeout(() => { danger.style.display = 'none'; }, 6000);
         }
     }
 
@@ -444,168 +754,6 @@
             } else { html += `<div class="resultado res-fail">${t.n}: SOBRECARGADO ❌</div>`; }
         });
         document.getElementById('res-ducto').innerHTML = html;
-    }
-
-    /* ========== FUNCIONES DE EXPORTACIÓN/IMPORTACIÓN DE INVENTARIO ========== */
-
-    // 📥 Descargar lista completa como CSV (compatible con Excel)
-    function downloadInventory() {
-        if(inventory.length === 0) return alert("⚠️ No hay materiales en el inventario para descargar");
-        
-        let csv = "MATERIAL;STOCK DISPONIBLE\n";
-        inventory.forEach(item => {
-            csv += `"${item.name}";${item.stock}\n`;
-        });
-        
-        const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', `Inventario_LINSTELEC_${new Date().toISOString().slice(0,10)}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    // 🖨️ Imprimir lista en formato limpio para físico
-    function printInventory() {
-        if(inventory.length === 0) return alert("⚠️ No hay materiales para imprimir");
-        
-        let content = `
-            <html><head><title>Inventario LINSTELEC</title>
-            <style>
-                body { font-family: Arial, sans-serif; padding: 20px; }
-                h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
-                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-                th { background: #3498db; color: white; }
-                tr:nth-child(even) { background: #f9f9f9; }
-                .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }
-                @media print { body { padding: 0; } }
-            </style></head><body>
-            <h1>📦 Inventario de Materiales - LINSTELEC CHILE</h1>
-            <p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CL')} | <strong>Hora:</strong> ${new Date().toLocaleTimeString('es-CL')}</p>
-            <table>
-                <thead><tr><th>#</th><th>Material</th><th>Stock en Bodega</th></tr></thead>
-                <tbody>
-        `;
-        
-        inventory.forEach((item, idx) => {
-            content += `<tr><td>${idx + 1}</td><td>${item.name}</td><td><strong>${item.stock}</strong></td></tr>`;
-        });
-        
-        content += `</tbody></table><div class="footer">
-            Documento generado desde Sistema LINSTELEC - Uso interno<br>
-            Total de materiales: ${inventory.length}
-        </div></body></html>`;
-        
-        const printWindow = window.open('', '_blank', 'width=800,height=600');
-        printWindow.document.write(content);
-        printWindow.document.close();
-        printWindow.onload = () => { 
-            setTimeout(() => { printWindow.print(); }, 500); 
-        };
-    }
-
-    // 📤 Exportar para compartir con otros usuarios (archivo JSON)
-    function exportForShare() {
-        if(inventory.length === 0) return alert("⚠️ No hay materiales para exportar");
-        
-        const exportData = {
-            version: "1.0",
-            date: new Date().toISOString(),
-            inventory: inventory
-        };
-        
-        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', `LINSTELEC_Inventario_Compartir_${new Date().toISOString().slice(0,10)}.json`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        alert("✅ Archivo exportado exitosamente.\n\n📋 Instrucciones:\n1. Envía este archivo .json a tus compañeros\n2. Ellos deben usar 'Importar Lista' en su sistema\n3. ¡Listo! Tendrán el mismo inventario actualizado");
-    }
-
-    // 📥 Importar lista compartida por otro usuario
-    function importFromShare() {
-        document.getElementById('importFile').click();
-    }
-
-    function handleImport(input) {
-        const file = input.files[0];
-        if(!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if(data.inventory && Array.isArray(data.inventory)) {
-                    if(confirm(`⚠️ IMPORTAR INVENTARIO\n\nEsto reemplazará tu inventario actual con ${data.inventory.length} materiales.\n\n¿Deseas continuar?`)) {
-                        inventory = data.inventory;
-                        localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
-                        renderInv();
-                        alert("✅ Inventario actualizado correctamente con " + inventory.length + " materiales");
-                    }
-                } else {
-                    alert("❌ Formato de archivo no válido.\nAsegúrate de usar un archivo .json exportado desde este sistema.");
-                }
-            } catch(err) {
-                alert("❌ Error al leer el archivo: " + err.message);
-            }
-            input.value = ''; // Reset input para permitir re-importar el mismo archivo
-        };
-        reader.readAsText(file);
-    }
-
-    /* ========== FUNCIONES ORIGINALES DE INVENTARIO ========== */
-    function addMaterial() {
-        const n = document.getElementById('new-item-name').value, q = parseInt(document.getElementById('new-item-qty').value);
-        if(n && !isNaN(q)) { inventory.push({ name: n, stock: q }); document.getElementById('new-item-name').value = ""; document.getElementById('new-item-qty').value = ""; renderInv(); }
-    }
-    function renderInv() {
-        const body = document.getElementById('inv-body'); body.innerHTML = "";
-        inventory.forEach((item, idx) => {
-            body.innerHTML += `<tr><td>${item.name}</td><td><input type="number" value="${item.stock}" onchange="updateStock(${idx}, this.value)" class="qty-input"></td><td><input type="number" id="use-qty-${idx}" value="1" min="1" class="qty-input"></td><td><button onclick="addToBag(${idx})" class="tab-btn" style="padding:5px 10px; font-size:12px; background:var(--primary); color:white;">Ocupar</button> <button onclick="delMat(${idx})" style="background:var(--danger); border:none; color:white; padding:5px 8px; border-radius:5px; cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`;
-        });
-        localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
-    }
-    function updateStock(idx, val) { inventory[idx].stock = parseInt(val); localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory)); }
-    function delMat(idx) { if(confirm("¿Eliminar?")) { inventory.splice(idx, 1); renderInv(); } }
-    function addToBag(idx) {
-        const useQty = parseInt(document.getElementById(`use-qty-${idx}`).value);
-        if(isNaN(useQty) || useQty <= 0) return;
-        const exist = bag.find(b => b.name === inventory[idx].name);
-        if(exist) exist.qty += useQty; else bag.push({ name: inventory[idx].name, qty: useQty, originIdx: idx });
-        renderBag();
-    }
-    function renderBag() {
-        const div = document.getElementById('bag-items'); div.innerHTML = "";
-        bag.forEach(item => { div.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:5px; background:white; padding:5px; border-radius:5px; font-size:0.9rem;"><span>${item.name}</span><strong>Cant: ${item.qty}</strong></div>`; });
-    }
-    function generateFile() {
-        if(bag.length === 0) return alert("Selecciona materiales primero");
-        const proj = document.getElementById('install-proj').value || "Salida_Materiales";
-        let txt = `LINSTELEC CHILE - GUIA DE MATERIALES\nPROYECTO: ${proj}\nFECHA: ${new Date().toLocaleDateString()}\n-------------------\n`;
-        bag.forEach(item => {
-            txt += `- ${item.name}: ${item.qty}\n`;
-            inventory[item.originIdx].stock -= item.qty;
-        });
-        const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', `${proj}_Materiales.txt`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        bag = []; renderBag(); renderInv();
-        alert("Archivo generado y stock actualizado.");
     }
 
     function iniciarChatbase() {
@@ -632,3 +780,4 @@
 </script>
 </body>
 </html>
+
