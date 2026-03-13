@@ -282,7 +282,7 @@
                         <label for="monofasico">
                             <span class="radio-icon">⚡</span>
                             Monofásico<br>
-                            <small>(√2 = 1.414)</small>
+                            <small>(2 = ida y vuelta)</small>
                         </label>
                     </div>
                     <div class="radio-option">
@@ -450,7 +450,7 @@
 </div>
 
 <script>
-    /* ========== 🔥 CONFIGURACIÓN JSONBIN - ¡EDITAR AQUÍ! ========== */
+    /* ========== 🔥 CONFIGURACIÓN JSONBIN ========== */
     const JSONBIN_CONFIG = {
         masterKey: "$2a$10$d5wiwzZ.u1m2caXKKtWSGuo4.hnU4mEWvEiCaj9XFa6IpBOA0UP0a",
         binId: "69b37960c3097a1dd51edd41",
@@ -491,7 +491,6 @@
         if(!JSONBIN_CONFIG.masterKey || JSONBIN_CONFIG.masterKey.includes('PEGAR_AQUI') || 
            !JSONBIN_CONFIG.binId || JSONBIN_CONFIG.binId.includes('TU_BIN_ID')) {
             updateSyncStatus('pending', 'Sin configurar');
-            console.log("⚠️ JSONBin no configurado");
             return;
         }
 
@@ -521,7 +520,6 @@
                 localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
                 renderInv();
                 updateSyncStatus('ok', `✅ ${new Date().toLocaleTimeString()}`);
-                console.log("✅ Sincronizado desde la nube");
             } else {
                 inventory = [];
                 await saveInventoryToCloud();
@@ -563,7 +561,6 @@
             if(!response.ok) throw new Error(`HTTP ${response.status}`);
             
             updateSyncStatus('ok', `Guardado ${new Date().toLocaleTimeString()}`);
-            console.log("✅ Guardado en la nube");
         } catch(error) {
             console.error("❌ Error al guardar:", error);
             updateSyncStatus('error', 'Error al guardar');
@@ -593,7 +590,6 @@
             }
         });
         
-        // Actualizar contador de resultados
         const countEl = document.getElementById('search-count');
         if(searchTerm) {
             countEl.textContent = `${visibleCount} resultado${visibleCount !== 1 ? 's' : ''} encontrado${visibleCount !== 1 ? 's' : ''}`;
@@ -603,11 +599,6 @@
         } else {
             countEl.textContent = '';
         }
-    }
-
-    function clearSearch() {
-        document.getElementById('search-inv').value = '';
-        filterInventory();
     }
 
     /* ========== FUNCIONES DE EXPORTACIÓN/IMPORTACIÓN ========== */
@@ -689,7 +680,7 @@
         link.click();
         document.body.removeChild(link);
         
-        alert("✅ Archivo exportado exitosamente.\n\n📋 Instrucciones:\n1. Envía este archivo .json a tus compañeros\n2. Ellos deben usar 'Importar Lista' en su sistema\n3. ¡Listo! Tendrán el mismo inventario actualizado");
+        alert("✅ Archivo exportado exitosamente.");
     }
 
     function importFromShare() {
@@ -713,7 +704,7 @@
                         alert("✅ Inventario actualizado correctamente con " + inventory.length + " materiales");
                     }
                 } else {
-                    alert("❌ Formato de archivo no válido.\nAsegúrate de usar un archivo .json exportado desde este sistema.");
+                    alert("❌ Formato de archivo no válido.");
                 }
             } catch(err) {
                 alert("❌ Error al leer el archivo: " + err.message);
@@ -723,7 +714,7 @@
         reader.readAsText(file);
     }
 
-    /* ========== FUNCIONES ORIGINALES DE INVENTARIO ========== */
+    /* ========== FUNCIONES DE INVENTARIO ========== */
     function addMaterial() {
         const n = document.getElementById('new-item-name').value, q = parseInt(document.getElementById('new-item-qty').value);
         if(n && !isNaN(q)) { 
@@ -749,8 +740,6 @@
             body.innerHTML += `<tr><td>${item.name}</td><td><input type="number" value="${item.stock}" onchange="updateStock(${idx}, this.value)" class="qty-input"></td><td><input type="number" id="use-qty-${idx}" value="1" min="1" class="qty-input"></td><td><button onclick="addToBag(${idx})" class="tab-btn" style="padding:5px 10px; font-size:12px; background:var(--primary); color:white;">Ocupar</button> <button onclick="delMat(${idx})" style="background:var(--danger); border:none; color:white; padding:5px 8px; border-radius:5px; cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`;
         });
         localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
-        
-        // Actualizar contador después de renderizar
         filterInventory();
     }
     
@@ -820,7 +809,6 @@
             document.getElementById('user-display').innerHTML = "👷 " + found.name + " - <strong>" + found.clase + "</strong>";
             renderInv(); 
             iniciarChatbase();
-            
             loadInventoryFromCloud();
             
             const audio = document.getElementById('mp3Player');
@@ -870,7 +858,7 @@
         else { document.getElementById('res-ohm').className = "resultado res-fail"; document.getElementById('res-ohm').innerHTML = "Ingrese Potencia y Voltaje"; }
     }
 
-    // ⚡ CALCULADORA DE CAÍDA DE TENSIÓN - MONOFÁSICO/TRIFÁSICO
+    // ⚡ CALCULADORA DE CAÍDA DE TENSIÓN - FÓRMULA CORREGIDA
     function calcTension() {
         document.getElementById('successImg').style.display = 'none';
         const danger = document.getElementById('dangerOverlay');
@@ -889,10 +877,10 @@
         const corriente = parseFloat(document.getElementById('amp').value);
         const seccion = parseFloat(document.getElementById('sec').value);
         
-        // Calcular según tipo de sistema
-        // Monofásico: √2 = 1.414
-        // Trifásico: √3 = 1.732
-        const factor = esMonofasico ? Math.sqrt(2) : Math.sqrt(3);
+        // ✅ FÓRMULA CORREGIDA
+        // Monofásico: 2 (ida y vuelta por fase + neutro)
+        // Trifásico: √3 = 1.732 (relación entre fases)
+        const factor = esMonofasico ? 2 : Math.sqrt(3);
         
         // Fórmula: ΔV = (factor × L × I × ρ) / S
         let dv = (factor * distancia * corriente * rho) / seccion;
@@ -900,10 +888,9 @@
         
         let res = document.getElementById('res-tension');
         let sistemaTexto = esMonofasico ? "MONOFÁSICO" : "TRIFÁSICO";
-        let factorTexto = esMonofasico ? "√2 (1.414)" : "√3 (1.732)";
+        let factorTexto = esMonofasico ? "2 (ida y vuelta)" : "√3 (1.732)";
         
         if (p <= 3) {
-            // ✅ CUMPLE - Mostrar imagen de éxito + confeti
             res.className = "resultado res-ok";
             res.innerHTML = `
                 <strong>Sistema ${sistemaTexto}</strong> | Factor: ${factorTexto}<br>
@@ -912,7 +899,6 @@
             `;
             document.getElementById('successImg').style.display = 'block';
             
-            // Efecto confeti simple
             for(let i=0; i<15; i++) {
                 setTimeout(() => {
                     const c = document.createElement('span');
@@ -923,7 +909,6 @@
                 }, i*100);
             }
         } else {
-            // ❌ FUERA DE NORMA - Pantalla roja parpadeante por 6 segundos
             res.className = "resultado res-fail";
             res.innerHTML = `
                 <strong>Sistema ${sistemaTexto}</strong> | Factor: ${factorTexto}<br>
@@ -931,13 +916,10 @@
                 ✗ FUERA DE NORMA (>3%)
             `;
             
-            // Mostrar overlay de peligro
             danger.style.display = 'flex';
             
-            // Vibración en móviles
             if(navigator.vibrate) navigator.vibrate([300,100,300,100,300]);
             
-            // Ocultar después de 6 segundos exactos
             setTimeout(() => {
                 danger.style.display = 'none';
             }, 6000);
