@@ -282,7 +282,7 @@
                         <label for="monofasico">
                             <span class="radio-icon">⚡</span>
                             Monofásico<br>
-                            <small>(2 = ida y vuelta)</small>
+                            <small>(220V - 2 conductores)</small>
                         </label>
                     </div>
                     <div class="radio-option">
@@ -290,7 +290,7 @@
                         <label for="trifasico">
                             <span class="radio-icon">🔺</span>
                             Trifásico<br>
-                            <small>(√3 = 1.732)</small>
+                            <small>(380V - √3)</small>
                         </label>
                     </div>
                 </div>
@@ -858,7 +858,7 @@
         else { document.getElementById('res-ohm').className = "resultado res-fail"; document.getElementById('res-ohm').innerHTML = "Ingrese Potencia y Voltaje"; }
     }
 
-    // ⚡ CALCULADORA DE CAÍDA DE TENSIÓN - FÓRMULA CORREGIDA
+    // ⚡ CALCULADORA DE CAÍDA DE TENSIÓN - FÓRMULAS CORREGIDAS
     function calcTension() {
         document.getElementById('successImg').style.display = 'none';
         const danger = document.getElementById('dangerOverlay');
@@ -870,7 +870,10 @@
         
         // Constantes
         const rho = 0.018;  // Resistividad del cobre
-        const V = 220;       // Voltaje nominal
+        
+        // ✅ TENSIÓN SEGÚN SISTEMA (Chile)
+        const V_nominal = esMonofasico ? 220 : 380;
+        const textoTension = esMonofasico ? "220V" : "380V";
         
         // Obtener valores
         const distancia = parseFloat(document.getElementById('dist').value);
@@ -884,7 +887,9 @@
         
         // Fórmula: ΔV = (factor × L × I × ρ) / S
         let dv = (factor * distancia * corriente * rho) / seccion;
-        let p = (dv / V) * 100;
+        
+        // ✅ Porcentaje con tensión correcta según sistema
+        let p = (dv / V_nominal) * 100;
         
         let res = document.getElementById('res-tension');
         let sistemaTexto = esMonofasico ? "MONOFÁSICO" : "TRIFÁSICO";
@@ -893,8 +898,9 @@
         if (p <= 3) {
             res.className = "resultado res-ok";
             res.innerHTML = `
-                <strong>Sistema ${sistemaTexto}</strong> | Factor: ${factorTexto}<br>
-                Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%)<br>
+                <strong>Sistema ${sistemaTexto} ${textoTension}</strong><br>
+                Factor: ${factorTexto} | ΔV: ${dv.toFixed(2)}V<br>
+                Pérdida: ${p.toFixed(2)}%<br>
                 ✓ CUMPLE RIC 04 (≤3%)
             `;
             document.getElementById('successImg').style.display = 'block';
@@ -911,8 +917,9 @@
         } else {
             res.className = "resultado res-fail";
             res.innerHTML = `
-                <strong>Sistema ${sistemaTexto}</strong> | Factor: ${factorTexto}<br>
-                Pérdida: ${dv.toFixed(2)}V (${p.toFixed(2)}%)<br>
+                <strong>Sistema ${sistemaTexto} ${textoTension}</strong><br>
+                Factor: ${factorTexto} | ΔV: ${dv.toFixed(2)}V<br>
+                Pérdida: ${p.toFixed(2)}%<br>
                 ✗ FUERA DE NORMA (>3%)
             `;
             
