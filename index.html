@@ -201,7 +201,7 @@
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
             text-align: center;
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
             margin: 0 auto;
             position: relative;
             z-index: 10;
@@ -240,25 +240,29 @@
             font-weight: 400;
         }
 
-        .login-form { display: flex; flex-direction: column; gap: 16px; }
+        .login-form { display: flex; flex-direction: column; gap: 18px; }
+        
         .input-group {
             position: relative;
-            display: flex;
-            align-items: center;
             width: 100%;
+            box-sizing: border-box;
         }
-        .input-group i {
+        
+        .input-group i.input-icon {
             position: absolute;
-            left: 15px;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
             color: #94a3b8;
             font-size: 1rem;
             pointer-events: none;
             transition: color 0.3s;
-            z-index: 2;
+            z-index: 3;
         }
+        
         .input-group input {
             width: 100%;
-            padding: 14px 15px 14px 45px;
+            padding: 14px 45px 14px 45px; /* Izquierda para ícono, derecha para toggle */
             border: 2px solid #e2e8f0;
             border-radius: 12px;
             font-size: 1rem;
@@ -266,28 +270,42 @@
             background: #f8fafc;
             box-sizing: border-box;
         }
+        
         .input-group input:focus {
             outline: none;
             border-color: var(--primary);
             background: var(--white);
             box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
         }
-        .input-group input:focus + i,
-        .input-group input:focus ~ i { color: var(--primary); }
+        
+        .input-group input:focus ~ i.input-icon { 
+            color: var(--primary); 
+        }
 
         .toggle-pass {
             position: absolute;
-            right: 12px;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
             background: none;
             border: none;
             color: #94a3b8;
             cursor: pointer;
-            padding: 5px;
+            padding: 6px;
             border-radius: 6px;
             transition: all 0.2s;
-            z-index: 2;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .toggle-pass:hover { color: var(--dark); background: #f1f5f9; }
+        .toggle-pass:hover { 
+            color: var(--dark); 
+            background: #f1f5f9; 
+        }
+        .toggle-pass:active {
+            transform: translateY(-50%) scale(0.95);
+        }
 
         .btn-calc {
             background: linear-gradient(135deg, var(--primary), #2980b9);
@@ -482,10 +500,10 @@
 
         iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
 
-        /* ===== PANEL FLOTANTE - SOLO MODO OSCURO ===== */
+        /* ===== PANEL FLOTANTE - ARRIBA DERECHA ===== */
         #floating-panel {
             position: fixed;
-            bottom: 25px;
+            top: 80px;  /* ← CAMBIO: arriba debajo del navbar */
             right: 25px;
             display: flex;
             flex-direction: column;
@@ -538,9 +556,38 @@
             right: 65px;
         }
 
+        /* Burbuja Música */
+        .bubble-music {
+            background: linear-gradient(135deg, var(--primary), #2980b9);
+            animation: float 3s ease-in-out infinite;
+        }
+        .bubble-music:hover { 
+            background: linear-gradient(135deg, #2980b9, var(--primary)); 
+        }
+        .bubble-music.playing {
+            background: linear-gradient(135deg, var(--success), #27ae60);
+            animation: pulse 1.5s infinite;
+        }
+        .bubble-music .bubble-status {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: var(--success);
+            border-radius: 50%;
+            border: 2px solid white;
+            display: none;
+        }
+        .bubble-music.playing .bubble-status {
+            display: block;
+            animation: blink 1s infinite;
+        }
+
+        /* Burbuja Tema */
         .bubble-theme {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            animation: float 3s ease-in-out infinite;
+            animation: float 3s ease-in-out infinite 0.3s;
         }
         .bubble-theme:hover { 
             background: linear-gradient(135deg, #8b5cf6, #6366f1); 
@@ -555,11 +602,19 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(39, 174, 96, 0.7); }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
+        }
 
         /* 🎵 VENTANA REPRODUCTOR MP3 - POSICIÓN ARRIBA DERECHA */
         .floating-window {
             position: fixed;
-            top: 80px;  /* ← CAMBIO: arriba debajo del navbar */
+            top: 160px;  /* ← Debajo de las burbujas */
             right: 25px;
             width: 280px;
             background: var(--white);
@@ -887,7 +942,7 @@
             .dashboard-datetime { text-align: center; }
             .dashboard-grid { grid-template-columns: 1fr; }
             #floating-panel {
-                bottom: 15px;
+                top: 70px;
                 right: 15px;
                 gap: 10px;
             }
@@ -901,7 +956,7 @@
                 right: 15px;
                 left: 15px;
                 width: auto;
-                top: 70px; /* Ajuste para móviles */
+                top: 140px;
             }
             .card-header {
                 flex-direction: column;
@@ -911,6 +966,13 @@
             .btn-back {
                 width: 100%;
                 justify-content: center;
+            }
+            .login-card {
+                padding: 35px 25px;
+                max-width: 95%;
+            }
+            .input-group input {
+                padding: 12px 40px 12px 40px;
             }
         }
     </style>
@@ -928,13 +990,13 @@
         
         <form onsubmit="checkLogin(); return false;" class="login-form">
             <div class="input-group">
-                <i class="fas fa-user"></i>
+                <i class="fas fa-user input-icon"></i>
                 <input type="text" id="userInput" placeholder="Usuario" autocomplete="username" required>
             </div>
             <div class="input-group">
-                <i class="fas fa-lock"></i>
+                <i class="fas fa-lock input-icon"></i>
                 <input type="password" id="passInput" placeholder="Contraseña" autocomplete="current-password" required>
-                <button type="button" class="toggle-pass" onclick="togglePassword()">
+                <button type="button" class="toggle-pass" onclick="togglePassword()" title="Mostrar/Ocultar contraseña">
                     <i class="fas fa-eye"></i>
                 </button>
             </div>
@@ -1138,7 +1200,7 @@
             <div id="res-tension"></div>
         </div>
 
-        <img id="successImg" src="image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2327ae60'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" alt="✓">
+        <img id="successImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2327ae60'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" alt="✓">
 
         <div id="dangerOverlay">
             <div class="danger-icon">⚠️</div>
@@ -1317,8 +1379,16 @@
     </div>
 </div>
 
-<!-- 🌙 PANEL FLOTANTE - SOLO MODO OSCURO -->
+<!-- 🎵🌙 PANEL FLOTANTE - ARRIBA DERECHA -->
 <div id="floating-panel">
+    <!-- Burbuja Música -->
+    <div class="bubble bubble-music" id="musicBubble" onclick="toggleMusicAction()" title="Reproductor MP3">
+        <i class="fas fa-music" id="musicIcon"></i>
+        <span class="bubble-tooltip">Música</span>
+        <span class="bubble-status"></span>
+    </div>
+    
+    <!-- Burbuja Modo Oscuro -->
     <div class="bubble bubble-theme" onclick="toggleDarkMode()" title="Modo Oscuro">
         <i class="fas fa-moon" id="themeIcon"></i>
         <span class="bubble-tooltip">Tema</span>
@@ -2274,6 +2344,83 @@
 
     /* ===== FUNCIONES PANEL FLOTANTE ===== */
 
+    // 🎵 Toggle música: Abre panel Y reproduce/pausa en un solo clic
+    function toggleMusicAction() {
+        const panel = document.getElementById('musicPanel');
+        const audio = document.getElementById('mp3Player');
+        const bubble = document.getElementById('musicBubble');
+        const playIcon = document.getElementById('playIcon');
+        
+        if (panel.classList.contains('visible')) {
+            // Si está abierto: pausar y cerrar
+            audio.pause();
+            panel.classList.remove('visible');
+            bubble.classList.remove('playing');
+            playIcon.classList.replace('fa-pause', 'fa-play');
+            document.getElementById('songStatus').textContent = 'Pausado';
+        } else {
+            // Si está cerrado: abrir y toggle play/pause
+            panel.classList.add('visible');
+            
+            if (audio.paused) {
+                audio.play();
+                bubble.classList.add('playing');
+                playIcon.classList.replace('fa-play', 'fa-pause');
+                document.getElementById('songStatus').textContent = '▶ Reproduciendo';
+            } else {
+                audio.pause();
+                bubble.classList.remove('playing');
+                playIcon.classList.replace('fa-pause', 'fa-play');
+                document.getElementById('songStatus').textContent = '⏸ Pausado';
+            }
+        }
+    }
+
+    // Cerrar panel de música (sin afectar reproducción)
+    function closeMusicPanel() {
+        document.getElementById('musicPanel').classList.remove('visible');
+    }
+
+    // Toggle Play/Pause dentro del panel
+    function togglePlayPause() {
+        const audio = document.getElementById('mp3Player');
+        const bubble = document.getElementById('musicBubble');
+        const playIcon = document.getElementById('playIcon');
+        const status = document.getElementById('songStatus');
+        
+        if (audio.paused) {
+            audio.play();
+            bubble.classList.add('playing');
+            playIcon.classList.replace('fa-play', 'fa-pause');
+            if (status) status.textContent = '▶ Reproduciendo';
+        } else {
+            audio.pause();
+            bubble.classList.remove('playing');
+            playIcon.classList.replace('fa-pause', 'fa-play');
+            if (status) status.textContent = '⏸ Pausado';
+        }
+    }
+
+    // Actualizar estado del reproductor
+    const audioEl = document.getElementById('mp3Player');
+    if (audioEl) {
+        audioEl.addEventListener('play', () => {
+            document.getElementById('musicBubble')?.classList.add('playing');
+            document.getElementById('playIcon')?.classList.replace('fa-play', 'fa-pause');
+        });
+        audioEl.addEventListener('pause', () => {
+            document.getElementById('musicBubble')?.classList.remove('playing');
+            document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
+        });
+        audioEl.addEventListener('ended', () => {
+            document.getElementById('musicBubble')?.classList.remove('playing');
+            document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
+            if (document.getElementById('songStatus')) {
+                document.getElementById('songStatus').textContent = '✓ Finalizado';
+            }
+        });
+    }
+
     // 🌙 MODO OSCURO - Toggle simple (DESACTIVADO POR DEFECTO)
     function toggleDarkMode() {
         const body = document.body;
@@ -2303,73 +2450,6 @@
         // Efecto visual en la burbuja
         bubble.style.transform = 'scale(0.9)';
         setTimeout(() => { bubble.style.transform = ''; }, 150);
-    }
-
-    // 🎵 Toggle música: Abre panel Y reproduce/pausa en un solo clic
-    function toggleMusicAction() {
-        const panel = document.getElementById('musicPanel');
-        const audio = document.getElementById('mp3Player');
-        const playIcon = document.getElementById('playIcon');
-        
-        if (panel.classList.contains('visible')) {
-            // Si está abierto: pausar y cerrar
-            audio.pause();
-            panel.classList.remove('visible');
-            playIcon.classList.replace('fa-pause', 'fa-play');
-            document.getElementById('songStatus').textContent = 'Pausado';
-        } else {
-            // Si está cerrado: abrir y toggle play/pause
-            panel.classList.add('visible');
-            
-            if (audio.paused) {
-                audio.play();
-                playIcon.classList.replace('fa-play', 'fa-pause');
-                document.getElementById('songStatus').textContent = '▶ Reproduciendo';
-            } else {
-                audio.pause();
-                playIcon.classList.replace('fa-pause', 'fa-play');
-                document.getElementById('songStatus').textContent = '⏸ Pausado';
-            }
-        }
-    }
-
-    // Cerrar panel de música (sin afectar reproducción)
-    function closeMusicPanel() {
-        document.getElementById('musicPanel').classList.remove('visible');
-    }
-
-    // Toggle Play/Pause dentro del panel
-    function togglePlayPause() {
-        const audio = document.getElementById('mp3Player');
-        const playIcon = document.getElementById('playIcon');
-        const status = document.getElementById('songStatus');
-        
-        if (audio.paused) {
-            audio.play();
-            playIcon.classList.replace('fa-play', 'fa-pause');
-            if (status) status.textContent = '▶ Reproduciendo';
-        } else {
-            audio.pause();
-            playIcon.classList.replace('fa-pause', 'fa-play');
-            if (status) status.textContent = '⏸ Pausado';
-        }
-    }
-
-    // Actualizar estado del reproductor
-    const audioEl = document.getElementById('mp3Player');
-    if (audioEl) {
-        audioEl.addEventListener('play', () => {
-            document.getElementById('playIcon')?.classList.replace('fa-play', 'fa-pause');
-        });
-        audioEl.addEventListener('pause', () => {
-            document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
-        });
-        audioEl.addEventListener('ended', () => {
-            document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
-            if (document.getElementById('songStatus')) {
-                document.getElementById('songStatus').textContent = '✓ Finalizado';
-            }
-        });
     }
 
     // Cargar tema guardado al iniciar
