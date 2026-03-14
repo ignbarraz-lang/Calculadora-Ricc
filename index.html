@@ -250,6 +250,19 @@
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
             outline: none;
         }
+
+        /* Estilos para calculadora de ductos */
+        .cable-info {
+            background: #f8fafc;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--primary);
+        }
+        .cable-info strong {
+            color: var(--dark);
+        }
     </style>
 </head>
 <body>
@@ -372,11 +385,53 @@
         </div>
 
         <div id="tuberia" class="card">
-            <h2>Análisis de Ductos EMT (RIC 07)</h2>
-            <div class="form-group"><label>Cable RVK:</label><select id="cable-tipo"><option value="52.8">6mm² (8.2mm Ø)</option><option value="81.7">10mm² (10.2mm Ø)</option><option value="109.4">16mm² (11.8mm Ø)</option></select></div>
-            <div class="form-group"><label>Cantidad de cables:</label><input type="number" id="cable-cant" value="1"></div>
-            <div class="form-group"><label><input type="checkbox" id="utp-check"> Incluir Cable UTP Cat6 (+32mm²)</label></div>
-            <button class="btn-calc" style="background:var(--success)" onclick="calcDucto()">Analizar Tubería</button><div id="res-ducto"></div>
+            <h2>Análisis de Ductos EMT (RIC 07 - SEC Chile)</h2>
+            <p style="font-size: 0.8rem; color: #64748b; margin: -15px 0 15px 0;">
+                <i class="fas fa-info-circle"></i> Factor de llenado: 1 cable=53% | 2 cables=31% | 3+ cables=40%
+            </p>
+            
+            <div class="form-group">
+                <label>Tipo de Cable:</label>
+                <select id="cable-tipo" onchange="actualizarCalculadoraDuctos()">
+                    <optgroup label="📡 MULTICONDUCTOR RVK (0.6/1kV)">
+                        <option value="multirvk_3x6" data-diametro="12.0" data-cantidad="1">RVK 3×6 mm² (Ø 12.0 mm)</option>
+                        <option value="multirvk_3x10" data-diametro="14.0" data-cantidad="1">RVK 3×10 mm² (Ø 14.0 mm)</option>
+                        <option value="multirvk_3x16" data-diametro="17.5" data-cantidad="1">RVK 3×16 mm² (Ø 17.5 mm)</option>
+                    </optgroup>
+                    <optgroup label="🔌 UNIPOLAR RVK (Cordón)">
+                        <option value="unirvk_1x6" data-diametro="6.5" data-cantidad="variable">Unipolar RVK 1×6 mm² (Ø 6.5 mm)</option>
+                        <option value="unirvk_1x10" data-diametro="7.3" data-cantidad="variable">Unipolar RVK 1×10 mm² (Ø 7.3 mm)</option>
+                        <option value="unirvk_1x16" data-diametro="8.5" data-cantidad="variable">Unipolar RVK 1×16 mm² (Ø 8.5 mm)</option>
+                    </optgroup>
+                    <optgroup label="🔥 UNIPOLAR H07Z1-K (EVA/Flex)">
+                        <option value="h07_1x1.5" data-diametro="3.1" data-cantidad="variable">H07Z1-K 1×1.5 mm² (Ø 3.1 mm)</option>
+                        <option value="h07_1x2.5" data-diametro="3.8" data-cantidad="variable">H07Z1-K 1×2.5 mm² (Ø 3.8 mm)</option>
+                    </optgroup>
+                </select>
+                <div id="cable-info" class="cable-info"></div>
+            </div>
+            
+            <div class="form-group" id="cantidad-group" style="display: none;">
+                <label>Cantidad de Cables:</label>
+                <input type="number" id="cable-cant" value="3" min="1" max="20" onchange="actualizarCalculadoraDuctos()">
+                <small style="color: #64748b; display: block; margin-top: 5px;">
+                    💡 Para circuitos monofásicos: 2-3 cables | Trifásicos: 4-5 cables
+                </small>
+            </div>
+            
+            <div class="form-group" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #cbd5e1;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" id="utp-check" onchange="actualizarCalculadoraDuctos()" style="width: auto; margin: 0;">
+                    <strong>Incluir Cable UTP Cat6 (Ø 6.0 mm)</strong>
+                </label>
+                <div id="utp-cantidad-group" style="display: none; margin-top: 10px;">
+                    <label style="font-size: 0.9rem;">Cantidad de cables UTP:</label>
+                    <input type="number" id="utp-cant" value="1" min="1" max="10" onchange="actualizarCalculadoraDuctos()">
+                </div>
+            </div>
+            
+            <button class="btn-calc" style="background:var(--success)" onclick="calcDucto()">Analizar Tubería EMT</button>
+            <div id="res-ducto"></div>
         </div>
 
         <div id="sgc" class="card" style="text-align:center;">
@@ -906,7 +961,7 @@
 
     // 🎉 Efecto de confeti para resultados exitosos
     function lanzarConfeti() {
-        const emojis = ['🎉','✨','⚡','🔋','✅'];
+        const emojis = ['🎉','✨','⚡','','✅'];
         for(let i = 0; i < 12; i++) {
             setTimeout(() => {
                 const c = document.createElement('span');
@@ -1012,19 +1067,160 @@
         }
     }
 
+    // 📐 Actualizar calculadora de ductos según tipo de cable
+    function actualizarCalculadoraDuctos() {
+        const select = document.getElementById('cable-tipo');
+        const selectedOption = select.options[select.selectedIndex];
+        const diametro = selectedOption.getAttribute('data-diametro');
+        const cantidad = selectedOption.getAttribute('data-cantidad');
+        const texto = selectedOption.text;
+        
+        // Mostrar/ocultar campo de cantidad
+        const cantidadGroup = document.getElementById('cantidad-group');
+        if (cantidad === 'variable') {
+            cantidadGroup.style.display = 'block';
+        } else {
+            cantidadGroup.style.display = 'none';
+        }
+        
+        // Mostrar información del cable
+        const infoDiv = document.getElementById('cable-info');
+        infoDiv.innerHTML = `
+            <strong>Cable seleccionado:</strong> ${texto}<br>
+            <strong>Diámetro exterior:</strong> Ø ${diametro} mm<br>
+            ${cantidad === '1' ? '<span style="color: var(--success);">✓ Multiconductor (1 solo cable en tubería)</span>' : '<span style="color: var(--primary);">📊 Ingrese cantidad de cables unipolares</span>'}
+        `;
+        
+        // Mostrar/ocultar cantidad de UTP si está marcado
+        const utpCheck = document.getElementById('utp-check');
+        const utpCantidadGroup = document.getElementById('utp-cantidad-group');
+        utpCantidadGroup.style.display = utpCheck.checked ? 'block' : 'none';
+    }
+
+    // 🔧 CALCULADORA DE DUCTOS EMT - NORMA SEC CHILE (RIC 07)
     function calcDucto() {
-        let areaT = (parseFloat(document.getElementById('cable-tipo').value) * parseInt(document.getElementById('cable-cant').value)) + (document.getElementById('utp-check').checked ? 32 : 0);
-        let nTotal = parseInt(document.getElementById('cable-cant').value) + (document.getElementById('utp-check').checked ? 1 : 0);
-        let f = nTotal === 1 ? 0.53 : (nTotal === 2 ? 0.31 : 0.40);
-        let ductos = [{n:"25mm", d:24.3}, {n:"32mm", d:32.5}, {n:"40mm", d:38.4}, {n:"50mm", d:50.1}];
-        let html = `<div class="resultado res-warn">Área requerida: ${areaT.toFixed(1)} mm²</div>`, yaRec = false;
-        ductos.forEach(t => {
-            let cap = ((Math.PI * Math.pow(t.d, 2)) / 4) * f;
-            if (cap >= areaT) {
-                if (!yaRec) { html += `<div class="resultado res-ok">${t.n}: RECOMENDADO ✅</div>`; yaRec = true; }
-                else { html += `<div class="resultado res-warn">${t.n}: EXCESIVO 🔵</div>`; }
-            } else { html += `<div class="resultado res-fail">${t.n}: SOBRECARGADO ❌</div>`; }
+        const select = document.getElementById('cable-tipo');
+        const selectedOption = select.options[select.selectedIndex];
+        const diametroCable = parseFloat(selectedOption.getAttribute('data-diametro'));
+        const tipoCantidad = selectedOption.getAttribute('data-cantidad');
+        
+        // Determinar cantidad de cables principales
+        let cantidadCables = 1;
+        if (tipoCantidad === 'variable') {
+            cantidadCables = parseInt(document.getElementById('cable-cant').value) || 1;
+        }
+        
+        // Calcular área de cables principales
+        const areaCablePrincipal = Math.PI * Math.pow(diametroCable / 2, 2);
+        const areaTotalPrincipal = areaCablePrincipal * cantidadCables;
+        
+        // Verificar si hay UTP
+        const utpCheck = document.getElementById('utp-check');
+        let areaTotalUTP = 0;
+        let cantidadUTP = 0;
+        if (utpCheck.checked) {
+            cantidadUTP = parseInt(document.getElementById('utp-cant').value) || 1;
+            const diametroUTP = 6.0; // mm
+            const areaUTP = Math.PI * Math.pow(diametroUTP / 2, 2);
+            areaTotalUTP = areaUTP * cantidadUTP;
+        }
+        
+        // Área total requerida
+        const areaTotalRequerida = areaTotalPrincipal + areaTotalUTP;
+        const totalCables = cantidadCables + cantidadUTP;
+        
+        // Determinar factor de llenado según RIC 07
+        let factorLlenado;
+        let textoFactor;
+        if (totalCables === 1) {
+            factorLlenado = 0.53;
+            textoFactor = "53% (1 cable)";
+        } else if (totalCables === 2) {
+            factorLlenado = 0.31;
+            textoFactor = "31% (2 cables)";
+        } else {
+            factorLlenado = 0.40;
+            textoFactor = "40% (3+ cables)";
+        }
+        
+        // Tubos EMT disponibles (diámetros nominales en mm)
+        const tubosEMT = [
+            { nominal: 16, interior: 15.3 },
+            { nominal: 20, interior: 19.3 },
+            { nominal: 25, interior: 24.5 },
+            { nominal: 32, interior: 31.0 },
+            { nominal: 40, interior: 37.5 },
+            { nominal: 50, interior: 46.5 }
+        ];
+        
+        // Calcular capacidad de cada tubo
+        let html = `
+            <div class="resultado res-warn" style="margin-bottom: 15px;">
+                <strong>📊 Resumen de Cables:</strong><br>
+                • Cables principales: ${cantidadCables} × Ø${diametroCable}mm = ${areaTotalPrincipal.toFixed(2)} mm²<br>
+                ${utpCheck.checked ? `• Cables UTP: ${cantidadUTP} × Ø6.0mm = ${areaTotalUTP.toFixed(2)} mm²<br>` : ''}
+                • <strong>Área total: ${areaTotalRequerida.toFixed(2)} mm²</strong><br>
+                • Factor de llenado RIC 07: ${textoFactor}
+            </div>
+            <h3 style="margin: 15px 0 10px 0; font-size: 1.1rem;">📐 Análisis por Tubo EMT:</h3>
+        `;
+        
+        let tuboRecomendado = null;
+        
+        tubosEMT.forEach(tubo => {
+            const areaInterna = Math.PI * Math.pow(tubo.interior / 2, 2);
+            const capacidadMaxima = areaInterna * factorLlenado;
+            const porcentajeOcupacion = (areaTotalRequerida / areaInterna) * 100;
+            
+            if (capacidadMaxima >= areaTotalRequerida) {
+                if (!tuboRecomendado) {
+                    tuboRecomendado = tubo;
+                    html += `
+                        <div class="resultado res-ok" style="margin-bottom: 10px;">
+                            <strong>✅ Tubo EMT ${tubo.nominal}mm - RECOMENDADO</strong><br>
+                            • Diámetro interior: ${tubo.interior}mm<br>
+                            • Capacidad máxima (${textoFactor}): ${capacidadMaxima.toFixed(2)} mm²<br>
+                            • Área requerida: ${areaTotalRequerida.toFixed(2)} mm²<br>
+                            • Ocupación: ${porcentajeOcupacion.toFixed(1)}%<br>
+                            • <strong>Margen disponible: ${(capacidadMaxima - areaTotalRequerida).toFixed(2)} mm²</strong>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="resultado res-warn" style="margin-bottom: 10px;">
+                            <strong>🔵 Tubo EMT ${tubo.nominal}mm - EXCESIVO</strong><br>
+                            • Ocupación: ${porcentajeOcupacion.toFixed(1)}%<br>
+                            • Sobredimensionado para esta instalación
+                        </div>
+                    `;
+                }
+            } else {
+                html += `
+                    <div class="resultado res-fail" style="margin-bottom: 10px;">
+                        <strong>❌ Tubo EMT ${tubo.nominal}mm - SOBRECARGADO</strong><br>
+                        • Capacidad máxima (${textoFactor}): ${capacidadMaxima.toFixed(2)} mm²<br>
+                        • Área requerida: ${areaTotalRequerida.toFixed(2)} mm²<br>
+                        • Ocupación: ${porcentajeOcupacion.toFixed(1)}%<br>
+                        • <strong style="color: var(--danger);">Excede norma RIC 07</strong>
+                    </div>
+                `;
+            }
         });
+        
+        if (!tuboRecomendado) {
+            html += `
+                <div class="resultado res-fail" style="margin-top: 15px;">
+                    <strong>⚠️ ADVERTENCIA:</strong> Ningún tubo EMT estándar cumple con la norma.<br>
+                    Considere:
+                    <ul style="margin: 10px 0;">
+                        <li>Reducir cantidad de cables</li>
+                        <li>Usar cables de menor diámetro</li>
+                        <li>Instalar múltiples tuberías</li>
+                    </ul>
+                </div>
+            `;
+        }
+        
         document.getElementById('res-ducto').innerHTML = html;
     }
 
@@ -1047,6 +1243,11 @@
         audioEl.onpause = () => { if(document.getElementById('songStatus')) document.getElementById('songStatus').textContent = '⏸ Pausado'; };
         audioEl.onended = () => { if(document.getElementById('songStatus')) document.getElementById('songStatus').textContent = '✓ Finalizado'; };
     }
+
+    // Inicializar calculadora de ductos al cargar
+    document.addEventListener('DOMContentLoaded', function() {
+        actualizarCalculadoraDuctos();
+    });
 </script>
 </body>
 </html>
