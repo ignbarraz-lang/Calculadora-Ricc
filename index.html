@@ -12,14 +12,285 @@
             --warning: #f39c12;
         }
         
+        /* ===== MODO OSCURO ===== */
+        [data-theme="dark"] {
+            --bg: #0f172a;
+            --white: #1e293b;
+            --dark: #f1f5f9;
+        }
+
+        [data-theme="dark"] body {
+            background: var(--bg);
+            color: var(--dark);
+        }
+
+        [data-theme="dark"] .card,
+        [data-theme="dark"] .login-card,
+        [data-theme="dark"] .stats-card,
+        [data-theme="dark"] .quick-access-card,
+        [data-theme="dark"] .alert-box,
+        [data-theme="dark"] .recent-tools,
+        [data-theme="dark"] .floating-window,
+        [data-theme="dark"] .window-content {
+            background: var(--white);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        [data-theme="dark"] input,
+        [data-theme="dark"] select,
+        [data-theme="dark"] textarea {
+            background: #334155;
+            border-color: #475569;
+            color: var(--dark);
+        }
+        [data-theme="dark"] input::placeholder {
+            color: #94a3b8;
+        }
+
+        [data-theme="dark"] .tab-btn {
+            background: #334155;
+            color: var(--dark);
+        }
+        [data-theme="dark"] .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        [data-theme="dark"] .inv-table th {
+            background: #334155;
+        }
+        [data-theme="dark"] .inv-table td,
+        [data-theme="dark"] .inv-table th {
+            border-color: #475569;
+        }
+
+        [data-theme="dark"] .nodo-box,
+        [data-theme="dark"] .cable-info,
+        [data-theme="dark"] .install-list {
+            background: #334155;
+            border-color: #475569;
+        }
+
+        [data-theme="dark"] .ecuacion-box {
+            background: #1e293b;
+            border-color: #475569;
+            color: #cbd5e1;
+        }
+
+        [data-theme="dark"] .resultado {
+            background: #1e293b;
+        }
+
+        #dark-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg);
+            z-index: 9997;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        #dark-overlay.active {
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        body, .card, input, select, .tab-btn, .navbar {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+        }
+        
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; color: var(--dark); }
         
-        /* LOGIN */
-        #login-wrapper { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--dark) 0%, #1a252f 100%); }
-        .login-card { background: var(--white); padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); text-align: center; width: 100%; max-width: 350px; }
-        .login-logo { width: 120px; height: auto; margin-bottom: 10px; background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .welcome-text { color: var(--dark); font-weight: bold; margin-bottom: 20px; font-size: 1.2rem; }
-        .login-card input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 16px; box-sizing: border-box; }
+        /* ===== LOGIN MINIMALISTA ===== */
+        #login-wrapper {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--dark) 0%, #1a252f 50%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+        }
+        .circuit-line {
+            position: absolute;
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            animation: pulseRing 8s infinite ease-out;
+        }
+        .circuit-line:nth-child(1) { width: 300px; height: 300px; top: 10%; right: 10%; }
+        .circuit-line:nth-child(2) { width: 500px; height: 500px; bottom: 5%; left: 5%; animation-delay: -4s; }
+        .circuit-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: floatDot 6s infinite ease-in-out;
+        }
+        .circuit-dot:nth-child(3) { top: 20%; left: 15%; animation-delay: -2s; }
+        .circuit-dot:nth-child(4) { bottom: 25%; right: 20%; animation-delay: -4s; }
+
+        @keyframes pulseRing {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.2; }
+            100% { transform: scale(0.8); opacity: 0.5; }
+        }
+        @keyframes floatDot {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .login-card {
+            background: var(--white);
+            padding: 45px 40px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+            text-align: center;
+            width: 100%;
+            max-width: 380px;
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-brand { margin-bottom: 30px; }
+        .login-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
+        }
+        .login-logo:hover { transform: scale(1.05); }
+        .company-name {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+        }
+        .company-country {
+            color: var(--primary);
+            font-weight: 300;
+        }
+        .company-tagline {
+            margin: 8px 0 0;
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .login-form { display: flex; flex-direction: column; gap: 16px; }
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            color: #94a3b8;
+            font-size: 1rem;
+            pointer-events: none;
+            transition: color 0.3s;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+        }
+        .input-group input:focus + i,
+        .input-group input:focus ~ i { color: var(--primary); }
+
+        .toggle-pass {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .toggle-pass:hover { color: var(--dark); background: #f1f5f9; }
+
+        .btn-calc {
+            background: linear-gradient(135deg, var(--primary), #2980b9);
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 8px;
+            box-shadow: 0 4px 14px rgba(52, 152, 219, 0.3);
+        }
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(135deg, #2980b9, var(--primary));
+        }
+        .btn-calc:active { transform: translateY(0); }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.9rem;
+            margin: 15px 0 0;
+            padding: 10px 15px;
+            background: #fef2f2;
+            border-radius: 10px;
+            border-left: 4px solid var(--danger);
+            display: none;
+            animation: shake 0.4s ease;
+        }
+        .error-msg.show { display: block; }
+
+        .login-footer {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .login-footer small {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
         
         /* NAVBAR */
         .navbar { background: var(--dark); color: white; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
@@ -41,9 +312,8 @@
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
         select, input[type="number"], input[type="text"] { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
-        .btn-calc { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
         
-        /* RADIO BUTTONS PARA TIPO DE SISTEMA */
+        /* RADIO BUTTONS */
         .radio-group {
             display: flex;
             gap: 15px;
@@ -89,7 +359,7 @@
         .res-fail { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
         .res-warn { background: #eff6ff; color: #1e40af; border-color: var(--primary); }
         
-        /* NODOS ECUACIONES */
+        /* NODOS */
         .nodo-box { background: #f1f5f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); }
         .nodo-title { font-weight: bold; margin-bottom: 10px; color: #1e293b; text-transform: uppercase; font-size: 0.85rem; }
         .grid-nodos { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
@@ -103,7 +373,7 @@
         .qty-input { width: 70px !important; padding: 5px !important; text-align: center; margin: 0 !important; }
         .install-list { background: #f0f9ff; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #bae6fd; }
 
-        /* 🔍 BUSCADOR INVENTARIO */
+        /* BUSCADOR */
         .search-box {
             position: relative;
             margin-bottom: 15px;
@@ -142,144 +412,218 @@
 
         iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
 
-        /* 🎵 BURBUJA DE MÚSICA FLOTANTE */
-        #musicBubble {
+        /* ===== PANEL FLOTANTE DE 3 BURBUJAS ===== */
+        #floating-panel {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--luis));
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+            align-items: flex-end;
+        }
+
+        .bubble {
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
-            z-index: 9998;
+            position: relative;
             transition: all 0.3s ease;
-            animation: pulse 2s infinite;
-        }
-        #musicBubble:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.6);
-        }
-        #musicBubble i {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             color: white;
-            font-size: 24px;
-        }
-        #musicBubble.playing {
-            animation: none;
-            background: linear-gradient(135deg, var(--success), #2ecc71);
-        }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4); }
-            50% { box-shadow: 0 4px 25px rgba(52, 152, 219, 0.7); }
+            font-size: 1.3rem;
         }
 
-        /* 🎵 VENTANA REPRODUCTOR MP3 */
-        #ventanaAres {
+        .bubble:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+
+        .bubble:active {
+            transform: scale(0.95);
+        }
+
+        .bubble-tooltip {
+            position: absolute;
+            right: 70px;
+            background: var(--dark);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+            pointer-events: none;
+        }
+        .bubble:hover .bubble-tooltip {
+            opacity: 1;
+            visibility: visible;
+            right: 65px;
+        }
+
+        .bubble-chatbase {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            animation: float 3s ease-in-out infinite;
+        }
+        .bubble-chatbase:hover { 
+            background: linear-gradient(135deg, #8b5cf6, #6366f1); 
+        }
+
+        .bubble-music {
+            background: linear-gradient(135deg, var(--primary), #2980b9);
+            animation: float 3s ease-in-out infinite 0.5s;
+        }
+        .bubble-music:hover { 
+            background: linear-gradient(135deg, #2980b9, var(--primary)); 
+        }
+        .bubble-music.playing {
+            background: linear-gradient(135deg, var(--success), #27ae60);
+            animation: pulse 1.5s infinite;
+        }
+
+        .bubble-theme {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            animation: float 3s ease-in-out infinite 1s;
+        }
+        .bubble-theme:hover { 
+            background: linear-gradient(135deg, #8b5cf6, #6366f1); 
+        }
+        .bubble-theme.active {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.5);
+        }
+        .bubble-theme.active i { color: #fbbf24; }
+
+        .bubble-status {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: var(--success);
+            border-radius: 50%;
+            border: 2px solid white;
+            display: none;
+        }
+        .bubble-music.playing .bubble-status {
+            display: block;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(39, 174, 96, 0.7); }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.9); }
+        }
+
+        /* VENTANA FLOTANTE REPRODUCTOR */
+        .floating-window {
             position: fixed;
             bottom: 100px;
-            right: 30px;
-            width: 320px;
+            right: 25px;
+            width: 280px;
             background: var(--white);
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            z-index: 9999;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 9998;
             display: none;
             flex-direction: column;
             overflow: hidden;
             animation: slideUp 0.3s ease;
         }
-        #ventanaAres.visible { display: flex; }
+        .floating-window.visible { display: flex; }
+
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        #barraTituloAres {
+
+        .window-header {
             background: linear-gradient(90deg, var(--primary), var(--luis));
             color: white;
             padding: 12px 15px;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: move;
+            font-weight: 600;
+            font-size: 0.95rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            user-select: none;
         }
-        .btn-control-ares {
-            width: 24px;
-            height: 24px;
+        .window-close {
             background: rgba(255,255,255,0.2);
             border: none;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 22px;
-            font-size: 14px;
-            cursor: pointer;
             color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: background 0.2s;
         }
-        .btn-control-ares:hover { background: rgba(255,255,255,0.3); }
-        #contenidoVentanaAres {
+        .window-close:hover { background: rgba(255,255,255,0.35); }
+
+        .window-content {
             padding: 20px;
-            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
             text-align: center;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
         }
-        #mp3Player {
-            width: 100%;
-            margin-top: 15px;
-            border-radius: 8px;
-        }
-        .song-info {
-            font-size: 13px;
-            color: var(--dark);
-            margin-bottom: 10px;
-        }
+        .song-info { margin-bottom: 15px; }
         .song-info strong {
             display: block;
-            font-size: 16px;
-            margin-bottom: 5px;
-            color: var(--primary);
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 4px;
         }
-        #barraEstadoAres {
-            font-size: 11px;
-            padding: 8px 15px;
-            border-top: 1px solid #e2e8f0;
-            background: var(--white);
-            display: flex;
-            justify-content: space-between;
+        .song-info span {
+            font-size: 0.85rem;
             color: #64748b;
         }
-        .status-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #cbd5e1;
+        .music-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-play {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            margin-right: 6px;
-            vertical-align: middle;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .status-dot.active {
-            background: var(--success);
-            animation: blink 1s infinite;
+        .btn-play:hover {
+            transform: scale(1.05);
+            background: #2980b9;
         }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
+        .btn-play:active { transform: scale(0.95); }
 
-        /* 🏠 PANTALLA DE INICIO / DASHBOARD */
-        #dashboard {
-            display: none;
-        }
-        #dashboard.active {
-            display: block;
-        }
+        /* DASHBOARD */
+        #dashboard { display: none; }
+        #dashboard.active { display: block; }
         
-        /* Dashboard Header */
         .dashboard-header {
             background: linear-gradient(135deg, var(--dark), #34495e);
             color: white;
@@ -291,32 +635,17 @@
             gap: 20px;
             align-items: center;
         }
-        .dashboard-welcome h1 {
-            margin: 0 0 10px 0;
-            font-size: 1.8rem;
-        }
-        .dashboard-welcome p {
-            margin: 0;
-            opacity: 0.9;
-            font-size: 1rem;
-        }
+        .dashboard-welcome h1 { margin: 0 0 10px 0; font-size: 1.8rem; }
+        .dashboard-welcome p { margin: 0; opacity: 0.9; font-size: 1rem; }
         .dashboard-datetime {
             text-align: right;
             background: rgba(255,255,255,0.1);
             padding: 15px 20px;
             border-radius: 10px;
         }
-        .dashboard-datetime .time {
-            font-size: 2rem;
-            font-weight: bold;
-            display: block;
-        }
-        .dashboard-datetime .date {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
+        .dashboard-datetime .time { font-size: 2rem; font-weight: bold; display: block; }
+        .dashboard-datetime .date { font-size: 0.9rem; opacity: 0.8; }
 
-        /* Dashboard Cards Grid */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -324,7 +653,6 @@
             margin-bottom: 25px;
         }
 
-        /* Quick Access Cards */
         .quick-access-card {
             background: var(--white);
             padding: 25px;
@@ -344,16 +672,8 @@
             color: var(--primary);
             margin-bottom: 15px;
         }
-        .quick-access-card h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.1rem;
-            color: var(--dark);
-        }
-        .quick-access-card p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: #64748b;
-        }
+        .quick-access-card h3 { margin: 0 0 10px 0; font-size: 1.1rem; color: var(--dark); }
+        .quick-access-card p { margin: 0; font-size: 0.85rem; color: #64748b; }
         .quick-access-card.danger { border-left-color: var(--danger); }
         .quick-access-card.danger i { color: var(--danger); }
         .quick-access-card.success { border-left-color: var(--success); }
@@ -363,7 +683,6 @@
         .quick-access-card.luis { border-left-color: var(--luis); }
         .quick-access-card.luis i { color: var(--luis); }
 
-        /* Stats Cards */
         .stats-card {
             background: var(--white);
             padding: 20px;
@@ -379,18 +698,9 @@
             align-items: center;
             gap: 8px;
         }
-        .stats-value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-        .stats-subtitle {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-top: 5px;
-        }
+        .stats-value { font-size: 2.5rem; font-weight: bold; color: var(--primary); }
+        .stats-subtitle { font-size: 0.85rem; color: #64748b; margin-top: 5px; }
 
-        /* Alert Box */
         .alert-box {
             background: var(--white);
             border-radius: 15px;
@@ -406,9 +716,7 @@
             align-items: center;
             gap: 10px;
         }
-        .alert-body {
-            padding: 20px;
-        }
+        .alert-body { padding: 20px; }
         .alert-item {
             display: flex;
             align-items: center;
@@ -416,14 +724,8 @@
             padding: 12px 0;
             border-bottom: 1px solid #f1f5f9;
         }
-        .alert-item:last-child {
-            border-bottom: none;
-        }
-        .alert-item-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .alert-item:last-child { border-bottom: none; }
+        .alert-item-info { display: flex; align-items: center; gap: 12px; }
         .alert-item-icon {
             width: 40px;
             height: 40px;
@@ -434,14 +736,8 @@
             justify-content: center;
             color: var(--warning);
         }
-        .alert-item-name {
-            font-weight: 600;
-            color: var(--dark);
-        }
-        .alert-item-stock {
-            font-size: 0.85rem;
-            color: #64748b;
-        }
+        .alert-item-name { font-weight: 600; color: var(--dark); }
+        .alert-item-stock { font-size: 0.85rem; color: #64748b; }
         .alert-item-qty {
             background: var(--danger);
             color: white;
@@ -450,11 +746,8 @@
             font-size: 0.85rem;
             font-weight: bold;
         }
-        .alert-item-qty.low {
-            background: var(--warning);
-        }
+        .alert-item-qty.low { background: var(--warning); }
 
-        /* Recent Tools */
         .recent-tools {
             background: var(--white);
             border-radius: 15px;
@@ -470,11 +763,7 @@
             align-items: center;
             gap: 8px;
         }
-        .recent-tools-list {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
+        .recent-tools-list { display: flex; gap: 10px; flex-wrap: wrap; }
         .recent-tool-item {
             background: #f1f5f9;
             padding: 10px 15px;
@@ -487,12 +776,8 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        .recent-tool-item:hover {
-            background: var(--primary);
-            color: white;
-        }
+        .recent-tool-item:hover { background: var(--primary); color: white; }
 
-        /* Sync Status */
         .sync-status {
             font-size: 12px;
             padding: 5px 10px;
@@ -506,7 +791,6 @@
         .sync-pending { background: #fef3c7; color: #92400e; }
         .sync-error { background: #fee2e2; color: #991b1b; }
 
-        /* 🎉 EFECTOS CAÍDA DE TENSIÓN */
         #tension { position: relative; }
         #successImg {
             position: absolute; left: -100px; top: 50%;
@@ -539,21 +823,12 @@
             margin-top: 20px; text-align: center; text-shadow: 0 3px 6px rgba(0,0,0,0.4);
         }
         .danger-subtext {
-            color: rgba(255,255,255,0.9); font-size: 16px;
-            margin-top: 10px;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0) rotate(0); }
-            20% { transform: translateX(-8px) rotate(-3deg); }
-            40% { transform: translateX(8px) rotate(3deg); }
-            60% { transform: translateX(-6px) rotate(-2deg); }
-            80% { transform: translateX(6px) rotate(2deg); }
+            color: rgba(255,255,255,0.9); font-size: 16px; margin-top: 10px;
         }
         @keyframes confettiFall {
             to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
 
-        /* Estilo para sección opcional de cos φ */
         #cosphi-container {
             transition: all 0.3s ease;
             animation: slideDown 0.2s ease;
@@ -568,7 +843,6 @@
             outline: none;
         }
 
-        /* Estilos para calculadora de ductos */
         .cable-info {
             background: #f8fafc;
             padding: 10px;
@@ -577,50 +851,82 @@
             font-size: 0.9rem;
             border-left: 3px solid var(--primary);
         }
-        .cable-info strong {
-            color: var(--dark);
-        }
+        .cable-info strong { color: var(--dark); }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .dashboard-header {
                 grid-template-columns: 1fr;
                 text-align: center;
             }
-            .dashboard-datetime {
-                text-align: center;
+            .dashboard-datetime { text-align: center; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            #floating-panel {
+                bottom: 15px;
+                right: 15px;
+                gap: 10px;
             }
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            #musicBubble {
-                bottom: 20px;
-                right: 20px;
+            .bubble {
                 width: 50px;
                 height: 50px;
+                font-size: 1.1rem;
             }
-            #ventanaAres {
-                bottom: 80px;
-                right: 20px;
-                left: 20px;
+            .bubble-tooltip { display: none; }
+            .floating-window {
+                right: 15px;
+                left: 15px;
                 width: auto;
+                bottom: 80px;
             }
         }
     </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="login-wrapper">
     <div class="login-card">
-        <img src="logo.png" alt="Logo Linstelec" class="login-logo">
-        <div class="welcome-text">¡Bienvenido!</div>
-        <input type="text" id="userInput" placeholder="Usuario">
-        <input type="password" id="passInput" placeholder="Contraseña">
-        <button class="btn-calc" onclick="checkLogin()">Ingresar</button>
-        <p id="error-msg" style="color:var(--danger); display:none; font-size:14px; margin-top:10px;">Acceso denegado</p>
+        <div class="login-brand">
+            <img src="logo.png" alt="LINSTELEC" class="login-logo">
+            <h1 class="company-name">LINSTELEC <span class="company-country">CHILE</span></h1>
+            <p class="company-tagline">Soluciones Eléctricas Inteligentes</p>
+        </div>
+        
+        <form onsubmit="checkLogin(); return false;" class="login-form">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="userInput" placeholder="Usuario" autocomplete="username" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="passInput" placeholder="Contraseña" autocomplete="current-password" required>
+                <button type="button" class="toggle-pass" onclick="togglePassword()">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+            
+            <button type="submit" class="btn-calc">
+                <i class="fas fa-sign-in-alt"></i> Ingresar al Sistema
+            </button>
+        </form>
+        
+        <p id="error-msg" class="error-msg">
+            <i class="fas fa-exclamation-circle"></i> Credenciales incorrectas
+        </p>
+        
+        <div class="login-footer">
+            <small>© 2026 LINSTELEC • Acceso restringido</small>
+        </div>
+    </div>
+    
+    <div class="login-decoration">
+        <div class="circuit-line"></div>
+        <div class="circuit-line"></div>
+        <div class="circuit-dot"></div>
+        <div class="circuit-dot"></div>
     </div>
 </div>
 
+<!-- APP PRINCIPAL -->
 <div id="main-app">
     <nav class="navbar">
         <div class="nav-brand"><img src="logo.png" alt="Logo Linstelec" class="nav-logo"></div>
@@ -629,9 +935,8 @@
     </nav>
 
     <div class="main-container" id="container">
-        <!-- 🏠 DASHBOARD / PANTALLA DE INICIO -->
+        <!-- DASHBOARD -->
         <div id="dashboard" class="card active">
-            <!-- Header con Saludo y Fecha/Hora -->
             <div class="dashboard-header">
                 <div class="dashboard-welcome">
                     <h1 id="dash-greeting">👷 ¡Hola!</h1>
@@ -643,7 +948,6 @@
                 </div>
             </div>
 
-            <!-- Accesos Rápidos -->
             <h3 style="margin-bottom: 15px; color: #64748b;"><i class="fas fa-bolt"></i> Herramientas Rápidas</h3>
             <div class="dashboard-grid">
                 <div class="quick-access-card" onclick="showTabFromDashboard('tension')">
@@ -678,7 +982,6 @@
                 </div>
             </div>
 
-            <!-- Alertas de Stock -->
             <div class="alert-box" style="margin-bottom: 20px;">
                 <div class="alert-header">
                     <i class="fas fa-exclamation-triangle"></i>
@@ -689,7 +992,6 @@
                 </div>
             </div>
 
-            <!-- Estadísticas y Herramientas Recientes -->
             <div class="dashboard-grid">
                 <div>
                     <div class="stats-card">
@@ -722,6 +1024,7 @@
             </div>
         </div>
 
+        <!-- TABS -->
         <div class="calc-tabs">
             <button class="tab-btn" onclick="showTab(event, 'tension')"><i class="fas fa-wave-square"></i> Caída Tensión</button>
             <button class="tab-btn" onclick="showTab(event, 'ohm')"><i class="fas fa-bolt"></i> Ley de Ohm</button>
@@ -733,11 +1036,11 @@
             <button class="tab-btn" style="background:var(--luis); color:white;" onclick="showTab(event, 'luis-ia')"><i class="fas fa-robot"></i> PREGÚNTALE A LUIS</button>
         </div>
 
+        <!-- CONTENIDO DE TABS (igual que tu código original) -->
         <div id="tension" class="card">
             <h2>Calculadora Caída de Tensión (RIC 04)</h2>
             <p style="font-size: 0.8rem; color: #64748b; margin: -15px 0 15px 0;"><i class="fas fa-info-circle"></i> Cálculo basado en resistividad del cobre ρ = 0.018</p>
             
-            <!-- 🔌 SELECTOR MONOFÁSICO/TRIFÁSICO -->
             <div class="form-group">
                 <label>Tipo de Sistema:</label>
                 <div class="radio-group">
@@ -776,7 +1079,6 @@
                 </select>
             </div>
 
-            <!-- ⚙️ OPCIONAL: Factor de Potencia -->
             <div class="form-group" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #cbd5e1;">
                 <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <input type="checkbox" id="cosphi-check" onchange="toggleCosPhi()" style="width: auto; margin: 0;">
@@ -893,7 +1195,6 @@
             <iframe id="pdf-view" src=""></iframe>
         </div>
 
-        <!-- 🔽 SECCIÓN INVENTARIO CON BUSCADOR -->
         <div id="inventario" class="card">
             <h2>Gestión de Bodega LINSTELEC 
                 <span id="sync-status" class="sync-status sync-pending">
@@ -901,7 +1202,6 @@
                 </span>
             </h2>
             
-            <!-- 🔽 BOTONES: Descargar, Imprimir, Exportar, Importar, Actualizar -->
             <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
                 <button class="tab-btn" onclick="downloadInventory()" style="background:var(--success); color:white;">
                     <i class="fas fa-download"></i> Descargar Lista
@@ -921,7 +1221,6 @@
             </div>
             <input type="file" id="importFile" accept=".txt,.json" style="display:none;" onchange="handleImport(this)">
             
-            <!-- 🔍 BUSCADOR DE MATERIALES -->
             <div class="search-box">
                 <i class="fas fa-search"></i>
                 <input type="text" id="search-inv" placeholder="🔍 Buscar material..." oninput="filterInventory()">
@@ -950,35 +1249,55 @@
     </div>
 </div>
 
-<!-- 🎵 BURBUJA DE MÚSICA FLOTANTE -->
-<div id="musicBubble" onclick="toggleMusicPlayer()">
-    <i class="fas fa-music"></i>
+<!-- 🎯 PANEL FLOTANTE DE 3 BURBUJAS -->
+<div id="floating-panel">
+    
+    <!-- 🔹 Burbuja 1: Chatbase IA (Superior) -->
+    <div class="bubble bubble-chatbase" onclick="openChatbase()" title="Asistente IA">
+        <i class="fas fa-comments"></i>
+        <span class="bubble-tooltip">Chat IA</span>
+    </div>
+    
+    <!-- 🔹 Burbuja 2: Reproductor MP3 (Centro) -->
+    <div class="bubble bubble-music" id="musicBubble" onclick="toggleMusicAction()" title="Reproductor MP3">
+        <i class="fas fa-music" id="musicIcon"></i>
+        <span class="bubble-tooltip">Música</span>
+        <span class="bubble-status" id="musicStatus"></span>
+    </div>
+    
+    <!-- 🔹 Burbuja 3: Modo Oscuro (Inferior) - DESACTIVADO POR DEFECTO -->
+    <div class="bubble bubble-theme" onclick="toggleDarkMode()" title="Modo Oscuro">
+        <i class="fas fa-moon" id="themeIcon"></i>
+        <span class="bubble-tooltip">Tema</span>
+    </div>
+    
 </div>
 
-<!-- 🎵 VENTANA REPRODUCTOR MP3 -->
-<div id="ventanaAres">
-    <div id="barraTituloAres">
+<!-- 🎵 VENTANA REPRODUCTOR MP3 (Flotante) -->
+<div id="musicPanel" class="floating-window">
+    <div class="window-header">
         <span>🎵 Reproductor MP3</span>
-        <button class="btn-control-ares" onclick="toggleMusicPlayer()">✕</button>
+        <button class="window-close" onclick="closeMusicPanel()">✕</button>
     </div>
-    <div id="contenidoVentanaAres">
+    <div class="window-content">
         <div class="song-info">
             <strong id="songTitle">OldSkul</strong>
-            <span id="songStatus">Listo para reproducir</span>
+            <span id="songStatus">Listo</span>
         </div>
-        <audio id="mp3Player" controls>
-            <source src="oldskul.mp3" type="audio/mpeg">
-            Tu navegador no soporta audio.
-        </audio>
-    </div>
-    <div id="barraEstadoAres">
-        <span><span class="status-dot" id="musicDot"></span>MP3</span>
-        <span>320kbps</span>
+        <audio id="mp3Player" src="oldskul.mp3"></audio>
+        <div class="music-controls">
+            <button onclick="togglePlayPause()" class="btn-play">
+                <i class="fas fa-play" id="playIcon"></i>
+            </button>
+        </div>
     </div>
 </div>
 
+<!-- 🌙 Overlay para transición suave -->
+<div id="dark-overlay"></div>
+
 <script>
-    /* ========== 🔥 CONFIGURACIÓN JSONBIN ========== */
+    /* ========== CONFIGURACIÓN JSONBIN ========== */
     const JSONBIN_CONFIG = {
         masterKey: "$2a$10$d5wiwzZ.u1m2caXKKtWSGuo4.hnU4mEWvEiCaj9XFa6IpBOA0UP0a",
         binId: "69b37960c3097a1dd51edd41",
@@ -1000,7 +1319,7 @@
     let recentTools = JSON.parse(localStorage.getItem('linstelec_recent_tools')) || [];
     let calcCount = parseInt(localStorage.getItem('linstelec_calc_count')) || 0;
 
-    /* ========== 🕐 ACTUALIZAR RELOJ DASHBOARD ========== */
+    /* ========== ACTUALIZAR RELOJ DASHBOARD ========== */
     function updateDashboardTime() {
         const now = new Date();
         const timeEl = document.getElementById('dash-time');
@@ -1014,8 +1333,7 @@
         }
     }
 
-    /* ========== 📡 FUNCIONES JSONBIN ========== */
-
+    /* ========== FUNCIONES JSONBIN ========== */
     function updateSyncStatus(status, message) {
         const el = document.getElementById('sync-status');
         if(!el) return;
@@ -1031,7 +1349,6 @@
         el.className = s.class;
         el.innerHTML = `<i class="fas ${s.icon}"></i> ${message || s.text}`;
         
-        // Actualizar dashboard también
         const syncStatusText = document.getElementById('sync-status-text');
         const lastSyncEl = document.getElementById('last-sync');
         if (syncStatusText) syncStatusText.textContent = message || s.text;
@@ -1127,8 +1444,7 @@
         alert("📡 Inventario actualizado desde la nube");
     }
 
-    /* ========== 🔍 FUNCIONES DE BÚSQUEDA ========== */
-
+    /* ========== FUNCIONES DE BÚSQUEDA ========== */
     function filterInventory() {
         const searchTerm = document.getElementById('search-inv').value.toLowerCase().trim();
         const rows = document.querySelectorAll('#inv-body tr');
@@ -1156,7 +1472,6 @@
     }
 
     /* ========== FUNCIONES DE EXPORTACIÓN/IMPORTACIÓN ========== */
-
     function downloadInventory() {
         if(inventory.length === 0) return alert("⚠️ No hay materiales en el inventario para descargar");
         
@@ -1299,7 +1614,6 @@
         filterInventory();
     }
 
-    // 📦 Actualizar alertas de stock en dashboard
     function updateStockAlerts() {
         const alertsContainer = document.getElementById('stock-alerts');
         if (!alertsContainer) return;
@@ -1400,32 +1714,63 @@
     function checkLogin() {
         const u = document.getElementById('userInput').value.trim();
         const p = document.getElementById('passInput').value;
+        const errorMsg = document.getElementById('error-msg');
         const found = USERS.find(user => user.id === u && user.pass === p);
         
+        const btn = document.querySelector('.btn-calc');
+        const originalBtn = btn.innerHTML;
+        
         if(found) {
-            currentUser = found;
-            document.getElementById('login-wrapper').style.display = 'none';
-            document.getElementById('container').style.display = 'block';
-            document.getElementById('user-display').innerHTML = "👷 " + found.name + " - <strong>" + found.clase + "</strong>";
+            btn.innerHTML = '<i class="fas fa-check"></i> Accediendo...';
+            btn.style.background = 'linear-gradient(135deg, var(--success), #27ae60)';
             
-            // Actualizar dashboard
-            document.getElementById('dash-greeting').textContent = getGreeting() + ", " + found.name.split(' ')[0] + "!";
-            document.getElementById('dash-user-info').textContent = found.clase + " | LINSTELEC CHILE";
-            document.getElementById('dash-user-class').textContent = found.clase;
+            setTimeout(() => {
+                currentUser = found;
+                document.getElementById('login-wrapper').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('login-wrapper').style.display = 'none';
+                    document.getElementById('container').style.display = 'block';
+                    document.getElementById('user-display').innerHTML = "👷 " + found.name + " - <strong>" + found.clase + "</strong>";
+                    
+                    document.getElementById('dash-greeting').textContent = getGreeting() + ", " + found.name.split(' ')[0] + "!";
+                    document.getElementById('dash-user-info').textContent = found.clase + " | LINSTELEC CHILE";
+                    document.getElementById('dash-user-class').textContent = found.clase;
+                    
+                    renderInv();
+                    updateStockAlerts();
+                    updateDashboardTime();
+                    updateRecentToolsDisplay();
+                    updateStatsDisplay();
+                    iniciarChatbase();
+                    loadInventoryFromCloud();
+                    
+                    setInterval(updateDashboardTime, 1000);
+                }, 300);
+            }, 800);
             
-            renderInv();
-            updateStockAlerts();
-            updateDashboardTime();
-            updateRecentToolsDisplay();
-            updateStatsDisplay();
-            iniciarChatbase();
-            loadInventoryFromCloud();
-            
-            // Iniciar reloj
-            setInterval(updateDashboardTime, 1000);
         } else { 
-            document.getElementById('error-msg').style.display = 'block';
-            setTimeout(() => { document.getElementById('error-msg').style.display = 'none'; }, 3000);
+            errorMsg.classList.add('show');
+            btn.innerHTML = originalBtn;
+            btn.style.background = '';
+            
+            const card = document.querySelector('.login-card');
+            card.style.animation = 'none';
+            setTimeout(() => { card.style.animation = 'shake 0.4s ease'; }, 10);
+            
+            setTimeout(() => { errorMsg.classList.remove('show'); }, 3500);
+        }
+    }
+
+    function togglePassword() {
+        const input = document.getElementById('passInput');
+        const icon = document.querySelector('.toggle-pass i');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
         }
     }
 
@@ -1436,19 +1781,15 @@
         return "🌙 Buenas noches";
     }
 
-    // Mostrar desde dashboard
     function showTabFromDashboard(tabName) {
-        // Guardar en recientes
         addToRecentTools(tabName);
         
-        // Ocultar dashboard y mostrar tab
         document.getElementById('dashboard').classList.remove('active');
         document.querySelectorAll('.calc-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
         
         document.getElementById(tabName).classList.add('active');
         
-        // Activar botón correspondiente
         const tabButtons = document.querySelectorAll('.calc-tabs .tab-btn');
         tabButtons.forEach(btn => {
             if (btn.getAttribute('onclick')?.includes(tabName)) {
@@ -1458,12 +1799,10 @@
     }
 
     function showTab(evt, name) {
-        // Guardar en recientes (si no viene del dashboard)
         if (evt) {
             addToRecentTools(name);
         }
         
-        // Ocultar dashboard
         document.getElementById('dashboard').classList.remove('active');
         
         let cards = document.getElementsByClassName("card"), btns = document.getElementsByClassName("tab-btn");
@@ -1473,7 +1812,6 @@
         evt.currentTarget.classList.add("active");
     }
 
-    // Herramientas recientes
     function addToRecentTools(toolName) {
         const toolNames = {
             'tension': 'Caída de Tensión',
@@ -1488,13 +1826,8 @@
         
         const toolLabel = toolNames[toolName] || toolName;
         
-        // Eliminar si ya existe
         recentTools = recentTools.filter(t => t !== toolLabel);
-        
-        // Agregar al inicio
         recentTools.unshift(toolLabel);
-        
-        // Mantener solo últimos 5
         recentTools = recentTools.slice(0, 5);
         
         localStorage.setItem('linstelec_recent_tools', JSON.stringify(recentTools));
@@ -1556,21 +1889,18 @@
         else { document.getElementById('res-ohm').className = "resultado res-fail"; document.getElementById('res-ohm').innerHTML = "Ingrese Potencia y Voltaje"; }
     }
 
-    // 🔘 Mostrar/Ocultar campo de factor de potencia
     function toggleCosPhi() {
         const check = document.getElementById('cosphi-check');
         const container = document.getElementById('cosphi-container');
         container.style.display = check.checked ? 'block' : 'none';
     }
 
-    // 🎨 Función auxiliar para mostrar resultados
     function mostrarResultado(mensaje, clase) {
         const res = document.getElementById('res-tension');
         res.className = `resultado ${clase}`;
         res.innerHTML = mensaje;
     }
 
-    // 🎉 Efecto de confeti para resultados exitosos
     function lanzarConfeti() {
         const emojis = ['🎉','✨','⚡','','✅'];
         for(let i = 0; i < 12; i++) {
@@ -1593,7 +1923,6 @@
         }
     }
 
-    // 📐 Actualizar calculadora de ductos según tipo de cable
     function actualizarCalculadoraDuctos() {
         const select = document.getElementById('cable-tipo');
         const selectedOption = select.options[select.selectedIndex];
@@ -1601,7 +1930,6 @@
         const cantidad = selectedOption.getAttribute('data-cantidad');
         const texto = selectedOption.text;
         
-        // Mostrar/ocultar campo de cantidad
         const cantidadGroup = document.getElementById('cantidad-group');
         if (cantidad === 'variable') {
             cantidadGroup.style.display = 'block';
@@ -1609,7 +1937,6 @@
             cantidadGroup.style.display = 'none';
         }
         
-        // Mostrar información del cable
         const infoDiv = document.getElementById('cable-info');
         infoDiv.innerHTML = `
             <strong>Cable seleccionado:</strong> ${texto}<br>
@@ -1617,13 +1944,11 @@
             ${cantidad === '1' ? '<span style="color: var(--success);">✓ Multiconductor (1 solo cable en tubería)</span>' : '<span style="color: var(--primary);">📊 Ingrese cantidad de cables unipolares</span>'}
         `;
         
-        // Mostrar/ocultar cantidad de UTP si está marcado
         const utpCheck = document.getElementById('utp-check');
         const utpCantidadGroup = document.getElementById('utp-cantidad-group');
         utpCantidadGroup.style.display = utpCheck.checked ? 'block' : 'none';
     }
 
-    // 🔧 CALCULADORA DE DUCTOS EMT - NORMA SEC CHILE + PRÁCTICA REAL
     function calcDucto() {
         incrementCalcCount();
         const select = document.getElementById('cable-tipo');
@@ -1632,37 +1957,31 @@
         const tipoCantidad = selectedOption.getAttribute('data-cantidad');
         const textoCable = selectedOption.text.toLowerCase();
         
-        // Determinar tipo de cable
         const esH07 = textoCable.includes('h07z1-k');
         const esMulticonductor = textoCable.includes('multiconductor') || selectedOption.value.startsWith('multirvk');
         const esUnipolarRVK = textoCable.includes('unipolar rvk') || selectedOption.value.startsWith('unirvk');
         
-        // Determinar cantidad de cables principales
         let cantidadCables = 1;
         if (tipoCantidad === 'variable') {
             cantidadCables = parseInt(document.getElementById('cable-cant').value) || 1;
         }
         
-        // Calcular área de cables principales
         const areaCablePrincipal = Math.PI * Math.pow(diametroCable / 2, 2);
         const areaTotalPrincipal = areaCablePrincipal * cantidadCables;
         
-        // Verificar si hay UTP
         const utpCheck = document.getElementById('utp-check');
         let areaTotalUTP = 0;
         let cantidadUTP = 0;
         if (utpCheck.checked) {
             cantidadUTP = parseInt(document.getElementById('utp-cant').value) || 1;
-            const diametroUTP = 6.0; // mm
+            const diametroUTP = 6.0;
             const areaUTP = Math.PI * Math.pow(diametroUTP / 2, 2);
             areaTotalUTP = areaUTP * cantidadUTP;
         }
         
-        // Área total requerida
         const areaTotalRequerida = areaTotalPrincipal + areaTotalUTP;
         const totalCables = cantidadCables + cantidadUTP;
         
-        // Determinar factor de llenado según RIC 07
         let factorLlenado;
         let textoFactor;
         if (totalCables === 1) {
@@ -1676,7 +1995,6 @@
             textoFactor = "40% (3+ cables)";
         }
         
-        // Tubos EMT disponibles - DIÁMETROS INTERIORES REALES (mm)
         const tubosEMT = [
             { nominal: 16, interior: 15.3 },
             { nominal: 20, interior: 19.3 },
@@ -1686,7 +2004,6 @@
             { nominal: 50, interior: 46.5 }
         ];
         
-        // Límites PRÁCTICOS máximos de cables por tubo (instalación domiciliaria real)
         const limitesPracticos = {
             16: { max: 5, ideal: 3, descripcion: "Máximo 5 cables (ideal 3)" },
             20: { max: 7, ideal: 5, descripcion: "Máximo 7 cables (ideal 5)" },
@@ -1696,7 +2013,6 @@
             50: { max: 20, ideal: 15, descripcion: "Máximo 20 cables (ideal 15)" }
         };
         
-        // Rango recomendado según tipo de cable
         let rangoRecomendado;
         if (esH07) {
             rangoRecomendado = { min: 16, max: 25, texto: "16mm - 25mm (instalación domiciliaria)" };
@@ -1704,7 +2020,6 @@
             rangoRecomendado = { min: 32, max: 50, texto: "32mm - 50mm (alimentadores y circuitos)" };
         }
         
-        // Calcular capacidad de cada tubo
         let html = `
             <div class="resultado res-warn" style="margin-bottom: 15px;">
                 <strong>📊 Resumen de Cables:</strong><br>
@@ -1824,7 +2139,6 @@
         document.getElementById('res-ducto').innerHTML = html;
     }
 
-    // ⚡ CALCULADORA DE CAÍDA DE TENSIÓN - CON COS φ OPCIONAL (RIC 04)
     function calcTension() {
         incrementCalcCount();
         document.getElementById('successImg').style.display = 'none';
@@ -1904,66 +2218,147 @@
         const s = document.createElement("script"); s.src = "https://www.chatbase.co/embed.min.js"; s.id = "HZBhzPxQtpDaw6ZlcBzEA"; s.domain = "www.chatbase.co"; document.body.appendChild(s);
     }
 
-    // 🎵 FUNCIONES DE MÚSICA - BURBUJA FLOTANTE
-    function toggleMusicPlayer() {
-        const player = document.getElementById('ventanaAres');
-        const bubble = document.getElementById('musicBubble');
-        const audio = document.getElementById('mp3Player');
-        const status = document.getElementById('songStatus');
-        const dot = document.getElementById('musicDot');
+    /* ===== FUNCIONES PANEL FLOTANTE ===== */
+
+    // 🤖 Abrir Chatbase IA
+    function openChatbase() {
+        // El widget de Chatbase ya está cargado, solo necesitamos asegurarnos de que esté visible
+        // Chatbase se abre automáticamente al hacer clic en su widget
+        // Esta función puede usarse para hacer scroll o mostrar mensajes
+        const chatbaseWidget = document.querySelector('iframe[src*="chatbase"]');
+        if (chatbaseWidget) {
+            chatbaseWidget.scrollIntoView({ behavior: 'smooth' });
+        }
         
-        if (player.classList.contains('visible')) {
-            // Cerrar reproductor
-            player.classList.remove('visible');
+        // Efecto visual en la burbuja
+        const bubble = document.querySelector('.bubble-chatbase');
+        bubble.style.transform = 'scale(0.9)';
+        setTimeout(() => { bubble.style.transform = ''; }, 150);
+    }
+
+    // 🎵 Toggle música: Abre panel Y reproduce/pausa en un solo clic
+    function toggleMusicAction() {
+        const panel = document.getElementById('musicPanel');
+        const audio = document.getElementById('mp3Player');
+        const bubble = document.getElementById('musicBubble');
+        const playIcon = document.getElementById('playIcon');
+        
+        if (panel.classList.contains('visible')) {
+            // Si está abierto: pausar y cerrar
+            audio.pause();
+            panel.classList.remove('visible');
             bubble.classList.remove('playing');
-            if (audio && !audio.paused) {
-                audio.pause();
-                if (status) status.textContent = 'Pausado';
-                if (dot) dot.classList.remove('active');
-            }
+            playIcon.classList.replace('fa-pause', 'fa-play');
+            document.getElementById('songStatus').textContent = 'Pausado';
         } else {
-            // Abrir reproductor
-            player.classList.add('visible');
+            // Si está cerrado: abrir y toggle play/pause
+            panel.classList.add('visible');
+            
+            if (audio.paused) {
+                audio.play();
+                bubble.classList.add('playing');
+                playIcon.classList.replace('fa-play', 'fa-pause');
+                document.getElementById('songStatus').textContent = '▶ Reproduciendo';
+            } else {
+                audio.pause();
+                bubble.classList.remove('playing');
+                playIcon.classList.replace('fa-pause', 'fa-play');
+                document.getElementById('songStatus').textContent = '⏸ Pausado';
+            }
         }
     }
 
-    // Configurar eventos del reproductor de música
-    const audioEl = document.getElementById('mp3Player');
-    if(audioEl) {
-        audioEl.onplay = () => { 
-            const bubble = document.getElementById('musicBubble');
-            const status = document.getElementById('songStatus');
-            const dot = document.getElementById('musicDot');
-            if (bubble) bubble.classList.add('playing');
-            if (status) status.textContent = '▶ Reproduciendo';
-            if (dot) dot.classList.add('active');
-        };
-        audioEl.onpause = () => { 
-            const bubble = document.getElementById('musicBubble');
-            const status = document.getElementById('songStatus');
-            const dot = document.getElementById('musicDot');
-            if (bubble) bubble.classList.remove('playing');
-            if (status) status.textContent = '⏸ Pausado';
-            if (dot) dot.classList.remove('active');
-        };
-        audioEl.onended = () => { 
-            const bubble = document.getElementById('musicBubble');
-            const status = document.getElementById('songStatus');
-            const dot = document.getElementById('musicDot');
-            if (bubble) bubble.classList.remove('playing');
-            if (status) status.textContent = '✓ Finalizado';
-            if (dot) dot.classList.remove('active');
-        };
+    // Cerrar panel de música (sin afectar reproducción)
+    function closeMusicPanel() {
+        document.getElementById('musicPanel').classList.remove('visible');
     }
 
-    // Drag para ventana de música
-    const vw = document.getElementById('ventanaAres'), vh = document.getElementById('barraTituloAres');
-    let drag = false, ox, oy;
-    if(vh) {
-        vh.onmousedown = e => { drag = true; ox = e.clientX - vw.offsetLeft; oy = e.clientY - vw.offsetTop; vw.style.transition = 'none'; };
-        document.onmousemove = e => { if(drag) { vw.style.left = (e.clientX - ox) + 'px'; vw.style.top = (e.clientY - oy) + 'px'; vw.style.right = 'auto'; vw.style.bottom = 'auto'; } };
-        document.onmouseup = () => { drag = false; vw.style.transition = ''; };
+    // Toggle Play/Pause dentro del panel
+    function togglePlayPause() {
+        const audio = document.getElementById('mp3Player');
+        const bubble = document.getElementById('musicBubble');
+        const playIcon = document.getElementById('playIcon');
+        const status = document.getElementById('songStatus');
+        
+        if (audio.paused) {
+            audio.play();
+            bubble.classList.add('playing');
+            playIcon.classList.replace('fa-play', 'fa-pause');
+            if (status) status.textContent = '▶ Reproduciendo';
+        } else {
+            audio.pause();
+            bubble.classList.remove('playing');
+            playIcon.classList.replace('fa-pause', 'fa-play');
+            if (status) status.textContent = '⏸ Pausado';
+        }
     }
+
+    // Actualizar estado del reproductor
+    const audioEl = document.getElementById('mp3Player');
+    if (audioEl) {
+        audioEl.addEventListener('play', () => {
+            document.getElementById('musicBubble')?.classList.add('playing');
+            document.getElementById('playIcon')?.classList.replace('fa-play', 'fa-pause');
+        });
+        audioEl.addEventListener('pause', () => {
+            document.getElementById('musicBubble')?.classList.remove('playing');
+            document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
+        });
+        audioEl.addEventListener('ended', () => {
+            document.getElementById('musicBubble')?.classList.remove('playing');
+            document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
+            if (document.getElementById('songStatus')) {
+                document.getElementById('songStatus').textContent = '✓ Finalizado';
+            }
+        });
+    }
+
+    // 🌙 MODO OSCURO - Toggle simple (DESACTIVADO POR DEFECTO)
+    function toggleDarkMode() {
+        const body = document.body;
+        const themeIcon = document.getElementById('themeIcon');
+        const bubble = document.querySelector('.bubble-theme');
+        const overlay = document.getElementById('dark-overlay');
+        
+        // Verificar estado actual
+        const isDark = body.getAttribute('data-theme') === 'dark';
+        
+        if (isDark) {
+            // Desactivar modo oscuro
+            body.removeAttribute('data-theme');
+            themeIcon.classList.replace('fa-sun', 'fa-moon');
+            bubble.classList.remove('active');
+            if (overlay) overlay.classList.remove('active');
+            localStorage.setItem('linstelec_theme', 'light');
+        } else {
+            // Activar modo oscuro
+            body.setAttribute('data-theme', 'dark');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+            bubble.classList.add('active');
+            if (overlay) overlay.classList.add('active');
+            localStorage.setItem('linstelec_theme', 'dark');
+        }
+        
+        // Efecto visual en la burbuja
+        bubble.style.transform = 'scale(0.9)';
+        setTimeout(() => { bubble.style.transform = ''; }, 150);
+    }
+
+    // Cargar tema guardado al iniciar
+    function loadSavedTheme() {
+        const saved = localStorage.getItem('linstelec_theme');
+        if (saved === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon')?.classList.replace('fa-moon', 'fa-sun');
+            document.querySelector('.bubble-theme')?.classList.add('active');
+        }
+        // Si es 'light' o null, se mantiene desactivado por defecto ✅
+    }
+
+    // Inicializar al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        loadSavedTheme();
+    });
 </script>
 </body>
 </html>
