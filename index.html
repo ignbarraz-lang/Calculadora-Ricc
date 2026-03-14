@@ -12,7 +12,7 @@
             --warning: #f39c12;
         }
         
-        /* ===== MODO OSCURO ===== */
+        /* ===== MODO OSCURO MEJORADO ===== */
         [data-theme="dark"] {
             --bg: #0f172a;
             --white: #1e293b;
@@ -21,7 +21,37 @@
 
         [data-theme="dark"] body {
             background: var(--bg);
-            color: var(--dark);
+            color: var(--dark) !important;
+        }
+
+        /* Textos principales en modo oscuro */
+        [data-theme="dark"] h1,
+        [data-theme="dark"] h2,
+        [data-theme="dark"] h3,
+        [data-theme="dark"] h4,
+        [data-theme="dark"] h5,
+        [data-theme="dark"] h6,
+        [data-theme="dark"] p,
+        [data-theme="dark"] label,
+        [data-theme="dark"] span,
+        [data-theme="dark"] strong,
+        [data-theme="dark"] .company-name,
+        [data-theme="dark"] .company-tagline,
+        [data-theme="dark"] .dashboard-welcome h1,
+        [data-theme="dark"] .dashboard-welcome p,
+        [data-theme="dark"] .stats-card h3,
+        [data-theme="dark"] .stats-value,
+        [data-theme="dark"] .stats-subtitle,
+        [data-theme="dark"] .quick-access-card h3,
+        [data-theme="dark"] .quick-access-card p,
+        [data-theme="dark"] .alert-header,
+        [data-theme="dark"] .alert-item-name,
+        [data-theme="dark"] .alert-item-stock,
+        [data-theme="dark"] .nodo-title,
+        [data-theme="dark"] .card h2,
+        [data-theme="dark"] .window-header,
+        [data-theme="dark"] .song-info strong {
+            color: #f1f5f9 !important;
         }
 
         [data-theme="dark"] .card,
@@ -34,6 +64,7 @@
         [data-theme="dark"] .window-content {
             background: var(--white);
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            color: var(--dark) !important;
         }
 
         [data-theme="dark"] input,
@@ -41,7 +72,7 @@
         [data-theme="dark"] textarea {
             background: #334155;
             border-color: #475569;
-            color: var(--dark);
+            color: var(--dark) !important;
         }
         [data-theme="dark"] input::placeholder {
             color: #94a3b8;
@@ -49,19 +80,21 @@
 
         [data-theme="dark"] .tab-btn {
             background: #334155;
-            color: var(--dark);
+            color: var(--dark) !important;
         }
         [data-theme="dark"] .tab-btn.active {
             background: var(--primary);
-            color: white;
+            color: white !important;
         }
 
         [data-theme="dark"] .inv-table th {
             background: #334155;
+            color: var(--dark) !important;
         }
         [data-theme="dark"] .inv-table td,
         [data-theme="dark"] .inv-table th {
             border-color: #475569;
+            color: var(--dark) !important;
         }
 
         [data-theme="dark"] .nodo-box,
@@ -69,16 +102,29 @@
         [data-theme="dark"] .install-list {
             background: #334155;
             border-color: #475569;
+            color: var(--dark) !important;
         }
 
         [data-theme="dark"] .ecuacion-box {
             background: #1e293b;
             border-color: #475569;
-            color: #cbd5e1;
+            color: #cbd5e1 !important;
         }
 
         [data-theme="dark"] .resultado {
             background: #1e293b;
+            color: var(--dark) !important;
+        }
+
+        [data-theme="dark"] .search-box input {
+            background: #334155;
+            border-color: #475569;
+            color: var(--dark) !important;
+        }
+
+        [data-theme="dark"] .btn-calc {
+            background: linear-gradient(135deg, var(--primary), #2980b9);
+            color: white !important;
         }
 
         #dark-overlay {
@@ -101,7 +147,7 @@
         
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; color: var(--dark); }
         
-        /* ===== LOGIN MINIMALISTA ===== */
+        /* ===== LOGIN MINIMALISTA CORREGIDO ===== */
         #login-wrapper {
             height: 100vh;
             display: flex;
@@ -154,8 +200,9 @@
             border-radius: 24px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
             text-align: center;
-            width: 100%;
-            max-width: 380px;
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto;
             position: relative;
             z-index: 10;
             animation: slideUp 0.5s ease-out;
@@ -198,6 +245,7 @@
             position: relative;
             display: flex;
             align-items: center;
+            width: 100%;
         }
         .input-group i {
             position: absolute;
@@ -206,6 +254,7 @@
             font-size: 1rem;
             pointer-events: none;
             transition: color 0.3s;
+            z-index: 2;
         }
         .input-group input {
             width: 100%;
@@ -215,6 +264,7 @@
             font-size: 1rem;
             transition: all 0.3s ease;
             background: #f8fafc;
+            box-sizing: border-box;
         }
         .input-group input:focus {
             outline: none;
@@ -235,6 +285,7 @@
             padding: 5px;
             border-radius: 6px;
             transition: all 0.2s;
+            z-index: 2;
         }
         .toggle-pass:hover { color: var(--dark); background: #f1f5f9; }
 
@@ -307,6 +358,25 @@
         .card { background: var(--white); padding: 25px; border-radius: 15px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 20px; display: none; }
         .card.active { display: block; }
         .card h2 { margin-top: 0; font-size: 1.25rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 20px; }
+        
+        /* BOTÓN VOLVER */
+        .btn-back {
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            background: #1a252f;
+            transform: translateX(-3px);
+        }
         
         /* FORM ELEMENTS */
         .form-group { margin-bottom: 15px; }
@@ -412,7 +482,7 @@
 
         iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
 
-        /* ===== PANEL FLOTANTE DE 3 BURBUJAS ===== */
+        /* ===== PANEL FLOTANTE - SOLO MODO OSCURO ===== */
         #floating-panel {
             position: fixed;
             bottom: 25px;
@@ -468,29 +538,9 @@
             right: 65px;
         }
 
-        .bubble-chatbase {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            animation: float 3s ease-in-out infinite;
-        }
-        .bubble-chatbase:hover { 
-            background: linear-gradient(135deg, #8b5cf6, #6366f1); 
-        }
-
-        .bubble-music {
-            background: linear-gradient(135deg, var(--primary), #2980b9);
-            animation: float 3s ease-in-out infinite 0.5s;
-        }
-        .bubble-music:hover { 
-            background: linear-gradient(135deg, #2980b9, var(--primary)); 
-        }
-        .bubble-music.playing {
-            background: linear-gradient(135deg, var(--success), #27ae60);
-            animation: pulse 1.5s infinite;
-        }
-
         .bubble-theme {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            animation: float 3s ease-in-out infinite 1s;
+            animation: float 3s ease-in-out infinite;
         }
         .bubble-theme:hover { 
             background: linear-gradient(135deg, #8b5cf6, #6366f1); 
@@ -501,39 +551,15 @@
         }
         .bubble-theme.active i { color: #fbbf24; }
 
-        .bubble-status {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 12px;
-            height: 12px;
-            background: var(--success);
-            border-radius: 50%;
-            border: 2px solid white;
-            display: none;
-        }
-        .bubble-music.playing .bubble-status {
-            display: block;
-            animation: blink 1s infinite;
-        }
-
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4); }
-            50% { box-shadow: 0 4px 25px rgba(39, 174, 96, 0.7); }
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.9); }
-        }
 
-        /* VENTANA FLOTANTE REPRODUCTOR */
+        /* 🎵 VENTANA REPRODUCTOR MP3 - POSICIÓN ARRIBA DERECHA */
         .floating-window {
             position: fixed;
-            bottom: 100px;
+            top: 80px;  /* ← CAMBIO: arriba debajo del navbar */
             right: 25px;
             width: 280px;
             background: var(--white);
@@ -875,7 +901,16 @@
                 right: 15px;
                 left: 15px;
                 width: auto;
-                bottom: 80px;
+                top: 70px; /* Ajuste para móviles */
+            }
+            .card-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            .btn-back {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -1036,9 +1071,14 @@
             <button class="tab-btn" style="background:var(--luis); color:white;" onclick="showTab(event, 'luis-ia')"><i class="fas fa-robot"></i> PREGÚNTALE A LUIS</button>
         </div>
 
-        <!-- CONTENIDO DE TABS (igual que tu código original) -->
+        <!-- CONTENIDO DE TABS CON BOTÓN VOLVER -->
+        
+        <!-- Caída de Tensión -->
         <div id="tension" class="card">
-            <h2>Calculadora Caída de Tensión (RIC 04)</h2>
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0;">Calculadora Caída de Tensión (RIC 04)</h2>
+                <button class="btn-back" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Volver</button>
+            </div>
             <p style="font-size: 0.8rem; color: #64748b; margin: -15px 0 15px 0;"><i class="fas fa-info-circle"></i> Cálculo basado en resistividad del cobre ρ = 0.018</p>
             
             <div class="form-group">
@@ -1098,7 +1138,7 @@
             <div id="res-tension"></div>
         </div>
 
-        <img id="successImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2327ae60'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" alt="✓">
+        <img id="successImg" src="image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%2327ae60'/%3E%3Cpath d='M30 50 L45 65 L70 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" alt="✓">
 
         <div id="dangerOverlay">
             <div class="danger-icon">⚠️</div>
@@ -1106,24 +1146,36 @@
             <div class="danger-subtext">Revisar instalación eléctrica</div>
         </div>
 
+        <!-- Ley de Ohm -->
         <div id="ohm" class="card">
-            <h2>Calculadora Ley de Ohm</h2>
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0;">Calculadora Ley de Ohm</h2>
+                <button class="btn-back" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Volver</button>
+            </div>
             <div class="form-group"><label>Potencia (Watts):</label><input type="number" id="watt-ohm" placeholder="Ej: 3680"></div>
             <div class="form-group"><label>Voltaje (V):</label><input type="number" id="volt-ohm" value="220"></div>
             <button class="btn-calc" style="background:var(--dark)" onclick="calcOhm()">Calcular Amperaje</button>
             <div id="res-ohm"></div>
         </div>
 
+        <!-- Calculadora Nodos -->
         <div id="nodos" class="card">
-            <h2>Cálculo de Impedancia y Cortocircuito</h2>
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0;">Cálculo de Impedancia y Cortocircuito</h2>
+                <button class="btn-back" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Volver</button>
+            </div>
             <div class="nodo-box" style="border-color: #f59e0b;"><div class="nodo-title">a) Nodo 1 (Empalme)</div><div class="grid-nodos"><div><label>Icc n.1 (kA):</label><input type="number" id="icc1" value="6.00" step="0.01"></div><div><label>Zcc n.1 (mΩ):</label><input type="number" id="zcc1" value="36.67" step="0.01"></div></div></div>
             <div class="nodo-box"><div class="nodo-title">b) Nodo 2 (TDF Voltex)</div><div class="grid-nodos"><div><label>L AL-01 (m):</label><input type="number" id="L2" value="2"></div><div><label>Sección (mm²):</label><input type="number" id="S2" value="6"></div></div><button class="btn-calc" onclick="calcNodoInteractivo(2)">CALCULAR Y VER ECUACIÓN</button><div id="ecu-2" class="ecuacion-box"></div></div>
             <div class="nodo-box"><div class="nodo-title">c) Nodo 3 (SAVE.01)</div><div class="grid-nodos"><div><label>L CR-01 (m):</label><input type="number" id="L3" value="12"></div><div><label>Sección (mm²):</label><input type="number" id="S3" value="6"></div></div><button class="btn-calc" onclick="calcNodoInteractivo(3)">CALCULAR Y VER ECUACIÓN</button><div id="ecu-3" class="ecuacion-box"></div></div>
             <div class="nodo-box"><div class="nodo-title">d) Nodo 4 (TDA Hogar)</div><div class="grid-nodos"><div><label>L Sub-alim (m):</label><input type="number" id="L4" value="2"></div><div><label>Sección (mm²):</label><input type="number" id="S4" value="6"></div></div><button class="btn-calc" onclick="calcNodoInteractivo(4)">CALCULAR Y VER ECUACIÓN</button><div id="ecu-4" class="ecuacion-box"></div></div>
         </div>
 
+        <!-- Ductos EMT -->
         <div id="tuberia" class="card">
-            <h2>Análisis de Ductos EMT (RIC 07 - SEC Chile)</h2>
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0;">Análisis de Ductos EMT (RIC 07 - SEC Chile)</h2>
+                <button class="btn-back" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Volver</button>
+            </div>
             <p style="font-size: 0.8rem; color: #64748b; margin: -15px 0 15px 0;">
                 <i class="fas fa-info-circle"></i> Factor de llenado: 1 cable=53% | 2 cables=31% | 3+ cables=40%
             </p>
@@ -1172,13 +1224,21 @@
             <div id="res-ducto"></div>
         </div>
 
+        <!-- Esquema SGC -->
         <div id="sgc" class="card" style="text-align:center;">
-            <h2>Esquema de Control SGC</h2>
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0;">Esquema de Control SGC</h2>
+                <button class="btn-back" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Volver</button>
+            </div>
             <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" style="background:#fff; border-radius:10px;"><text x="95" y="30" font-weight="bold">SGC</text><text x="310" y="30" font-weight="bold">CARGADOR</text><circle cx="35" cy="100" r="7" fill="#2ecc71"/><circle cx="75" cy="100" r="7" fill="#3498db"/><circle cx="115" cy="100" r="7" fill="#2ecc71"/><circle cx="155" cy="100" r="7" fill="#8b4513"/><circle cx="250" cy="100" r="7" fill="#bdc3c7"/><circle cx="290" cy="100" r="7" fill="#8b4513"/><circle cx="330" cy="100" r="7" fill="#2ecc71"/><circle cx="370" cy="100" r="7" fill="#3498db"/><path d="M 35 100 L 35 130 L 115 130 L 115 100" stroke="#2ecc71" fill="none" stroke-width="3"/><path d="M 155 107 L 155 160 L 290 160 L 290 107" stroke="#8b4513" fill="none" stroke-width="2"/><path d="M 115 130 L 115 200 L 330 200 L 330 107" stroke="#2ecc71" fill="none" stroke-width="2"/><path d="M 75 107 L 75 235 L 370 235 L 370 107" stroke="#3498db" fill="none" stroke-width="2"/></svg>
         </div>
 
+        <!-- Biblioteca RIC -->
         <div id="biblioteca" class="card">
-            <h2>Biblioteca Pliegos RIC (01-19 + 15.1)</h2>
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0;">Biblioteca Pliegos RIC (01-19 + 15.1)</h2>
+                <button class="btn-back" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Volver</button>
+            </div>
             <select onchange="document.getElementById('pdf-view').src = this.value">
                 <option value="">-- Seleccionar Pliego --</option>
                 <option value="RIC01.pdf">RIC 01: Empalmes</option><option value="RIC02.pdf">RIC 02: Tableros Electricos</option>
@@ -1195,12 +1255,16 @@
             <iframe id="pdf-view" src=""></iframe>
         </div>
 
+        <!-- Inventario -->
         <div id="inventario" class="card">
-            <h2>Gestión de Bodega LINSTELEC 
-                <span id="sync-status" class="sync-status sync-pending">
-                    <i class="fas fa-circle"></i> Sin sincronizar
-                </span>
-            </h2>
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0;">Gestión de Bodega LINSTELEC 
+                    <span id="sync-status" class="sync-status sync-pending">
+                        <i class="fas fa-circle"></i> Sin sincronizar
+                    </span>
+                </h2>
+                <button class="btn-back" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Volver</button>
+            </div>
             
             <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
                 <button class="tab-btn" onclick="downloadInventory()" style="background:var(--success); color:white;">
@@ -1242,38 +1306,26 @@
             </div>
         </div>
 
+        <!-- Luis IA -->
         <div id="luis-ia" class="card">
-            <h2>🤖 PREGÚNTALE A LUIS (Experto RIC)</h2>
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h2 style="margin: 0;">🤖 PREGÚNTALE A LUIS (Experto RIC)</h2>
+                <button class="btn-back" onclick="showDashboard()"><i class="fas fa-arrow-left"></i> Volver</button>
+            </div>
             <iframe src="https://brayaton-asistente-ric-pro.hf.space"></iframe>
         </div>
     </div>
 </div>
 
-<!-- 🎯 PANEL FLOTANTE DE 3 BURBUJAS -->
+<!-- 🌙 PANEL FLOTANTE - SOLO MODO OSCURO -->
 <div id="floating-panel">
-    
-    <!-- 🔹 Burbuja 1: Chatbase IA (Superior) -->
-    <div class="bubble bubble-chatbase" onclick="openChatbase()" title="Asistente IA">
-        <i class="fas fa-comments"></i>
-        <span class="bubble-tooltip">Chat IA</span>
-    </div>
-    
-    <!-- 🔹 Burbuja 2: Reproductor MP3 (Centro) -->
-    <div class="bubble bubble-music" id="musicBubble" onclick="toggleMusicAction()" title="Reproductor MP3">
-        <i class="fas fa-music" id="musicIcon"></i>
-        <span class="bubble-tooltip">Música</span>
-        <span class="bubble-status" id="musicStatus"></span>
-    </div>
-    
-    <!-- 🔹 Burbuja 3: Modo Oscuro (Inferior) - DESACTIVADO POR DEFECTO -->
     <div class="bubble bubble-theme" onclick="toggleDarkMode()" title="Modo Oscuro">
         <i class="fas fa-moon" id="themeIcon"></i>
         <span class="bubble-tooltip">Tema</span>
     </div>
-    
 </div>
 
-<!-- 🎵 VENTANA REPRODUCTOR MP3 (Flotante) -->
+<!-- 🎵 VENTANA REPRODUCTOR MP3 (Flotante - ARRIBA DERECHA) -->
 <div id="musicPanel" class="floating-window">
     <div class="window-header">
         <span>🎵 Reproductor MP3</span>
@@ -1783,33 +1835,35 @@
 
     function showTabFromDashboard(tabName) {
         addToRecentTools(tabName);
-        
+        showTool(tabName);
+    }
+
+    function showTool(name) {
+        // Ocultar dashboard y todas las herramientas
         document.getElementById('dashboard').classList.remove('active');
-        document.querySelectorAll('.calc-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         
-        document.getElementById(tabName).classList.add('active');
+        // Mostrar la herramienta seleccionada
+        document.getElementById(name).classList.add('active');
         
-        const tabButtons = document.querySelectorAll('.calc-tabs .tab-btn');
-        tabButtons.forEach(btn => {
-            if (btn.getAttribute('onclick')?.includes(tabName)) {
-                btn.classList.add('active');
-            }
-        });
+        // Activar botón correspondiente en tabs si existe
+        const tabBtn = document.querySelector(`.tab-btn[onclick*="'${name}'"]`);
+        if(tabBtn) tabBtn.classList.add('active');
     }
 
     function showTab(evt, name) {
         if (evt) {
             addToRecentTools(name);
         }
-        
-        document.getElementById('dashboard').classList.remove('active');
-        
-        let cards = document.getElementsByClassName("card"), btns = document.getElementsByClassName("tab-btn");
-        for (let i=0; i<cards.length; i++) cards[i].classList.remove("active");
-        for (let i=0; i<btns.length; i++) btns[i].classList.remove("active");
-        document.getElementById(name).classList.add("active");
-        evt.currentTarget.classList.add("active");
+        showTool(name);
+    }
+
+    // 🔙 FUNCIÓN PARA VOLVER AL DASHBOARD
+    function showDashboard() {
+        document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('dashboard').classList.add('active');
     }
 
     function addToRecentTools(toolName) {
@@ -2220,99 +2274,6 @@
 
     /* ===== FUNCIONES PANEL FLOTANTE ===== */
 
-    // 🤖 Abrir Chatbase IA
-    function openChatbase() {
-        // El widget de Chatbase ya está cargado, solo necesitamos asegurarnos de que esté visible
-        // Chatbase se abre automáticamente al hacer clic en su widget
-        // Esta función puede usarse para hacer scroll o mostrar mensajes
-        const chatbaseWidget = document.querySelector('iframe[src*="chatbase"]');
-        if (chatbaseWidget) {
-            chatbaseWidget.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // Efecto visual en la burbuja
-        const bubble = document.querySelector('.bubble-chatbase');
-        bubble.style.transform = 'scale(0.9)';
-        setTimeout(() => { bubble.style.transform = ''; }, 150);
-    }
-
-    // 🎵 Toggle música: Abre panel Y reproduce/pausa en un solo clic
-    function toggleMusicAction() {
-        const panel = document.getElementById('musicPanel');
-        const audio = document.getElementById('mp3Player');
-        const bubble = document.getElementById('musicBubble');
-        const playIcon = document.getElementById('playIcon');
-        
-        if (panel.classList.contains('visible')) {
-            // Si está abierto: pausar y cerrar
-            audio.pause();
-            panel.classList.remove('visible');
-            bubble.classList.remove('playing');
-            playIcon.classList.replace('fa-pause', 'fa-play');
-            document.getElementById('songStatus').textContent = 'Pausado';
-        } else {
-            // Si está cerrado: abrir y toggle play/pause
-            panel.classList.add('visible');
-            
-            if (audio.paused) {
-                audio.play();
-                bubble.classList.add('playing');
-                playIcon.classList.replace('fa-play', 'fa-pause');
-                document.getElementById('songStatus').textContent = '▶ Reproduciendo';
-            } else {
-                audio.pause();
-                bubble.classList.remove('playing');
-                playIcon.classList.replace('fa-pause', 'fa-play');
-                document.getElementById('songStatus').textContent = '⏸ Pausado';
-            }
-        }
-    }
-
-    // Cerrar panel de música (sin afectar reproducción)
-    function closeMusicPanel() {
-        document.getElementById('musicPanel').classList.remove('visible');
-    }
-
-    // Toggle Play/Pause dentro del panel
-    function togglePlayPause() {
-        const audio = document.getElementById('mp3Player');
-        const bubble = document.getElementById('musicBubble');
-        const playIcon = document.getElementById('playIcon');
-        const status = document.getElementById('songStatus');
-        
-        if (audio.paused) {
-            audio.play();
-            bubble.classList.add('playing');
-            playIcon.classList.replace('fa-play', 'fa-pause');
-            if (status) status.textContent = '▶ Reproduciendo';
-        } else {
-            audio.pause();
-            bubble.classList.remove('playing');
-            playIcon.classList.replace('fa-pause', 'fa-play');
-            if (status) status.textContent = '⏸ Pausado';
-        }
-    }
-
-    // Actualizar estado del reproductor
-    const audioEl = document.getElementById('mp3Player');
-    if (audioEl) {
-        audioEl.addEventListener('play', () => {
-            document.getElementById('musicBubble')?.classList.add('playing');
-            document.getElementById('playIcon')?.classList.replace('fa-play', 'fa-pause');
-        });
-        audioEl.addEventListener('pause', () => {
-            document.getElementById('musicBubble')?.classList.remove('playing');
-            document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
-        });
-        audioEl.addEventListener('ended', () => {
-            document.getElementById('musicBubble')?.classList.remove('playing');
-            document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
-            if (document.getElementById('songStatus')) {
-                document.getElementById('songStatus').textContent = '✓ Finalizado';
-            }
-        });
-    }
-
     // 🌙 MODO OSCURO - Toggle simple (DESACTIVADO POR DEFECTO)
     function toggleDarkMode() {
         const body = document.body;
@@ -2342,6 +2303,73 @@
         // Efecto visual en la burbuja
         bubble.style.transform = 'scale(0.9)';
         setTimeout(() => { bubble.style.transform = ''; }, 150);
+    }
+
+    // 🎵 Toggle música: Abre panel Y reproduce/pausa en un solo clic
+    function toggleMusicAction() {
+        const panel = document.getElementById('musicPanel');
+        const audio = document.getElementById('mp3Player');
+        const playIcon = document.getElementById('playIcon');
+        
+        if (panel.classList.contains('visible')) {
+            // Si está abierto: pausar y cerrar
+            audio.pause();
+            panel.classList.remove('visible');
+            playIcon.classList.replace('fa-pause', 'fa-play');
+            document.getElementById('songStatus').textContent = 'Pausado';
+        } else {
+            // Si está cerrado: abrir y toggle play/pause
+            panel.classList.add('visible');
+            
+            if (audio.paused) {
+                audio.play();
+                playIcon.classList.replace('fa-play', 'fa-pause');
+                document.getElementById('songStatus').textContent = '▶ Reproduciendo';
+            } else {
+                audio.pause();
+                playIcon.classList.replace('fa-pause', 'fa-play');
+                document.getElementById('songStatus').textContent = '⏸ Pausado';
+            }
+        }
+    }
+
+    // Cerrar panel de música (sin afectar reproducción)
+    function closeMusicPanel() {
+        document.getElementById('musicPanel').classList.remove('visible');
+    }
+
+    // Toggle Play/Pause dentro del panel
+    function togglePlayPause() {
+        const audio = document.getElementById('mp3Player');
+        const playIcon = document.getElementById('playIcon');
+        const status = document.getElementById('songStatus');
+        
+        if (audio.paused) {
+            audio.play();
+            playIcon.classList.replace('fa-play', 'fa-pause');
+            if (status) status.textContent = '▶ Reproduciendo';
+        } else {
+            audio.pause();
+            playIcon.classList.replace('fa-pause', 'fa-play');
+            if (status) status.textContent = '⏸ Pausado';
+        }
+    }
+
+    // Actualizar estado del reproductor
+    const audioEl = document.getElementById('mp3Player');
+    if (audioEl) {
+        audioEl.addEventListener('play', () => {
+            document.getElementById('playIcon')?.classList.replace('fa-play', 'fa-pause');
+        });
+        audioEl.addEventListener('pause', () => {
+            document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
+        });
+        audioEl.addEventListener('ended', () => {
+            document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
+            if (document.getElementById('songStatus')) {
+                document.getElementById('songStatus').textContent = '✓ Finalizado';
+            }
+        });
     }
 
     // Cargar tema guardado al iniciar
