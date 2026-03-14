@@ -235,6 +235,21 @@
         .sync-ok { background: #d1fae5; color: #065f46; }
         .sync-pending { background: #fef3c7; color: #92400e; }
         .sync-error { background: #fee2e2; color: #991b1b; }
+
+        /* Estilo para sección opcional de cos φ */
+        #cosphi-container {
+            transition: all 0.3s ease;
+            animation: slideDown 0.2s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #cosphi-value:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
     </style>
 </head>
 <body>
@@ -311,6 +326,23 @@
                     <option value="50">50 mm²</option>
                 </select>
             </div>
+
+            <!-- ⚙️ OPCIONAL: Factor de Potencia -->
+            <div class="form-group" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #cbd5e1;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" id="cosphi-check" onchange="toggleCosPhi()" style="width: auto; margin: 0;">
+                    <strong>Usar Factor de Potencia (cos φ) - Cálculo AC avanzado</strong>
+                </label>
+                
+                <div id="cosphi-container" style="display: none; margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 10px; border-left: 4px solid var(--primary);">
+                    <label>Factor de Potencia (cos φ):</label>
+                    <input type="number" id="cosphi-value" value="0.8" min="0.1" max="1" step="0.01" style="max-width: 150px;">
+                    <small style="display: block; margin-top: 5px; color: #64748b;">
+                        💡 Valores típicos: Iluminación LED: 0.9 | Motores: 0.8 | Resistivo puro: 1.0
+                    </small>
+                </div>
+            </div>
+            
             <button class="btn-calc" onclick="calcTension()">Calcular Pérdida</button>
             <div id="res-tension"></div>
         </div>
@@ -858,78 +890,125 @@
         else { document.getElementById('res-ohm').className = "resultado res-fail"; document.getElementById('res-ohm').innerHTML = "Ingrese Potencia y Voltaje"; }
     }
 
-    // ⚡ CALCULADORA DE CAÍDA DE TENSIÓN - FÓRMULAS CORREGIDAS
+    // 🔘 Mostrar/Ocultar campo de factor de potencia
+    function toggleCosPhi() {
+        const check = document.getElementById('cosphi-check');
+        const container = document.getElementById('cosphi-container');
+        container.style.display = check.checked ? 'block' : 'none';
+    }
+
+    // 🎨 Función auxiliar para mostrar resultados
+    function mostrarResultado(mensaje, clase) {
+        const res = document.getElementById('res-tension');
+        res.className = `resultado ${clase}`;
+        res.innerHTML = mensaje;
+    }
+
+    // 🎉 Efecto de confeti para resultados exitosos
+    function lanzarConfeti() {
+        const emojis = ['🎉','✨','⚡','🔋','✅'];
+        for(let i = 0; i < 12; i++) {
+            setTimeout(() => {
+                const c = document.createElement('span');
+                c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                c.style.cssText = `
+                    position: fixed; 
+                    left: ${Math.random() * 100}vw; 
+                    top: -20px; 
+                    font-size: ${16 + Math.random() * 12}px; 
+                    animation: confettiFall ${2 + Math.random() * 2}s linear forwards; 
+                    pointer-events: none; 
+                    z-index: 9999;
+                    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                `;
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 4000);
+            }, i * 80);
+        }
+    }
+
+    // ⚡ CALCULADORA DE CAÍDA DE TENSIÓN - CON COS φ OPCIONAL (RIC 04)
     function calcTension() {
+        // Resetear efectos visuales
         document.getElementById('successImg').style.display = 'none';
         const danger = document.getElementById('dangerOverlay');
         danger.style.display = 'none';
         
-        // Obtener tipo de sistema
-        const tipoSistema = document.querySelector('input[name="tipoSistema"]:checked').value;
+        // 🔌 Obtener tipo de sistema seleccionado
+        const tipoSistema = document.querySelector('input[name="tipoSistema"]:checked')?.value;
+        if (!tipoSistema) {
+            mostrarResultado('⚠️ Seleccione tipo de sistema (Monofásico/Trifásico)', 'res-fail');
+            return;
+        }
         const esMonofasico = tipoSistema === 'monofasico';
         
-        // Constantes
-        const rho = 0.018;  // Resistividad del cobre
+        // 📊 Constantes y parámetros según norma RIC 04 (Chile)
+        const rho = 0.018;  // Resistividad del cobre [Ω·mm²/m] a 20°C
+        const V_nominal = esMonofasico ? 220 : 380;  // Tensión nominal Chile
+        const limitePorcentaje = 3;  // Límite RIC 04 para circuitos finales
         
-        // ✅ TENSIÓN SEGÚN SISTEMA (Chile)
-        const V_nominal = esMonofasico ? 220 : 380;
-        const textoTension = esMonofasico ? "220V" : "380V";
+        // 📥 Obtener y validar valores de entrada
+        const distancia = parseFloat(document.getElementById('dist')?.value);
+        const corriente = parseFloat(document.getElementById('amp')?.value);
+        const seccion = parseFloat(document.getElementById('sec')?.value);
         
-        // Obtener valores
-        const distancia = parseFloat(document.getElementById('dist').value);
-        const corriente = parseFloat(document.getElementById('amp').value);
-        const seccion = parseFloat(document.getElementById('sec').value);
+        if (isNaN(distancia) || isNaN(corriente) || isNaN(seccion) || distancia <= 0 || corriente <= 0 || seccion <= 0) {
+            mostrarResultado('⚠️ Ingrese valores válidos mayores a cero', 'res-fail');
+            return;
+        }
         
-        // ✅ FÓRMULA CORREGIDA
-        // Monofásico: 2 (ida y vuelta por fase + neutro)
-        // Trifásico: √3 = 1.732 (relación entre fases)
+        // ⚙️ Factor según tipo de sistema:
         const factor = esMonofasico ? 2 : Math.sqrt(3);
         
-        // Fórmula: ΔV = (factor × L × I × ρ) / S
-        let dv = (factor * distancia * corriente * rho) / seccion;
+        // 🔌 Factor de potencia (OPCIONAL - solo si se activa)
+        const usarCosPhi = document.getElementById('cosphi-check')?.checked;
+        const cosPhi = usarCosPhi ? parseFloat(document.getElementById('cosphi-value')?.value) : 1;
         
-        // ✅ Porcentaje con tensión correcta según sistema
-        let p = (dv / V_nominal) * 100;
+        if (usarCosPhi && (isNaN(cosPhi) || cosPhi <= 0 || cosPhi > 1)) {
+            mostrarResultado('⚠️ Factor de potencia debe estar entre 0.1 y 1.0', 'res-fail');
+            return;
+        }
         
-        let res = document.getElementById('res-tension');
-        let sistemaTexto = esMonofasico ? "MONOFÁSICO" : "TRIFÁSICO";
-        let factorTexto = esMonofasico ? "2 (ida y vuelta)" : "√3 (1.732)";
+        // 🧮 Fórmula de caída de tensión:
+        // Básica: ΔV = (factor × L × I × ρ) / S
+        // Con cos φ: ΔV = (factor × L × I × ρ) / (S × cos φ)
+        const divisor = seccion * (usarCosPhi ? cosPhi : 1);
+        const deltaV = (factor * distancia * corriente * rho) / divisor;
         
-        if (p <= 3) {
-            res.className = "resultado res-ok";
-            res.innerHTML = `
-                <strong>Sistema ${sistemaTexto} ${textoTension}</strong><br>
-                Factor: ${factorTexto} | ΔV: ${dv.toFixed(2)}V<br>
-                Pérdida: ${p.toFixed(2)}%<br>
-                ✓ CUMPLE RIC 04 (≤3%)
-            `;
-            document.getElementById('successImg').style.display = 'block';
+        // 📈 Porcentaje de caída respecto a tensión nominal
+        const porcentaje = (deltaV / V_nominal) * 100;
+        
+        // 🎨 Mostrar resultados
+        const sistemaTexto = esMonofasico ? "MONOFÁSICO 220V" : "TRIFÁSICO 380V";
+        const factorTexto = esMonofasico ? "2 (ida + vuelta)" : "√3 = 1.732 (entre fases)";
+        const cosPhiTexto = usarCosPhi ? ` | cos φ: ${cosPhi}` : '';
+        
+        if (porcentaje <= limitePorcentaje) {
+            mostrarResultado(`
+                <strong>✅ Sistema ${sistemaTexto}</strong><br>
+                🔹 Factor aplicado: ${factorTexto}${cosPhiTexto}<br>
+                🔹 Caída de tensión: <strong>${deltaV.toFixed(2)} V</strong><br>
+                🔹 Porcentaje: <strong>${porcentaje.toFixed(2)} %</strong><br>
+                🔹 Límite RIC 04: ≤ ${limitePorcentaje}%<br>
+                <span style="color:var(--success); font-weight:bold;">✓ CUMPLE NORMA</span>
+            `, 'res-ok');
             
-            for(let i=0; i<15; i++) {
-                setTimeout(() => {
-                    const c = document.createElement('span');
-                    c.textContent = ['🎉','✨','⚡','🔋','✅'][Math.floor(Math.random()*5)];
-                    c.style.cssText = `position:fixed; left:${Math.random()*100}vw; top:-30px; font-size:${18+Math.random()*15}px; animation:confettiFall ${2+Math.random()*2}s linear forwards; pointer-events:none; z-index:9999;`;
-                    document.body.appendChild(c);
-                    setTimeout(() => c.remove(), 4000);
-                }, i*100);
-            }
+            document.getElementById('successImg').style.display = 'block';
+            lanzarConfeti();
         } else {
-            res.className = "resultado res-fail";
-            res.innerHTML = `
-                <strong>Sistema ${sistemaTexto} ${textoTension}</strong><br>
-                Factor: ${factorTexto} | ΔV: ${dv.toFixed(2)}V<br>
-                Pérdida: ${p.toFixed(2)}%<br>
-                ✗ FUERA DE NORMA (>3%)
-            `;
+            mostrarResultado(`
+                <strong>❌ Sistema ${sistemaTexto}</strong><br>
+                🔹 Factor aplicado: ${factorTexto}${cosPhiTexto}<br>
+                🔹 Caída de tensión: <strong>${deltaV.toFixed(2)} V</strong><br>
+                🔹 Porcentaje: <strong>${porcentaje.toFixed(2)} %</strong><br>
+                🔹 Límite RIC 04: ≤ ${limitePorcentaje}%<br>
+                <span style="color:var(--danger); font-weight:bold;">✗ FUERA DE NORMA</span><br>
+                <small>💡 Solución: Aumentar sección, reducir distancia o mejorar cos φ</small>
+            `, 'res-fail');
             
             danger.style.display = 'flex';
-            
-            if(navigator.vibrate) navigator.vibrate([300,100,300,100,300]);
-            
-            setTimeout(() => {
-                danger.style.display = 'none';
-            }, 6000);
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 200]);
+            setTimeout(() => { danger.style.display = 'none'; }, 5000);
         }
     }
 
