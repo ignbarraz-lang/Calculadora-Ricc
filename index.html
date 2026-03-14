@@ -982,91 +982,6 @@
         }
     }
 
-    // ⚡ CALCULADORA DE CAÍDA DE TENSIÓN - CON COS φ OPCIONAL (RIC 04)
-    function calcTension() {
-        // Resetear efectos visuales
-        document.getElementById('successImg').style.display = 'none';
-        const danger = document.getElementById('dangerOverlay');
-        danger.style.display = 'none';
-        
-        // 🔌 Obtener tipo de sistema seleccionado
-        const tipoSistema = document.querySelector('input[name="tipoSistema"]:checked')?.value;
-        if (!tipoSistema) {
-            mostrarResultado('⚠️ Seleccione tipo de sistema (Monofásico/Trifásico)', 'res-fail');
-            return;
-        }
-        const esMonofasico = tipoSistema === 'monofasico';
-        
-        // 📊 Constantes y parámetros según norma RIC 04 (Chile)
-        const rho = 0.018;  // Resistividad del cobre [Ω·mm²/m] a 20°C
-        const V_nominal = esMonofasico ? 220 : 380;  // Tensión nominal Chile
-        const limitePorcentaje = 3;  // Límite RIC 04 para circuitos finales
-        
-        // 📥 Obtener y validar valores de entrada
-        const distancia = parseFloat(document.getElementById('dist')?.value);
-        const corriente = parseFloat(document.getElementById('amp')?.value);
-        const seccion = parseFloat(document.getElementById('sec')?.value);
-        
-        if (isNaN(distancia) || isNaN(corriente) || isNaN(seccion) || distancia <= 0 || corriente <= 0 || seccion <= 0) {
-            mostrarResultado('⚠️ Ingrese valores válidos mayores a cero', 'res-fail');
-            return;
-        }
-        
-        // ⚙️ Factor según tipo de sistema:
-        const factor = esMonofasico ? 2 : Math.sqrt(3);
-        
-        // 🔌 Factor de potencia (OPCIONAL - solo si se activa)
-        const usarCosPhi = document.getElementById('cosphi-check')?.checked;
-        const cosPhi = usarCosPhi ? parseFloat(document.getElementById('cosphi-value')?.value) : 1;
-        
-        if (usarCosPhi && (isNaN(cosPhi) || cosPhi <= 0 || cosPhi > 1)) {
-            mostrarResultado('⚠️ Factor de potencia debe estar entre 0.1 y 1.0', 'res-fail');
-            return;
-        }
-        
-        // 🧮 Fórmula de caída de tensión:
-        // Básica: ΔV = (factor × L × I × ρ) / S
-        // Con cos φ: ΔV = (factor × L × I × ρ) / (S × cos φ)
-        const divisor = seccion * (usarCosPhi ? cosPhi : 1);
-        const deltaV = (factor * distancia * corriente * rho) / divisor;
-        
-        // 📈 Porcentaje de caída respecto a tensión nominal
-        const porcentaje = (deltaV / V_nominal) * 100;
-        
-        // 🎨 Mostrar resultados
-        const sistemaTexto = esMonofasico ? "MONOFÁSICO 220V" : "TRIFÁSICO 380V";
-        const factorTexto = esMonofasico ? "2 (ida + vuelta)" : "√3 = 1.732 (entre fases)";
-        const cosPhiTexto = usarCosPhi ? ` | cos φ: ${cosPhi}` : '';
-        
-        if (porcentaje <= limitePorcentaje) {
-            mostrarResultado(`
-                <strong>✅ Sistema ${sistemaTexto}</strong><br>
-                🔹 Factor aplicado: ${factorTexto}${cosPhiTexto}<br>
-                🔹 Caída de tensión: <strong>${deltaV.toFixed(2)} V</strong><br>
-                🔹 Porcentaje: <strong>${porcentaje.toFixed(2)} %</strong><br>
-                🔹 Límite RIC 04: ≤ ${limitePorcentaje}%<br>
-                <span style="color:var(--success); font-weight:bold;">✓ CUMPLE NORMA</span>
-            `, 'res-ok');
-            
-            document.getElementById('successImg').style.display = 'block';
-            lanzarConfeti();
-        } else {
-            mostrarResultado(`
-                <strong>❌ Sistema ${sistemaTexto}</strong><br>
-                🔹 Factor aplicado: ${factorTexto}${cosPhiTexto}<br>
-                🔹 Caída de tensión: <strong>${deltaV.toFixed(2)} V</strong><br>
-                🔹 Porcentaje: <strong>${porcentaje.toFixed(2)} %</strong><br>
-                🔹 Límite RIC 04: ≤ ${limitePorcentaje}%<br>
-                <span style="color:var(--danger); font-weight:bold;">✗ FUERA DE NORMA</span><br>
-                <small>💡 Solución: Aumentar sección, reducir distancia o mejorar cos φ</small>
-            `, 'res-fail');
-            
-            danger.style.display = 'flex';
-            if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 200]);
-            setTimeout(() => { danger.style.display = 'none'; }, 5000);
-        }
-    }
-
     // 📐 Actualizar calculadora de ductos según tipo de cable
     function actualizarCalculadoraDuctos() {
         const select = document.getElementById('cable-tipo');
@@ -1097,12 +1012,18 @@
         utpCantidadGroup.style.display = utpCheck.checked ? 'block' : 'none';
     }
 
-    // 🔧 CALCULADORA DE DUCTOS EMT - NORMA SEC CHILE (RIC 07)
+    // 🔧 CALCULADORA DE DUCTOS EMT - NORMA SEC CHILE + PRÁCTICA REAL
     function calcDucto() {
         const select = document.getElementById('cable-tipo');
         const selectedOption = select.options[select.selectedIndex];
         const diametroCable = parseFloat(selectedOption.getAttribute('data-diametro'));
         const tipoCantidad = selectedOption.getAttribute('data-cantidad');
+        const textoCable = selectedOption.text.toLowerCase();
+        
+        // Determinar tipo de cable
+        const esH07 = textoCable.includes('h07z1-k');
+        const esMulticonductor = textoCable.includes('multiconductor') || selectedOption.value.startsWith('multirvk');
+        const esUnipolarRVK = textoCable.includes('unipolar rvk') || selectedOption.value.startsWith('unirvk');
         
         // Determinar cantidad de cables principales
         let cantidadCables = 1;
@@ -1143,7 +1064,7 @@
             textoFactor = "40% (3+ cables)";
         }
         
-        // Tubos EMT disponibles (diámetros nominales en mm)
+        // Tubos EMT disponibles - DIÁMETROS INTERIORES REALES (mm)
         const tubosEMT = [
             { nominal: 16, interior: 15.3 },
             { nominal: 20, interior: 19.3 },
@@ -1153,14 +1074,38 @@
             { nominal: 50, interior: 46.5 }
         ];
         
+        // Límites PRÁCTICOS máximos de cables por tubo (instalación domiciliaria real)
+        const limitesPracticos = {
+            16: { max: 5, ideal: 3, descripcion: "Máximo 5 cables (ideal 3)" },
+            20: { max: 7, ideal: 5, descripcion: "Máximo 7 cables (ideal 5)" },
+            25: { max: 9, ideal: 6, descripcion: "Máximo 9 cables (ideal 6)" },
+            32: { max: 12, ideal: 9, descripcion: "Máximo 12 cables (ideal 9)" },
+            40: { max: 15, ideal: 12, descripcion: "Máximo 15 cables (ideal 12)" },
+            50: { max: 20, ideal: 15, descripcion: "Máximo 20 cables (ideal 15)" }
+        };
+        
+        // Rango recomendado según tipo de cable
+        // ✅ H07Z1-K → Tubos 16-25mm
+        // ✅ Unipolar RVK y Multiconductor RVK → Tubos 32-50mm
+        let rangoRecomendado;
+        if (esH07) {
+            rangoRecomendado = { min: 16, max: 25, texto: "16mm - 25mm (instalación domiciliaria)" };
+        } else {
+            // Unipolar RVK y Multiconductor RVK
+            rangoRecomendado = { min: 32, max: 50, texto: "32mm - 50mm (alimentadores y circuitos)" };
+        }
+        
         // Calcular capacidad de cada tubo
         let html = `
             <div class="resultado res-warn" style="margin-bottom: 15px;">
                 <strong>📊 Resumen de Cables:</strong><br>
+                • Tipo: ${esH07 ? 'H07Z1-K (domiciliario)' : (esMulticonductor ? 'RVK Multiconductor' : 'RVK Unipolar')}<br>
                 • Cables principales: ${cantidadCables} × Ø${diametroCable}mm = ${areaTotalPrincipal.toFixed(2)} mm²<br>
                 ${utpCheck.checked ? `• Cables UTP: ${cantidadUTP} × Ø6.0mm = ${areaTotalUTP.toFixed(2)} mm²<br>` : ''}
                 • <strong>Área total: ${areaTotalRequerida.toFixed(2)} mm²</strong><br>
-                • Factor de llenado RIC 07: ${textoFactor}
+                • Total cables: ${totalCables}<br>
+                • Factor RIC 07: ${textoFactor}<br>
+                • <strong>Rango recomendado: Tubos ${rangoRecomendado.texto}</strong>
             </div>
             <h3 style="margin: 15px 0 10px 0; font-size: 1.1rem;">📐 Análisis por Tubo EMT:</h3>
         `;
@@ -1170,53 +1115,102 @@
         tubosEMT.forEach(tubo => {
             const areaInterna = Math.PI * Math.pow(tubo.interior / 2, 2);
             const capacidadMaxima = areaInterna * factorLlenado;
-            const porcentajeOcupacion = (areaTotalRequerida / areaInterna) * 100;
+            const ocupacionPorcentaje = (areaTotalRequerida / capacidadMaxima) * 100;
+            const margenDisponible = capacidadMaxima - areaTotalRequerida;
             
-            if (capacidadMaxima >= areaTotalRequerida) {
-                if (!tuboRecomendado) {
+            // Verificar si está dentro del rango recomendado
+            const dentroRango = tubo.nominal >= rangoRecomendado.min && tubo.nominal <= rangoRecomendado.max;
+            const limite = limitesPracticos[tubo.nominal];
+            const excedeLimitePractico = totalCables > limite.max;
+            const sobreOcupacion = ocupacionPorcentaje > 70;
+            
+            if (capacidadMaxima >= areaTotalRequerida && !excedeLimitePractico) {
+                if (!tuboRecomendado && dentroRango) {
                     tuboRecomendado = tubo;
+                    
+                    let claseResultado = 'res-ok';
+                    let icono = '✅';
+                    let textoExtra = '';
+                    
+                    if (sobreOcupacion) {
+                        claseResultado = 'res-warn';
+                        icono = '⚠️';
+                        textoExtra = '<br><span style="color: #856404;"><strong>⚠️ Ocupación alta - Instalación difícil</strong></span>';
+                    }
+                    
                     html += `
-                        <div class="resultado res-ok" style="margin-bottom: 10px;">
-                            <strong>✅ Tubo EMT ${tubo.nominal}mm - RECOMENDADO</strong><br>
+                        <div class="resultado ${claseResultado}" style="margin-bottom: 10px; border: 2px solid ${sobreOcupacion ? '#ffc107' : '#28a745'};">
+                            <strong>${icono} Tubo EMT ${tubo.nominal}mm - RECOMENDADO</strong><br>
                             • Diámetro interior: ${tubo.interior}mm<br>
                             • Capacidad máxima (${textoFactor}): ${capacidadMaxima.toFixed(2)} mm²<br>
                             • Área requerida: ${areaTotalRequerida.toFixed(2)} mm²<br>
-                            • Ocupación: ${porcentajeOcupacion.toFixed(1)}%<br>
-                            • <strong>Margen disponible: ${(capacidadMaxima - areaTotalRequerida).toFixed(2)} mm²</strong>
+                            • Ocupación del factor: ${ocupacionPorcentaje.toFixed(1)}%<br>
+                            • Margen disponible: ${margenDisponible.toFixed(2)} mm²<br>
+                            • Límite práctico: ${limite.descripcion}${textoExtra}
                         </div>
                     `;
-                } else {
+                } else if (dentroRango) {
                     html += `
                         <div class="resultado res-warn" style="margin-bottom: 10px;">
                             <strong>🔵 Tubo EMT ${tubo.nominal}mm - EXCESIVO</strong><br>
-                            • Ocupación: ${porcentajeOcupacion.toFixed(1)}%<br>
-                            • Sobredimensionado para esta instalación
+                            • Ocupación: ${ocupacionPorcentaje.toFixed(1)}%<br>
+                            • Sobredimensionado
+                        </div>
+                    `;
+                } else {
+                    // Fuera del rango recomendado pero cumple matemáticamente
+                    html += `
+                        <div class="resultado res-warn" style="margin-bottom: 10px; opacity: 0.7;">
+                            <strong>🔸 Tubo EMT ${tubo.nominal}mm - NO RECOMENDADO</strong><br>
+                            • Cumple matemáticamente pero <strong>no es práctica habitual</strong><br>
+                            • Para ${esH07 ? 'H07Z1-K' : 'RVK'} use tubos ${rangoRecomendado.texto}
                         </div>
                     `;
                 }
+            } else if (excedeLimitePractico) {
+                html += `
+                    <div class="resultado res-fail" style="margin-bottom: 10px; background: #f8d7da; border-color: #dc3545;">
+                        <strong>❌ Tubo EMT ${tubo.nominal}mm - NO VIABLE</strong><br>
+                        • Aunque cumple matemáticamente (${ocupacionPorcentaje.toFixed(1)}%)<br>
+                        • <strong>Límite práctico excedido: ${totalCables} cables > ${limite.max} máx</strong><br>
+                        • Imposible de instalar en obra real<br>
+                        • Use mínimo tubo ${Object.keys(limitesPracticos).find(t => limitesPracticos[t].max >= totalCables) || 32}mm
+                    </div>
+                `;
             } else {
                 html += `
                     <div class="resultado res-fail" style="margin-bottom: 10px;">
                         <strong>❌ Tubo EMT ${tubo.nominal}mm - SOBRECARGADO</strong><br>
                         • Capacidad máxima (${textoFactor}): ${capacidadMaxima.toFixed(2)} mm²<br>
                         • Área requerida: ${areaTotalRequerida.toFixed(2)} mm²<br>
-                        • Ocupación: ${porcentajeOcupacion.toFixed(1)}%<br>
+                        • Ocupación: ${ocupacionPorcentaje.toFixed(1)}%<br>
                         • <strong style="color: var(--danger);">Excede norma RIC 07</strong>
                     </div>
                 `;
             }
         });
         
+        // Advertencias adicionales
+        if (totalCables >= 7 && esH07) {
+            html += `
+                <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin: 15px 0; border-radius: 5px;">
+                    <strong>🌡️ ADVERTENCIA - Factor de Corrección por Temperatura:</strong><br>
+                    • Con ${totalCables} cables juntos, debe aplicar factor de corrección (RIC 04 Tabla 4.3)<br>
+                    • La capacidad de corriente de los cables se reduce<br>
+                    • Considere aumentar sección o usar más tuberías
+                </div>
+            `;
+        }
+        
         if (!tuboRecomendado) {
             html += `
-                <div class="resultado res-fail" style="margin-top: 15px;">
-                    <strong>⚠️ ADVERTENCIA:</strong> Ningún tubo EMT estándar cumple con la norma.<br>
-                    Considere:
-                    <ul style="margin: 10px 0;">
-                        <li>Reducir cantidad de cables</li>
-                        <li>Usar cables de menor diámetro</li>
-                        <li>Instalar múltiples tuberías</li>
-                    </ul>
+                <div class="resultado res-fail" style="margin-top: 15px; background: #f8d7da; border-color: #dc3545;">
+                    <strong>⚠️ SIN SOLUCIÓN ADECUADA</strong><br>
+                    Opciones:<br>
+                    1. Reducir cantidad de cables por tubería<br>
+                    2. Usar cables de menor diámetro<br>
+                    3. Instalar múltiples tuberías paralelas<br>
+                    4. Aumentar diámetro de tubo (si es posible)
                 </div>
             `;
         }
