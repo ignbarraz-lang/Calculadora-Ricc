@@ -14,7 +14,7 @@
 
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; color: var(--dark); }
         
-        /* ===== LOGIN MINIMALISTA ===== */
+        /* ===== LOGIN ===== */
         #login-wrapper {
             height: 100vh;
             display: flex;
@@ -96,10 +96,7 @@
             color: var(--dark);
             letter-spacing: -0.5px;
         }
-        .company-country {
-            color: var(--primary);
-            font-weight: 300;
-        }
+        .company-country { color: var(--primary); font-weight: 300; }
         .company-tagline {
             margin: 8px 0 0;
             color: #64748b;
@@ -109,11 +106,7 @@
 
         .login-form { display: flex; flex-direction: column; gap: 18px; }
         
-        .input-group {
-            position: relative;
-            width: 100%;
-            box-sizing: border-box;
-        }
+        .input-group { position: relative; width: 100%; box-sizing: border-box; }
         
         .input-group i.input-icon {
             position: absolute;
@@ -145,9 +138,7 @@
             box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
         }
         
-        .input-group input:focus ~ i.input-icon { 
-            color: var(--primary); 
-        }
+        .input-group input:focus ~ i.input-icon { color: var(--primary); }
 
         .toggle-pass {
             position: absolute;
@@ -166,13 +157,8 @@
             align-items: center;
             justify-content: center;
         }
-        .toggle-pass:hover { 
-            color: var(--dark); 
-            background: #f1f5f9; 
-        }
-        .toggle-pass:active {
-            transform: translateY(-50%) scale(0.95);
-        }
+        .toggle-pass:hover { color: var(--dark); background: #f1f5f9; }
+        .toggle-pass:active { transform: translateY(-50%) scale(0.95); }
 
         .btn-calc {
             background: linear-gradient(135deg, var(--primary), #2980b9);
@@ -217,10 +203,7 @@
             padding-top: 20px;
             border-top: 1px solid #f1f5f9;
         }
-        .login-footer small {
-            color: #94a3b8;
-            font-size: 0.8rem;
-        }
+        .login-footer small { color: #94a3b8; font-size: 0.8rem; }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
@@ -229,22 +212,52 @@
         }
         
         /* NAVBAR */
-        .navbar { background: var(--dark); color: white; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .navbar { 
+            background: var(--dark); 
+            color: white; 
+            padding: 0.8rem 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+        }
         .nav-brand { display: flex; align-items: center; }
         .nav-logo { height: 40px; width: auto; background: white; padding: 4px; border-radius: 6px; }
 
         /* CONTAINER & TABS */
         .main-container { max-width: 1200px; margin: 20px auto; padding: 0 20px; display: none; }
         .calc-tabs { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
-        .tab-btn { padding: 12px 20px; border: none; border-radius: 12px; background: var(--white); cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 8px; transition: 0.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); white-space: nowrap; }
+        .tab-btn { 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 12px; 
+            background: var(--white); 
+            cursor: pointer; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            transition: 0.3s; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+            white-space: nowrap; 
+        }
         .tab-btn.active { background: var(--primary); color: white; }
         
         /* CARDS */
-        .card { background: var(--white); padding: 25px; border-radius: 15px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 20px; display: none; }
+        .card { 
+            background: var(--white); 
+            padding: 25px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; 
+            display: none; 
+        }
         .card.active { display: block; }
         .card h2 { margin-top: 0; font-size: 1.25rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 20px; }
         
-        /* BOTÓN VOLVER */
         .btn-back {
             background: var(--dark);
             color: white;
@@ -258,30 +271,22 @@
             gap: 8px;
             transition: all 0.3s;
         }
-        .btn-back:hover {
-            background: #1a252f;
-            transform: translateX(-3px);
-        }
+        .btn-back:hover { background: #1a252f; transform: translateX(-3px); }
         
-        /* FORM ELEMENTS */
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
-        select, input[type="number"], input[type="text"] { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 1rem; box-sizing: border-box; }
+        select, input[type="number"], input[type="text"] { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 10px; 
+            font-size: 1rem; 
+            box-sizing: border-box; 
+        }
         
-        /* RADIO BUTTONS */
-        .radio-group {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        .radio-option {
-            flex: 1;
-            min-width: 150px;
-        }
-        .radio-option input[type="radio"] {
-            display: none;
-        }
+        .radio-group { display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+        .radio-option { flex: 1; min-width: 150px; }
+        .radio-option input[type="radio"] { display: none; }
         .radio-option label {
             display: block;
             padding: 12px 20px;
@@ -299,40 +304,27 @@
             border-color: var(--primary);
             box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
         }
-        .radio-option label:hover {
-            border-color: var(--primary);
-        }
-        .radio-icon {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-            display: block;
-        }
+        .radio-option label:hover { border-color: var(--primary); }
+        .radio-icon { font-size: 1.5rem; margin-bottom: 5px; display: block; }
         
-        /* RESULTS */
         .resultado { margin-top: 20px; padding: 15px; border-radius: 10px; font-weight: bold; border-left: 5px solid; }
         .res-ok { background: #f0fdf4; color: #166534; border-color: var(--success); }
         .res-fail { background: #fef2f2; color: #991b1b; border-color: var(--danger); }
         .res-warn { background: #eff6ff; color: #1e40af; border-color: var(--primary); }
         
-        /* NODOS */
         .nodo-box { background: #f1f5f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--primary); }
         .nodo-title { font-weight: bold; margin-bottom: 10px; color: #1e293b; text-transform: uppercase; font-size: 0.85rem; }
         .grid-nodos { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px; }
         .ecuacion-box { display: none; margin-top: 15px; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #334155; line-height: 1.5; }
         .math-res { color: var(--danger); font-weight: bold; }
 
-        /* INVENTARIO */
         .inv-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .inv-table th, .inv-table td { padding: 10px; border: 1px solid #e2e8f0; text-align: left; }
         .inv-table th { background: #f8fafc; }
         .qty-input { width: 70px !important; padding: 5px !important; text-align: center; margin: 0 !important; }
         .install-list { background: #f0f9ff; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #bae6fd; }
 
-        /* BUSCADOR */
-        .search-box {
-            position: relative;
-            margin-bottom: 15px;
-        }
+        .search-box { position: relative; margin-bottom: 15px; }
         .search-box input {
             width: 100%;
             padding: 12px 12px 12px 40px;
@@ -341,10 +333,7 @@
             font-size: 1rem;
             transition: border-color 0.3s;
         }
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
+        .search-box input:focus { outline: none; border-color: var(--primary); }
         .search-box i {
             position: absolute;
             left: 15px;
@@ -352,33 +341,23 @@
             transform: translateY(-50%);
             color: #94a3b8;
         }
-        .search-results {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 5px;
-            text-align: right;
-        }
-        .no-results {
-            text-align: center;
-            padding: 20px;
-            color: #64748b;
-            font-style: italic;
-        }
+        .search-results { font-size: 12px; color: #64748b; margin-top: 5px; text-align: right; }
+        .no-results { text-align: center; padding: 20px; color: #64748b; font-style: italic; }
 
         iframe { width: 100%; height: 70vh; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 15px; }
 
-        /* ===== PANEL FLOTANTE MÚSICA - ARRIBA DERECHA ===== */
+        /* ===== PANEL FLOTANTE MÚSICA ===== */
         #floating-panel {
             position: fixed;
             top: 80px;
             right: 25px;
-            display: none; /* 🔒 OCULTO POR DEFECTO (se muestra tras login) */
+            display: none; /* 🔒 OCULTO POR DEFECTO */
             flex-direction: column;
             gap: 12px;
             z-index: 9999;
             align-items: flex-end;
         }
-        #floating-panel.visible { display: flex; } /* ✅ Se muestra con esta clase */
+        #floating-panel.visible { display: flex !important; } /* ✅ Se muestra con esta clase */
 
         .bubble {
             width: 56px;
@@ -394,15 +373,8 @@
             color: white;
             font-size: 1.3rem;
         }
-
-        .bubble:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-        }
-
-        .bubble:active {
-            transform: scale(0.95);
-        }
+        .bubble:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
+        .bubble:active { transform: scale(0.95); }
 
         .bubble-tooltip {
             position: absolute;
@@ -418,20 +390,13 @@
             transition: all 0.2s;
             pointer-events: none;
         }
-        .bubble:hover .bubble-tooltip {
-            opacity: 1;
-            visibility: visible;
-            right: 65px;
-        }
+        .bubble:hover .bubble-tooltip { opacity: 1; visibility: visible; right: 65px; }
 
-        /* Burbuja Música */
         .bubble-music {
             background: linear-gradient(135deg, var(--primary), #2980b9);
             animation: float 3s ease-in-out infinite;
         }
-        .bubble-music:hover { 
-            background: linear-gradient(135deg, #2980b9, var(--primary)); 
-        }
+        .bubble-music:hover { background: linear-gradient(135deg, #2980b9, var(--primary)); }
         .bubble-music.playing {
             background: linear-gradient(135deg, var(--success), #27ae60);
             animation: pulse 1.5s infinite;
@@ -447,23 +412,11 @@
             border: 2px solid white;
             display: none;
         }
-        .bubble-music.playing .bubble-status {
-            display: block;
-            animation: blink 1s infinite;
-        }
+        .bubble-music.playing .bubble-status { display: block; animation: blink 1s infinite; }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4); }
-            50% { box-shadow: 0 4px 25px rgba(39, 174, 96, 0.7); }
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.9); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4); } 50% { box-shadow: 0 4px 25px rgba(39, 174, 96, 0.7); } }
+        @keyframes blink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.9); } }
 
         /* 🎵 VENTANA REPRODUCTOR MP3 */
         .floating-window {
@@ -480,7 +433,7 @@
             overflow: hidden;
             animation: slideUp 0.3s ease;
         }
-        .floating-window.visible { display: flex; }
+        .floating-window.visible { display: flex !important; } /* ✅ Se muestra con esta clase */
 
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -519,22 +472,10 @@
             background: linear-gradient(135deg, #f8fafc, #e2e8f0);
         }
         .song-info { margin-bottom: 15px; }
-        .song-info strong {
-            display: block;
-            font-size: 1.1rem;
-            color: var(--dark);
-            margin-bottom: 4px;
-        }
-        .song-info span {
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-        .music-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
+        .song-info strong { display: block; font-size: 1.1rem; color: var(--dark); margin-bottom: 4px; }
+        .song-info span { font-size: 0.85rem; color: #64748b; }
+        
+        .music-controls { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
         .btn-play {
             width: 50px;
             height: 50px;
@@ -549,10 +490,7 @@
             align-items: center;
             justify-content: center;
         }
-        .btn-play:hover {
-            transform: scale(1.05);
-            background: #2980b9;
-        }
+        .btn-play:hover { transform: scale(1.05); background: #2980b9; }
         .btn-play:active { transform: scale(0.95); }
 
         /* DASHBOARD */
@@ -581,12 +519,7 @@
         .dashboard-datetime .time { font-size: 2rem; font-weight: bold; display: block; }
         .dashboard-datetime .date { font-size: 0.9rem; opacity: 0.8; }
 
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 25px; }
 
         .quick-access-card {
             background: var(--white);
@@ -598,15 +531,8 @@
             border-left: 4px solid var(--primary);
             text-align: center;
         }
-        .quick-access-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-        }
-        .quick-access-card i {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
+        .quick-access-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+        .quick-access-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
         .quick-access-card h3 { margin: 0 0 10px 0; font-size: 1.1rem; color: var(--dark); }
         .quick-access-card p { margin: 0; font-size: 0.85rem; color: #64748b; }
         .quick-access-card.danger { border-left-color: var(--danger); }
@@ -625,23 +551,11 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             margin-bottom: 20px;
         }
-        .stats-card h3 {
-            margin: 0 0 15px 0;
-            font-size: 1rem;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .stats-card h3 { margin: 0 0 15px 0; font-size: 1rem; color: #64748b; display: flex; align-items: center; gap: 8px; }
         .stats-value { font-size: 2.5rem; font-weight: bold; color: var(--primary); }
         .stats-subtitle { font-size: 0.85rem; color: #64748b; margin-top: 5px; }
 
-        .alert-box {
-            background: var(--white);
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
+        .alert-box { background: var(--white); border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); overflow: hidden; }
         .alert-header {
             background: linear-gradient(90deg, var(--warning), #e67e22);
             color: white;
@@ -652,75 +566,37 @@
             gap: 10px;
         }
         .alert-body { padding: 20px; }
-        .alert-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
+        .alert-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
         .alert-item:last-child { border-bottom: none; }
         .alert-item-info { display: flex; align-items: center; gap: 12px; }
         .alert-item-icon {
-            width: 40px;
-            height: 40px;
-            background: #fef3c7;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--warning);
+            width: 40px; height: 40px; background: #fef3c7; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; color: var(--warning);
         }
         .alert-item-name { font-weight: 600; color: var(--dark); }
         .alert-item-stock { font-size: 0.85rem; color: #64748b; }
         .alert-item-qty {
-            background: var(--danger);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
+            background: var(--danger); color: white; padding: 5px 12px;
+            border-radius: 20px; font-size: 0.85rem; font-weight: bold;
         }
         .alert-item-qty.low { background: var(--warning); }
 
         .recent-tools {
-            background: var(--white);
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            padding: 20px;
-            margin-bottom: 20px;
+            background: var(--white); border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 20px; margin-bottom: 20px;
         }
-        .recent-tools h3 {
-            margin: 0 0 15px 0;
-            font-size: 1rem;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        .recent-tools h3 { margin: 0 0 15px 0; font-size: 1rem; color: #64748b; display: flex; align-items: center; gap: 8px; }
         .recent-tools-list { display: flex; gap: 10px; flex-wrap: wrap; }
         .recent-tool-item {
-            background: #f1f5f9;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
+            background: #f1f5f9; padding: 10px 15px; border-radius: 8px; font-size: 0.85rem;
+            color: var(--dark); display: flex; align-items: center; gap: 8px;
+            cursor: pointer; transition: all 0.2s;
         }
         .recent-tool-item:hover { background: var(--primary); color: white; }
 
         .sync-status {
-            font-size: 12px;
-            padding: 5px 10px;
-            border-radius: 20px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            margin-left: 10px;
+            font-size: 12px; padding: 5px 10px; border-radius: 20px;
+            display: inline-flex; align-items: center; gap: 5px; margin-left: 10px;
         }
         .sync-ok { background: #d1fae5; color: #065f46; }
         .sync-pending { background: #fef3c7; color: #92400e; }
@@ -753,81 +629,32 @@
             font-size: 100px; color: white; text-shadow: 0 0 30px rgba(0,0,0,0.6);
             animation: shake 0.4s infinite;
         }
-        .danger-text {
-            color: white; font-size: 28px; font-weight: bold;
-            margin-top: 20px; text-align: center; text-shadow: 0 3px 6px rgba(0,0,0,0.4);
-        }
-        .danger-subtext {
-            color: rgba(255,255,255,0.9); font-size: 16px; margin-top: 10px;
-        }
-        @keyframes confettiFall {
-            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
+        .danger-text { color: white; font-size: 28px; font-weight: bold; margin-top: 20px; text-align: center; text-shadow: 0 3px 6px rgba(0,0,0,0.4); }
+        .danger-subtext { color: rgba(255,255,255,0.9); font-size: 16px; margin-top: 10px; }
+        @keyframes confettiFall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
 
-        #cosphi-container {
-            transition: all 0.3s ease;
-            animation: slideDown 0.2s ease;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        #cosphi-value:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-            outline: none;
-        }
+        #cosphi-container { transition: all 0.3s ease; animation: slideDown 0.2s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        #cosphi-value:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); outline: none; }
 
         .cable-info {
-            background: #f8fafc;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            border-left: 3px solid var(--primary);
+            background: #f8fafc; padding: 10px; border-radius: 8px;
+            margin-top: 10px; font-size: 0.9rem; border-left: 3px solid var(--primary);
         }
         .cable-info strong { color: var(--dark); }
 
         @media (max-width: 768px) {
-            .dashboard-header {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
+            .dashboard-header { grid-template-columns: 1fr; text-align: center; }
             .dashboard-datetime { text-align: center; }
             .dashboard-grid { grid-template-columns: 1fr; }
-            #floating-panel {
-                top: 70px;
-                right: 15px;
-                gap: 10px;
-            }
-            .bubble {
-                width: 50px;
-                height: 50px;
-                font-size: 1.1rem;
-            }
+            #floating-panel { top: 70px; right: 15px; gap: 10px; }
+            .bubble { width: 50px; height: 50px; font-size: 1.1rem; }
             .bubble-tooltip { display: none; }
-            .floating-window {
-                right: 15px;
-                left: 15px;
-                width: auto;
-                top: 140px;
-            }
-            .card-header {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-            .btn-back {
-                width: 100%;
-                justify-content: center;
-            }
-            .login-card {
-                padding: 35px 25px;
-                max-width: 95%;
-            }
-            .input-group input {
-                padding: 12px 40px 12px 40px;
-            }
+            .floating-window { right: 15px; left: 15px; width: auto; top: 140px; }
+            .card-header { flex-direction: column; gap: 10px; text-align: center; }
+            .btn-back { width: 100%; justify-content: center; }
+            .login-card { padding: 35px 25px; max-width: 95%; }
+            .input-group input { padding: 12px 40px 12px 40px; }
         }
     </style>
 </head>
@@ -1234,7 +1061,7 @@
 </div>
 
 <!-- 🎵 PANEL FLOTANTE MÚSICA - ARRIBA DERECHA (OCULTO HASTA LOGIN) -->
-<div id="floating-panel" style="display: none;">
+<div id="floating-panel">
     <!-- Burbuja Música -->
     <div class="bubble bubble-music" id="musicBubble" onclick="toggleMusicPanel()" title="Reproductor MP3">
         <i class="fas fa-music" id="musicIcon"></i>
@@ -1244,7 +1071,7 @@
 </div>
 
 <!-- 🎵 VENTANA REPRODUCTOR MP3 (OCULTA HASTA LOGIN) -->
-<div id="musicPanel" class="floating-window" style="display: none;">
+<div id="musicPanel" class="floating-window">
     <div class="window-header">
         <span>🎵 Reproductor MP3</span>
         <button class="window-close" onclick="closeMusicPanel()">✕</button>
@@ -1254,12 +1081,15 @@
             <strong id="songTitle">OldSkul</strong>
             <span id="songStatus">Listo</span>
         </div>
-        <audio id="mp3Player" src="oldskul.mp3"></audio>
+        <audio id="mp3Player" src="oldskul.mp3" preload="auto"></audio>
         <div class="music-controls">
             <button onclick="togglePlayPause()" class="btn-play">
                 <i class="fas fa-play" id="playIcon"></i>
             </button>
         </div>
+        <p id="audioError" style="color: var(--danger); font-size: 0.8rem; margin-top: 10px; display: none;">
+            ⚠️ No se encontró el archivo de audio
+        </p>
     </div>
 </div>
 
@@ -1291,31 +1121,23 @@
         const now = new Date();
         const timeEl = document.getElementById('dash-time');
         const dateEl = document.getElementById('dash-date');
-        
-        if (timeEl) {
-            timeEl.textContent = now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
-        }
-        if (dateEl) {
-            dateEl.textContent = now.toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        }
+        if (timeEl) timeEl.textContent = now.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+        if (dateEl) dateEl.textContent = now.toLocaleDateString('es-CL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     }
 
     /* ========== FUNCIONES JSONBIN ========== */
     function updateSyncStatus(status, message) {
         const el = document.getElementById('sync-status');
         if(!el) return;
-        
         const statuses = {
             ok: { class: 'sync-status sync-ok', icon: 'fa-check-circle', text: 'Sincronizado' },
             pending: { class: 'sync-status sync-pending', icon: 'fa-circle', text: 'Sin sincronizar' },
             error: { class: 'sync-status sync-error', icon: 'fa-exclamation-circle', text: 'Error' },
             syncing: { class: 'sync-status sync-pending', icon: 'fa-spinner fa-spin', text: 'Sincronizando...' }
         };
-        
         const s = statuses[status] || statuses.pending;
         el.className = s.class;
         el.innerHTML = `<i class="fas ${s.icon}"></i> ${message || s.text}`;
-        
         const syncStatusText = document.getElementById('sync-status-text');
         const lastSyncEl = document.getElementById('last-sync');
         if (syncStatusText) syncStatusText.textContent = message || s.text;
@@ -1330,28 +1152,19 @@
             updateSyncStatus('pending', 'Sin configurar');
             return;
         }
-
         isSyncing = true;
         updateSyncStatus('syncing', 'Cargando...');
-        
         try {
             const url = `${JSONBIN_CONFIG.baseUrl}/${JSONBIN_CONFIG.binId}/latest`;
-            
             const response = await fetch(url, {
                 method: 'GET',
-                headers: { 
-                    'X-Master-Key': JSONBIN_CONFIG.masterKey,
-                    'Content-Type': 'application/json'
-                }
+                headers: { 'X-Master-Key': JSONBIN_CONFIG.masterKey, 'Content-Type': 'application/json' }
             });
-            
             if(!response.ok) {
                 const errorData = await response.json();
                 throw new Error(`${response.status}: ${errorData.message || 'Error'}`);
             }
-            
             const data = await response.json();
-            
             if(data.record && data.record.inventory) {
                 inventory = data.record.inventory;
                 localStorage.setItem('linstelec_inv_v2', JSON.stringify(inventory));
@@ -1368,36 +1181,20 @@
             updateSyncStatus('error', 'Error de conexión');
             inventory = JSON.parse(localStorage.getItem('linstelec_inv_v2')) || [];
             renderInv();
-        } finally {
-            isSyncing = false;
-        }
+        } finally { isSyncing = false; }
     }
 
     async function saveInventoryToCloud() {
-        if(!JSONBIN_CONFIG.masterKey || JSONBIN_CONFIG.masterKey.includes('PEGAR_AQUI')) {
-            return;
-        }
-
+        if(!JSONBIN_CONFIG.masterKey || JSONBIN_CONFIG.masterKey.includes('PEGAR_AQUI')) return;
         if(isSyncing) return;
-        
         try {
-            const payload = {
-                inventory: inventory,
-                lastUpdate: new Date().toISOString(),
-                updatedBy: currentUser?.name || 'Unknown'
-            };
-            
+            const payload = { inventory: inventory, lastUpdate: new Date().toISOString(), updatedBy: currentUser?.name || 'Unknown' };
             const response = await fetch(`${JSONBIN_CONFIG.baseUrl}/${JSONBIN_CONFIG.binId}`, {
                 method: 'PUT',
-                headers: { 
-                    'X-Master-Key': JSONBIN_CONFIG.masterKey,
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'X-Master-Key': JSONBIN_CONFIG.masterKey, 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            
             if(!response.ok) throw new Error(`HTTP ${response.status}`);
-            
             updateSyncStatus('ok', `Guardado ${new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}`);
         } catch(error) {
             console.error("❌ Error al guardar:", error);
@@ -1411,46 +1208,29 @@
         alert("📡 Inventario actualizado desde la nube");
     }
 
-    /* ========== FUNCIONES DE BÚSQUEDA ========== */
     function filterInventory() {
         const searchTerm = document.getElementById('search-inv').value.toLowerCase().trim();
         const rows = document.querySelectorAll('#inv-body tr');
         let visibleCount = 0;
-        
         rows.forEach(row => {
             const materialName = row.cells[0]?.textContent.toLowerCase() || '';
-            if(materialName.includes(searchTerm)) {
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.display = 'none';
-            }
+            if(materialName.includes(searchTerm)) { row.style.display = ''; visibleCount++; }
+            else { row.style.display = 'none'; }
         });
-        
         const countEl = document.getElementById('search-count');
         if(searchTerm) {
             countEl.textContent = `${visibleCount} resultado${visibleCount !== 1 ? 's' : ''} encontrado${visibleCount !== 1 ? 's' : ''}`;
-            if(visibleCount === 0) {
-                countEl.textContent = '❌ Sin resultados';
-            }
-        } else {
-            countEl.textContent = '';
-        }
+            if(visibleCount === 0) countEl.textContent = '❌ Sin resultados';
+        } else { countEl.textContent = ''; }
     }
 
-    /* ========== FUNCIONES DE EXPORTACIÓN/IMPORTACIÓN ========== */
     function downloadInventory() {
         if(inventory.length === 0) return alert("⚠️ No hay materiales en el inventario para descargar");
-        
         let csv = "MATERIAL;STOCK DISPONIBLE\n";
-        inventory.forEach(item => {
-            csv += `"${item.name}";${item.stock}\n`;
-        });
-        
+        inventory.forEach(item => { csv += `"${item.name}";${item.stock}\n`; });
         const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
+        link.setAttribute('href', URL.createObjectURL(blob));
         link.setAttribute('download', `Inventario_LINSTELEC_${new Date().toISOString().slice(0,10)}.csv`);
         link.style.visibility = 'hidden';
         document.body.appendChild(link);
@@ -1460,73 +1240,48 @@
 
     function printInventory() {
         if(inventory.length === 0) return alert("⚠️ No hay materiales para imprimir");
-        
-        let content = `
-            <html><head><title>Inventario LINSTELEC</title>
-            <style>
-                body { font-family: Arial, sans-serif; padding: 20px; }
-                h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
-                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
-                th { background: #3498db; color: white; }
-                tr:nth-child(even) { background: #f9f9f9; }
-                .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }
-                @media print { body { padding: 0; } }
-            </style></head><body>
-            <h1>📦 Inventario de Materiales - LINSTELEC CHILE</h1>
-            <p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CL')} | <strong>Hora:</strong> ${new Date().toLocaleTimeString('es-CL')}</p>
-            <table>
-                <thead><tr><th>#</th><th>Material</th><th>Stock en Bodega</th></tr></thead>
-                <tbody>
-        `;
-        
+        let content = `<html><head><title>Inventario LINSTELEC</title><style>
+            body { font-family: Arial, sans-serif; padding: 20px; }
+            h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+            th { background: #3498db; color: white; }
+            tr:nth-child(even) { background: #f9f9f9; }
+            .footer { margin-top: 30px; font-size: 12px; color: #666; text-align: center; }
+            @media print { body { padding: 0; } }
+        </style></head><body>
+        <h1>📦 Inventario de Materiales - LINSTELEC CHILE</h1>
+        <p><strong>Fecha:</strong> ${new Date().toLocaleDateString('es-CL')} | <strong>Hora:</strong> ${new Date().toLocaleTimeString('es-CL')}</p>
+        <table><thead><tr><th>#</th><th>Material</th><th>Stock en Bodega</th></tr></thead><tbody>`;
         inventory.forEach((item, idx) => {
             content += `<tr><td>${idx + 1}</td><td>${item.name}</td><td><strong>${item.stock}</strong></td></tr>`;
         });
-        
-        content += `</tbody></table><div class="footer">
-            Documento generado desde Sistema LINSTELEC - Uso interno<br>
-            Total de materiales: ${inventory.length}
-        </div></body></html>`;
-        
+        content += `</tbody></table><div class="footer">Documento generado desde Sistema LINSTELEC - Uso interno<br>Total de materiales: ${inventory.length}</div></body></html>`;
         const printWindow = window.open('', '_blank', 'width=800,height=600');
         printWindow.document.write(content);
         printWindow.document.close();
-        printWindow.onload = () => { 
-            setTimeout(() => { printWindow.print(); }, 500); 
-        };
+        printWindow.onload = () => { setTimeout(() => { printWindow.print(); }, 500); };
     }
 
     function exportForShare() {
         if(inventory.length === 0) return alert("⚠️ No hay materiales para exportar");
-        
-        const exportData = {
-            version: "1.0",
-            date: new Date().toISOString(),
-            inventory: inventory
-        };
-        
+        const exportData = { version: "1.0", date: new Date().toISOString(), inventory: inventory };
         const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
         const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
+        link.setAttribute('href', URL.createObjectURL(blob));
         link.setAttribute('download', `LINSTELEC_Inventario_Compartir_${new Date().toISOString().slice(0,10)}.json`);
         link.style.visibility = 'hidden';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        
         alert("✅ Archivo exportado exitosamente.");
     }
 
-    function importFromShare() {
-        document.getElementById('importFile').click();
-    }
+    function importFromShare() { document.getElementById('importFile').click(); }
 
     function handleImport(input) {
         const file = input.files[0];
         if(!file) return;
-        
         const reader = new FileReader();
         reader.onload = function(e) {
             try {
@@ -1540,18 +1295,13 @@
                         saveInventoryToCloud();
                         alert("✅ Inventario actualizado correctamente con " + inventory.length + " materiales");
                     }
-                } else {
-                    alert("❌ Formato de archivo no válido.");
-                }
-            } catch(err) {
-                alert("❌ Error al leer el archivo: " + err.message);
-            }
+                } else { alert("❌ Formato de archivo no válido."); }
+            } catch(err) { alert("❌ Error al leer el archivo: " + err.message); }
             input.value = '';
         };
         reader.readAsText(file);
     }
 
-    /* ========== FUNCIONES DE INVENTARIO ========== */
     function addMaterial() {
         const n = document.getElementById('new-item-name').value, q = parseInt(document.getElementById('new-item-qty').value);
         if(n && !isNaN(q)) { 
@@ -1567,13 +1317,11 @@
     function renderInv() {
         const body = document.getElementById('inv-body'); 
         body.innerHTML = "";
-        
         if(inventory.length === 0) {
             body.innerHTML = `<tr><td colspan="4" class="no-results">📦 No hay materiales registrados. ¡Agrega el primero!</td></tr>`;
             document.getElementById('search-count').textContent = '';
             return;
         }
-        
         inventory.forEach((item, idx) => {
             body.innerHTML += `<tr><td>${item.name}</td><td><input type="number" value="${item.stock}" onchange="updateStock(${idx}, this.value)" class="qty-input"></td><td><input type="number" id="use-qty-${idx}" value="1" min="1" class="qty-input"></td><td><button onclick="addToBag(${idx})" class="tab-btn" style="padding:5px 10px; font-size:12px; background:var(--primary); color:white;">Ocupar</button> <button onclick="delMat(${idx})" style="background:var(--danger); border:none; color:white; padding:5px 8px; border-radius:5px; cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`;
         });
@@ -1584,39 +1332,16 @@
     function updateStockAlerts() {
         const alertsContainer = document.getElementById('stock-alerts');
         if (!alertsContainer) return;
-        
         const lowStock = inventory.filter(item => item.stock <= 5);
-        const criticalStock = inventory.filter(item => item.stock <= 2);
-        
         if (lowStock.length === 0) {
-            alertsContainer.innerHTML = `
-                <div style="text-align: center; color: var(--success); padding: 20px;">
-                    <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
-                    <p>✅ Todo el inventario está en niveles óptimos</p>
-                </div>
-            `;
+            alertsContainer.innerHTML = `<div style="text-align: center; color: var(--success); padding: 20px;"><i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px;"></i><p>✅ Todo el inventario está en niveles óptimos</p></div>`;
             return;
         }
-        
         let html = '';
         lowStock.forEach(item => {
             const isCritical = item.stock <= 2;
-            html += `
-                <div class="alert-item">
-                    <div class="alert-item-info">
-                        <div class="alert-item-icon">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div>
-                            <div class="alert-item-name">${item.name}</div>
-                            <div class="alert-item-stock">Stock actual</div>
-                        </div>
-                    </div>
-                    <div class="alert-item-qty ${isCritical ? '' : 'low'}">${item.stock} un</div>
-                </div>
-            `;
+            html += `<div class="alert-item"><div class="alert-item-info"><div class="alert-item-icon"><i class="fas fa-box"></i></div><div><div class="alert-item-name">${item.name}</div><div class="alert-item-stock">Stock actual</div></div></div><div class="alert-item-qty ${isCritical ? '' : 'low'}">${item.stock} un</div></div>`;
         });
-        
         alertsContainer.innerHTML = html;
     }
     
@@ -1662,8 +1387,7 @@
         });
         const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
         const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
+        link.setAttribute('href', URL.createObjectURL(blob));
         link.setAttribute('download', `${proj}_Materiales.txt`);
         link.style.visibility = 'hidden';
         document.body.appendChild(link);
@@ -1683,14 +1407,12 @@
         const p = document.getElementById('passInput').value;
         const errorMsg = document.getElementById('error-msg');
         const found = USERS.find(user => user.id === u && user.pass === p);
-        
         const btn = document.querySelector('.btn-calc');
         const originalBtn = btn.innerHTML;
         
         if(found) {
             btn.innerHTML = '<i class="fas fa-check"></i> Accediendo...';
             btn.style.background = 'linear-gradient(135deg, var(--success), #27ae60)';
-            
             setTimeout(() => {
                 currentUser = found;
                 document.getElementById('login-wrapper').style.opacity = '0';
@@ -1698,14 +1420,12 @@
                     document.getElementById('login-wrapper').style.display = 'none';
                     document.getElementById('container').style.display = 'block';
                     document.getElementById('user-display').innerHTML = "👷 " + found.name + " - <strong>" + found.clase + "</strong>";
-                    
                     document.getElementById('dash-greeting').textContent = getGreeting() + ", " + found.name.split(' ')[0] + "!";
                     document.getElementById('dash-user-info').textContent = found.clase + " | LINSTELEC CHILE";
                     document.getElementById('dash-user-class').textContent = found.clase;
                     
                     // ✅ MOSTRAR PANEL DE MÚSICA SOLO DESPUÉS DEL LOGIN
-                    document.getElementById('floating-panel').style.display = 'flex';
-                    document.getElementById('musicPanel').style.display = 'none'; // Panel cerrado por defecto
+                    document.getElementById('floating-panel').classList.add('visible');
                     
                     renderInv();
                     updateStockAlerts();
@@ -1714,20 +1434,16 @@
                     updateStatsDisplay();
                     iniciarChatbase();
                     loadInventoryFromCloud();
-                    
                     setInterval(updateDashboardTime, 1000);
                 }, 300);
             }, 800);
-            
         } else { 
             errorMsg.classList.add('show');
             btn.innerHTML = originalBtn;
             btn.style.background = '';
-            
             const card = document.querySelector('.login-card');
             card.style.animation = 'none';
             setTimeout(() => { card.style.animation = 'shake 0.4s ease'; }, 10);
-            
             setTimeout(() => { errorMsg.classList.remove('show'); }, 3500);
         }
     }
@@ -1735,14 +1451,8 @@
     function togglePassword() {
         const input = document.getElementById('passInput');
         const icon = document.querySelector('.toggle-pass i');
-        
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.replace('fa-eye-slash', 'fa-eye');
-        }
+        if (input.type === 'password') { input.type = 'text'; icon.classList.replace('fa-eye', 'fa-eye-slash'); }
+        else { input.type = 'password'; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
     }
 
     function getGreeting() {
@@ -1752,11 +1462,7 @@
         return "🌙 Buenas noches";
     }
 
-    function showTabFromDashboard(tabName) {
-        addToRecentTools(tabName);
-        showTool(tabName);
-    }
-
+    function showTabFromDashboard(tabName) { addToRecentTools(tabName); showTool(tabName); }
     function showTool(name) {
         document.getElementById('dashboard').classList.remove('active');
         document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
@@ -1765,14 +1471,7 @@
         const tabBtn = document.querySelector(`.tab-btn[onclick*="'${name}'"]`);
         if(tabBtn) tabBtn.classList.add('active');
     }
-
-    function showTab(evt, name) {
-        if (evt) {
-            addToRecentTools(name);
-        }
-        showTool(name);
-    }
-
+    function showTab(evt, name) { if (evt) addToRecentTools(name); showTool(name); }
     function showDashboard() {
         document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -1780,23 +1479,11 @@
     }
 
     function addToRecentTools(toolName) {
-        const toolNames = {
-            'tension': 'Caída de Tensión',
-            'ohm': 'Ley de Ohm',
-            'nodos': 'Calculadora Nodos',
-            'tuberia': 'Ductos EMT',
-            'sgc': 'Esquema SGC',
-            'biblioteca': 'Biblioteca RIC',
-            'inventario': 'Inventario',
-            'luis-ia': 'Luis IA'
-        };
-        
+        const toolNames = { 'tension': 'Caída de Tensión', 'ohm': 'Ley de Ohm', 'nodos': 'Calculadora Nodos', 'tuberia': 'Ductos EMT', 'sgc': 'Esquema SGC', 'biblioteca': 'Biblioteca RIC', 'inventario': 'Inventario', 'luis-ia': 'Luis IA' };
         const toolLabel = toolNames[toolName] || toolName;
-        
         recentTools = recentTools.filter(t => t !== toolLabel);
         recentTools.unshift(toolLabel);
         recentTools = recentTools.slice(0, 5);
-        
         localStorage.setItem('linstelec_recent_tools', JSON.stringify(recentTools));
         updateRecentToolsDisplay();
     }
@@ -1804,32 +1491,12 @@
     function updateRecentToolsDisplay() {
         const container = document.getElementById('recent-tools-list');
         if (!container) return;
-        
-        if (recentTools.length === 0) {
-            container.innerHTML = '<span style="color: #64748b;">Sin historial aún</span>';
-            return;
-        }
-        
-        container.innerHTML = recentTools.map(tool => `
-            <div class="recent-tool-item">
-                <i class="fas fa-clock"></i>
-                ${tool}
-            </div>
-        `).join('');
+        if (recentTools.length === 0) { container.innerHTML = '<span style="color: #64748b;">Sin historial aún</span>'; return; }
+        container.innerHTML = recentTools.map(tool => `<div class="recent-tool-item"><i class="fas fa-clock"></i> ${tool}</div>`).join('');
     }
 
-    function updateStatsDisplay() {
-        const statsEl = document.getElementById('stats-month');
-        if (statsEl) {
-            statsEl.textContent = calcCount;
-        }
-    }
-
-    function incrementCalcCount() {
-        calcCount++;
-        localStorage.setItem('linstelec_calc_count', calcCount);
-        updateStatsDisplay();
-    }
+    function updateStatsDisplay() { const statsEl = document.getElementById('stats-month'); if (statsEl) statsEl.textContent = calcCount; }
+    function incrementCalcCount() { calcCount++; localStorage.setItem('linstelec_calc_count', calcCount); updateStatsDisplay(); }
 
     function calcNodoInteractivo(nodo) {
         incrementCalcCount();
@@ -1874,16 +1541,7 @@
             setTimeout(() => {
                 const c = document.createElement('span');
                 c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                c.style.cssText = `
-                    position: fixed; 
-                    left: ${Math.random() * 100}vw; 
-                    top: -20px; 
-                    font-size: ${16 + Math.random() * 12}px; 
-                    animation: confettiFall ${2 + Math.random() * 2}s linear forwards; 
-                    pointer-events: none; 
-                    z-index: 9999;
-                    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-                `;
+                c.style.cssText = `position: fixed; left: ${Math.random() * 100}vw; top: -20px; font-size: ${16 + Math.random() * 12}px; animation: confettiFall ${2 + Math.random() * 2}s linear forwards; pointer-events: none; z-index: 9999; text-shadow: 0 2px 4px rgba(0,0,0,0.3);`;
                 document.body.appendChild(c);
                 setTimeout(() => c.remove(), 4000);
             }, i * 80);
@@ -1896,21 +1554,10 @@
         const diametro = selectedOption.getAttribute('data-diametro');
         const cantidad = selectedOption.getAttribute('data-cantidad');
         const texto = selectedOption.text;
-        
         const cantidadGroup = document.getElementById('cantidad-group');
-        if (cantidad === 'variable') {
-            cantidadGroup.style.display = 'block';
-        } else {
-            cantidadGroup.style.display = 'none';
-        }
-        
+        if (cantidad === 'variable') { cantidadGroup.style.display = 'block'; } else { cantidadGroup.style.display = 'none'; }
         const infoDiv = document.getElementById('cable-info');
-        infoDiv.innerHTML = `
-            <strong>Cable seleccionado:</strong> ${texto}<br>
-            <strong>Diámetro exterior:</strong> Ø ${diametro} mm<br>
-            ${cantidad === '1' ? '<span style="color: var(--success);">✓ Multiconductor (1 solo cable en tubería)</span>' : '<span style="color: var(--primary);">📊 Ingrese cantidad de cables unipolares</span>'}
-        `;
-        
+        infoDiv.innerHTML = `<strong>Cable seleccionado:</strong> ${texto}<br><strong>Diámetro exterior:</strong> Ø ${diametro} mm<br>${cantidad === '1' ? '<span style="color: var(--success);">✓ Multiconductor (1 solo cable en tubería)</span>' : '<span style="color: var(--primary);">📊 Ingrese cantidad de cables unipolares</span>'}`;
         const utpCheck = document.getElementById('utp-check');
         const utpCantidadGroup = document.getElementById('utp-cantidad-group');
         utpCantidadGroup.style.display = utpCheck.checked ? 'block' : 'none';
@@ -1923,186 +1570,60 @@
         const diametroCable = parseFloat(selectedOption.getAttribute('data-diametro'));
         const tipoCantidad = selectedOption.getAttribute('data-cantidad');
         const textoCable = selectedOption.text.toLowerCase();
-        
         const esH07 = textoCable.includes('h07z1-k');
         const esMulticonductor = textoCable.includes('multiconductor') || selectedOption.value.startsWith('multirvk');
-        const esUnipolarRVK = textoCable.includes('unipolar rvk') || selectedOption.value.startsWith('unirvk');
-        
         let cantidadCables = 1;
-        if (tipoCantidad === 'variable') {
-            cantidadCables = parseInt(document.getElementById('cable-cant').value) || 1;
-        }
-        
+        if (tipoCantidad === 'variable') { cantidadCables = parseInt(document.getElementById('cable-cant').value) || 1; }
         const areaCablePrincipal = Math.PI * Math.pow(diametroCable / 2, 2);
         const areaTotalPrincipal = areaCablePrincipal * cantidadCables;
-        
         const utpCheck = document.getElementById('utp-check');
-        let areaTotalUTP = 0;
-        let cantidadUTP = 0;
+        let areaTotalUTP = 0, cantidadUTP = 0;
         if (utpCheck.checked) {
             cantidadUTP = parseInt(document.getElementById('utp-cant').value) || 1;
             const diametroUTP = 6.0;
             const areaUTP = Math.PI * Math.pow(diametroUTP / 2, 2);
             areaTotalUTP = areaUTP * cantidadUTP;
         }
-        
         const areaTotalRequerida = areaTotalPrincipal + areaTotalUTP;
         const totalCables = cantidadCables + cantidadUTP;
-        
-        let factorLlenado;
-        let textoFactor;
-        if (totalCables === 1) {
-            factorLlenado = 0.53;
-            textoFactor = "53% (1 cable)";
-        } else if (totalCables === 2) {
-            factorLlenado = 0.31;
-            textoFactor = "31% (2 cables)";
-        } else {
-            factorLlenado = 0.40;
-            textoFactor = "40% (3+ cables)";
-        }
-        
-        const tubosEMT = [
-            { nominal: 16, interior: 15.3 },
-            { nominal: 20, interior: 19.3 },
-            { nominal: 25, interior: 24.5 },
-            { nominal: 32, interior: 31.0 },
-            { nominal: 40, interior: 37.5 },
-            { nominal: 50, interior: 46.5 }
-        ];
-        
-        const limitesPracticos = {
-            16: { max: 5, ideal: 3, descripcion: "Máximo 5 cables (ideal 3)" },
-            20: { max: 7, ideal: 5, descripcion: "Máximo 7 cables (ideal 5)" },
-            25: { max: 9, ideal: 6, descripcion: "Máximo 9 cables (ideal 6)" },
-            32: { max: 12, ideal: 9, descripcion: "Máximo 12 cables (ideal 9)" },
-            40: { max: 15, ideal: 12, descripcion: "Máximo 15 cables (ideal 12)" },
-            50: { max: 20, ideal: 15, descripcion: "Máximo 20 cables (ideal 15)" }
-        };
-        
-        let rangoRecomendado;
-        if (esH07) {
-            rangoRecomendado = { min: 16, max: 25, texto: "16mm - 25mm (instalación domiciliaria)" };
-        } else {
-            rangoRecomendado = { min: 32, max: 50, texto: "32mm - 50mm (alimentadores y circuitos)" };
-        }
-        
-        let html = `
-            <div class="resultado res-warn" style="margin-bottom: 15px;">
-                <strong>📊 Resumen de Cables:</strong><br>
-                • Tipo: ${esH07 ? 'H07Z1-K (domiciliario)' : (esMulticonductor ? 'RVK Multiconductor' : 'RVK Unipolar')}<br>
-                • Cables principales: ${cantidadCables} × Ø${diametroCable}mm = ${areaTotalPrincipal.toFixed(2)} mm²<br>
-                ${utpCheck.checked ? `• Cables UTP: ${cantidadUTP} × Ø6.0mm = ${areaTotalUTP.toFixed(2)} mm²<br>` : ''}
-                • <strong>Área total: ${areaTotalRequerida.toFixed(2)} mm²</strong><br>
-                • Total cables: ${totalCables}<br>
-                • Factor RIC 07: ${textoFactor}<br>
-                • <strong>Rango recomendado: Tubos ${rangoRecomendado.texto}</strong>
-            </div>
-            <h3 style="margin: 15px 0 10px 0; font-size: 1.1rem;">📐 Análisis por Tubo EMT:</h3>
-        `;
-        
+        let factorLlenado, textoFactor;
+        if (totalCables === 1) { factorLlenado = 0.53; textoFactor = "53% (1 cable)"; }
+        else if (totalCables === 2) { factorLlenado = 0.31; textoFactor = "31% (2 cables)"; }
+        else { factorLlenado = 0.40; textoFactor = "40% (3+ cables)"; }
+        const tubosEMT = [{ nominal: 16, interior: 15.3 }, { nominal: 20, interior: 19.3 }, { nominal: 25, interior: 24.5 }, { nominal: 32, interior: 31.0 }, { nominal: 40, interior: 37.5 }, { nominal: 50, interior: 46.5 }];
+        const limitesPracticos = { 16: { max: 5, ideal: 3, descripcion: "Máximo 5 cables (ideal 3)" }, 20: { max: 7, ideal: 5, descripcion: "Máximo 7 cables (ideal 5)" }, 25: { max: 9, ideal: 6, descripcion: "Máximo 9 cables (ideal 6)" }, 32: { max: 12, ideal: 9, descripcion: "Máximo 12 cables (ideal 9)" }, 40: { max: 15, ideal: 12, descripcion: "Máximo 15 cables (ideal 12)" }, 50: { max: 20, ideal: 15, descripcion: "Máximo 20 cables (ideal 15)" } };
+        let rangoRecomendado = esH07 ? { min: 16, max: 25, texto: "16mm - 25mm (instalación domiciliaria)" } : { min: 32, max: 50, texto: "32mm - 50mm (alimentadores y circuitos)" };
+        let html = `<div class="resultado res-warn" style="margin-bottom: 15px;"><strong>📊 Resumen de Cables:</strong><br>• Tipo: ${esH07 ? 'H07Z1-K (domiciliario)' : (esMulticonductor ? 'RVK Multiconductor' : 'RVK Unipolar')}<br>• Cables principales: ${cantidadCables} × Ø${diametroCable}mm = ${areaTotalPrincipal.toFixed(2)} mm²<br>${utpCheck.checked ? `• Cables UTP: ${cantidadUTP} × Ø6.0mm = ${areaTotalUTP.toFixed(2)} mm²<br>` : ''}• <strong>Área total: ${areaTotalRequerida.toFixed(2)} mm²</strong><br>• Total cables: ${totalCables}<br>• Factor RIC 07: ${textoFactor}<br>• <strong>Rango recomendado: Tubos ${rangoRecomendado.texto}</strong></div><h3 style="margin: 15px 0 10px 0; font-size: 1.1rem;">📐 Análisis por Tubo EMT:</h3>`;
         let tuboRecomendado = null;
-        
         tubosEMT.forEach(tubo => {
             const areaInterna = Math.PI * Math.pow(tubo.interior / 2, 2);
             const capacidadMaxima = areaInterna * factorLlenado;
             const ocupacionPorcentaje = (areaTotalRequerida / capacidadMaxima) * 100;
             const margenDisponible = capacidadMaxima - areaTotalRequerida;
-            
             const dentroRango = tubo.nominal >= rangoRecomendado.min && tubo.nominal <= rangoRecomendado.max;
             const limite = limitesPracticos[tubo.nominal];
             const excedeLimitePractico = totalCables > limite.max;
             const sobreOcupacion = ocupacionPorcentaje > 70;
-            
             if (capacidadMaxima >= areaTotalRequerida && !excedeLimitePractico) {
                 if (!tuboRecomendado && dentroRango) {
                     tuboRecomendado = tubo;
-                    
-                    let claseResultado = 'res-ok';
-                    let icono = '✅';
-                    let textoExtra = '';
-                    
-                    if (sobreOcupacion) {
-                        claseResultado = 'res-warn';
-                        icono = '⚠️';
-                        textoExtra = '<br><span style="color: #856404;"><strong>⚠️ Ocupación alta - Instalación difícil</strong></span>';
-                    }
-                    
-                    html += `
-                        <div class="resultado ${claseResultado}" style="margin-bottom: 10px; border: 2px solid ${sobreOcupacion ? '#ffc107' : '#28a745'};">
-                            <strong>${icono} Tubo EMT ${tubo.nominal}mm - RECOMENDADO</strong><br>
-                            • Diámetro interior: ${tubo.interior}mm<br>
-                            • Capacidad máxima (${textoFactor}): ${capacidadMaxima.toFixed(2)} mm²<br>
-                            • Área requerida: ${areaTotalRequerida.toFixed(2)} mm²<br>
-                            • Ocupación del factor: ${ocupacionPorcentaje.toFixed(1)}%<br>
-                            • Margen disponible: ${margenDisponible.toFixed(2)} mm²<br>
-                            • Límite práctico: ${limite.descripcion}${textoExtra}
-                        </div>
-                    `;
-                } else if (dentroRango) {
-                    html += `
-                        <div class="resultado res-warn" style="margin-bottom: 10px;">
-                            <strong>🔵 Tubo EMT ${tubo.nominal}mm - EXCESIVO</strong><br>
-                            • Ocupación: ${ocupacionPorcentaje.toFixed(1)}%<br>
-                            • Sobredimensionado
-                        </div>
-                    `;
-                } else {
-                    html += `
-                        <div class="resultado res-warn" style="margin-bottom: 10px; opacity: 0.7;">
-                            <strong>🔸 Tubo EMT ${tubo.nominal}mm - NO RECOMENDADO</strong><br>
-                            • Cumple matemáticamente pero <strong>no es práctica habitual</strong><br>
-                            • Para ${esH07 ? 'H07Z1-K' : 'RVK'} use tubos ${rangoRecomendado.texto}
-                        </div>
-                    `;
-                }
+                    let claseResultado = 'res-ok', icono = '✅', textoExtra = '';
+                    if (sobreOcupacion) { claseResultado = 'res-warn'; icono = '⚠️'; textoExtra = '<br><span style="color: #856404;"><strong>⚠️ Ocupación alta - Instalación difícil</strong></span>'; }
+                    html += `<div class="resultado ${claseResultado}" style="margin-bottom: 10px; border: 2px solid ${sobreOcupacion ? '#ffc107' : '#28a745'};"><strong>${icono} Tubo EMT ${tubo.nominal}mm - RECOMENDADO</strong><br>• Diámetro interior: ${tubo.interior}mm<br>• Capacidad máxima (${textoFactor}): ${capacidadMaxima.toFixed(2)} mm²<br>• Área requerida: ${areaTotalRequerida.toFixed(2)} mm²<br>• Ocupación del factor: ${ocupacionPorcentaje.toFixed(1)}%<br>• Margen disponible: ${margenDisponible.toFixed(2)} mm²<br>• Límite práctico: ${limite.descripcion}${textoExtra}</div>`;
+                } else if (dentroRango) { html += `<div class="resultado res-warn" style="margin-bottom: 10px;"><strong>🔵 Tubo EMT ${tubo.nominal}mm - EXCESIVO</strong><br>• Ocupación: ${ocupacionPorcentaje.toFixed(1)}%<br>• Sobredimensionado</div>`; }
+                else { html += `<div class="resultado res-warn" style="margin-bottom: 10px; opacity: 0.7;"><strong>🔸 Tubo EMT ${tubo.nominal}mm - NO RECOMENDADO</strong><br>• Cumple matemáticamente pero <strong>no es práctica habitual</strong><br>• Para ${esH07 ? 'H07Z1-K' : 'RVK'} use tubos ${rangoRecomendado.texto}</div>`; }
             } else if (excedeLimitePractico) {
-                html += `
-                    <div class="resultado res-fail" style="margin-bottom: 10px; background: #f8d7da; border-color: #dc3545;">
-                        <strong>❌ Tubo EMT ${tubo.nominal}mm - NO VIABLE</strong><br>
-                        • Aunque cumple matemáticamente (${ocupacionPorcentaje.toFixed(1)}%)<br>
-                        • <strong>Límite práctico excedido: ${totalCables} cables > ${limite.max} máx</strong><br>
-                        • Imposible de instalar en obra real<br>
-                        • Use mínimo tubo ${Object.keys(limitesPracticos).find(t => limitesPracticos[t].max >= totalCables) || 32}mm
-                    </div>
-                `;
+                html += `<div class="resultado res-fail" style="margin-bottom: 10px; background: #f8d7da; border-color: #dc3545;"><strong>❌ Tubo EMT ${tubo.nominal}mm - NO VIABLE</strong><br>• Aunque cumple matemáticamente (${ocupacionPorcentaje.toFixed(1)}%)<br>• <strong>Límite práctico excedido: ${totalCables} cables > ${limite.max} máx</strong><br>• Imposible de instalar en obra real<br>• Use mínimo tubo ${Object.keys(limitesPracticos).find(t => limitesPracticos[t].max >= totalCables) || 32}mm</div>`;
             } else {
-                html += `
-                    <div class="resultado res-fail" style="margin-bottom: 10px;">
-                        <strong>❌ Tubo EMT ${tubo.nominal}mm - SOBRECARGADO</strong><br>
-                        • Capacidad máxima (${textoFactor}): ${capacidadMaxima.toFixed(2)} mm²<br>
-                        • Área requerida: ${areaTotalRequerida.toFixed(2)} mm²<br>
-                        • Ocupación: ${ocupacionPorcentaje.toFixed(1)}%<br>
-                        • <strong style="color: var(--danger);">Excede norma RIC 07</strong>
-                    </div>
-                `;
+                html += `<div class="resultado res-fail" style="margin-bottom: 10px;"><strong>❌ Tubo EMT ${tubo.nominal}mm - SOBRECARGADO</strong><br>• Capacidad máxima (${textoFactor}): ${capacidadMaxima.toFixed(2)} mm²<br>• Área requerida: ${areaTotalRequerida.toFixed(2)} mm²<br>• Ocupación: ${ocupacionPorcentaje.toFixed(1)}%<br>• <strong style="color: var(--danger);">Excede norma RIC 07</strong></div>`;
             }
         });
-        
         if (totalCables >= 7 && esH07) {
-            html += `
-                <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin: 15px 0; border-radius: 5px;">
-                    <strong>🌡️ ADVERTENCIA - Factor de Corrección por Temperatura:</strong><br>
-                    • Con ${totalCables} cables juntos, debe aplicar factor de corrección (RIC 04 Tabla 4.3)<br>
-                    • La capacidad de corriente de los cables se reduce<br>
-                    • Considere aumentar sección o usar más tuberías
-                </div>
-            `;
+            html += `<div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin: 15px 0; border-radius: 5px;"><strong>🌡️ ADVERTENCIA - Factor de Corrección por Temperatura:</strong><br>• Con ${totalCables} cables juntos, debe aplicar factor de corrección (RIC 04 Tabla 4.3)<br>• La capacidad de corriente de los cables se reduce<br>• Considere aumentar sección o usar más tuberías</div>`;
         }
-        
         if (!tuboRecomendado) {
-            html += `
-                <div class="resultado res-fail" style="margin-top: 15px; background: #f8d7da; border-color: #dc3545;">
-                    <strong>⚠️ SIN SOLUCIÓN ADECUADA</strong><br>
-                    Opciones:<br>
-                    1. Reducir cantidad de cables por tubería<br>
-                    2. Usar cables de menor diámetro<br>
-                    3. Instalar múltiples tuberías paralelas<br>
-                    4. Aumentar diámetro de tubo (si es posible)
-                </div>
-            `;
+            html += `<div class="resultado res-fail" style="margin-top: 15px; background: #f8d7da; border-color: #dc3545;"><strong>⚠️ SIN SOLUCIÓN ADECUADA</strong><br>Opciones:<br>1. Reducir cantidad de cables por tubería<br>2. Usar cables de menor diámetro<br>3. Instalar múltiples tuberías paralelas<br>4. Aumentar diámetro de tubo (si es posible)</div>`;
         }
-        
         document.getElementById('res-ducto').innerHTML = html;
     }
 
@@ -2111,69 +1632,28 @@
         document.getElementById('successImg').style.display = 'none';
         const danger = document.getElementById('dangerOverlay');
         danger.style.display = 'none';
-        
         const tipoSistema = document.querySelector('input[name="tipoSistema"]:checked')?.value;
-        if (!tipoSistema) {
-            mostrarResultado('⚠️ Seleccione tipo de sistema (Monofásico/Trifásico)', 'res-fail');
-            return;
-        }
+        if (!tipoSistema) { mostrarResultado('⚠️ Seleccione tipo de sistema (Monofásico/Trifásico)', 'res-fail'); return; }
         const esMonofasico = tipoSistema === 'monofasico';
-        
-        const rho = 0.018;
-        const V_nominal = esMonofasico ? 220 : 380;
-        const limitePorcentaje = 3;
-        
-        const distancia = parseFloat(document.getElementById('dist')?.value);
-        const corriente = parseFloat(document.getElementById('amp')?.value);
-        const seccion = parseFloat(document.getElementById('sec')?.value);
-        
-        if (isNaN(distancia) || isNaN(corriente) || isNaN(seccion) || distancia <= 0 || corriente <= 0 || seccion <= 0) {
-            mostrarResultado('⚠️ Ingrese valores válidos mayores a cero', 'res-fail');
-            return;
-        }
-        
+        const rho = 0.018, V_nominal = esMonofasico ? 220 : 380, limitePorcentaje = 3;
+        const distancia = parseFloat(document.getElementById('dist')?.value), corriente = parseFloat(document.getElementById('amp')?.value), seccion = parseFloat(document.getElementById('sec')?.value);
+        if (isNaN(distancia) || isNaN(corriente) || isNaN(seccion) || distancia <= 0 || corriente <= 0 || seccion <= 0) { mostrarResultado('⚠️ Ingrese valores válidos mayores a cero', 'res-fail'); return; }
         const factor = esMonofasico ? 2 : Math.sqrt(3);
-        
         const usarCosPhi = document.getElementById('cosphi-check')?.checked;
         const cosPhi = usarCosPhi ? parseFloat(document.getElementById('cosphi-value')?.value) : 1;
-        
-        if (usarCosPhi && (isNaN(cosPhi) || cosPhi <= 0 || cosPhi > 1)) {
-            mostrarResultado('⚠️ Factor de potencia debe estar entre 0.1 y 1.0', 'res-fail');
-            return;
-        }
-        
+        if (usarCosPhi && (isNaN(cosPhi) || cosPhi <= 0 || cosPhi > 1)) { mostrarResultado('⚠️ Factor de potencia debe estar entre 0.1 y 1.0', 'res-fail'); return; }
         const divisor = seccion * (usarCosPhi ? cosPhi : 1);
         const deltaV = (factor * distancia * corriente * rho) / divisor;
-        
         const porcentaje = (deltaV / V_nominal) * 100;
-        
         const sistemaTexto = esMonofasico ? "MONOFÁSICO 220V" : "TRIFÁSICO 380V";
         const factorTexto = esMonofasico ? "2 (ida + vuelta)" : "√3 = 1.732 (entre fases)";
         const cosPhiTexto = usarCosPhi ? ` | cos φ: ${cosPhi}` : '';
-        
         if (porcentaje <= limitePorcentaje) {
-            mostrarResultado(`
-                <strong>✅ Sistema ${sistemaTexto}</strong><br>
-                🔹 Factor aplicado: ${factorTexto}${cosPhiTexto}<br>
-                🔹 Caída de tensión: <strong>${deltaV.toFixed(2)} V</strong><br>
-                🔹 Porcentaje: <strong>${porcentaje.toFixed(2)} %</strong><br>
-                🔹 Límite RIC 04: ≤ ${limitePorcentaje}%<br>
-                <span style="color:var(--success); font-weight:bold;">✓ CUMPLE NORMA</span>
-            `, 'res-ok');
-            
+            mostrarResultado(`<strong>✅ Sistema ${sistemaTexto}</strong><br>🔹 Factor aplicado: ${factorTexto}${cosPhiTexto}<br>🔹 Caída de tensión: <strong>${deltaV.toFixed(2)} V</strong><br>🔹 Porcentaje: <strong>${porcentaje.toFixed(2)} %</strong><br>🔹 Límite RIC 04: ≤ ${limitePorcentaje}%<br><span style="color:var(--success); font-weight:bold;">✓ CUMPLE NORMA</span>`, 'res-ok');
             document.getElementById('successImg').style.display = 'block';
             lanzarConfeti();
         } else {
-            mostrarResultado(`
-                <strong>❌ Sistema ${sistemaTexto}</strong><br>
-                🔹 Factor aplicado: ${factorTexto}${cosPhiTexto}<br>
-                🔹 Caída de tensión: <strong>${deltaV.toFixed(2)} V</strong><br>
-                🔹 Porcentaje: <strong>${porcentaje.toFixed(2)} %</strong><br>
-                🔹 Límite RIC 04: ≤ ${limitePorcentaje}%<br>
-                <span style="color:var(--danger); font-weight:bold;">✗ FUERA DE NORMA</span><br>
-                <small>💡 Solución: Aumentar sección, reducir distancia o mejorar cos φ</small>
-            `, 'res-fail');
-            
+            mostrarResultado(`<strong>❌ Sistema ${sistemaTexto}</strong><br>🔹 Factor aplicado: ${factorTexto}${cosPhiTexto}<br>🔹 Caída de tensión: <strong>${deltaV.toFixed(2)} V</strong><br>🔹 Porcentaje: <strong>${porcentaje.toFixed(2)} %</strong><br>🔹 Límite RIC 04: ≤ ${limitePorcentaje}%<br><span style="color:var(--danger); font-weight:bold;">✗ FUERA DE NORMA</span><br><small>💡 Solución: Aumentar sección, reducir distancia o mejorar cos φ</small>`, 'res-fail');
             danger.style.display = 'flex';
             if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 200]);
             setTimeout(() => { danger.style.display = 'none'; }, 5000);
@@ -2185,18 +1665,12 @@
         const s = document.createElement("script"); s.src = "https://www.chatbase.co/embed.min.js"; s.id = "HZBhzPxQtpDaw6ZlcBzEA"; s.domain = "www.chatbase.co"; document.body.appendChild(s);
     }
 
-    /* ===== FUNCIONES PANEL MÚSICA - MODIFICADAS ===== */
+    /* ===== 🎵 FUNCIONES PANEL MÚSICA - CORREGIDAS ===== */
 
     // 🎵 ABRIR/CERRAR PANEL (NO AFECTA REPRODUCCIÓN)
     function toggleMusicPanel() {
         const panel = document.getElementById('musicPanel');
-        
-        // Solo alternar visibilidad del panel
-        if (panel.classList.contains('visible')) {
-            panel.classList.remove('visible');
-        } else {
-            panel.classList.add('visible');
-        }
+        panel.classList.toggle('visible');
         // ✅ La música sigue sonando sin importar si el panel está abierto o cerrado
     }
 
@@ -2211,16 +1685,29 @@
         const bubble = document.getElementById('musicBubble');
         const playIcon = document.getElementById('playIcon');
         const status = document.getElementById('songStatus');
+        const errorMsg = document.getElementById('audioError');
         
+        // Ocultar mensaje de error si estaba visible
+        if (errorMsg) errorMsg.style.display = 'none';
+        
+        // Intentar reproducir/pausar
         if (audio.paused) {
-            audio.play();
-            bubble.classList.add('playing');
-            playIcon.classList.replace('fa-play', 'fa-pause');
-            if (status) status.textContent = '▶ Reproduciendo';
+            audio.play().then(() => {
+                bubble?.classList.add('playing');
+                playIcon?.classList.replace('fa-play', 'fa-pause');
+                if (status) status.textContent = '▶ Reproduciendo';
+            }).catch(err => {
+                console.error("❌ Error al reproducir:", err);
+                if (errorMsg) {
+                    errorMsg.style.display = 'block';
+                    errorMsg.textContent = '⚠️ Error: Verifica que oldskul.mp3 esté en la carpeta';
+                }
+                if (status) status.textContent = '❌ Error';
+            });
         } else {
             audio.pause();
-            bubble.classList.remove('playing');
-            playIcon.classList.replace('fa-pause', 'fa-play');
+            bubble?.classList.remove('playing');
+            playIcon?.classList.replace('fa-pause', 'fa-play');
             if (status) status.textContent = '⏸ Pausado';
         }
     }
@@ -2231,17 +1718,25 @@
         audioEl.addEventListener('play', () => {
             document.getElementById('musicBubble')?.classList.add('playing');
             document.getElementById('playIcon')?.classList.replace('fa-play', 'fa-pause');
+            document.getElementById('songStatus') && (document.getElementById('songStatus').textContent = '▶ Reproduciendo');
         });
         audioEl.addEventListener('pause', () => {
             document.getElementById('musicBubble')?.classList.remove('playing');
             document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
+            document.getElementById('songStatus') && (document.getElementById('songStatus').textContent = '⏸ Pausado');
         });
         audioEl.addEventListener('ended', () => {
             document.getElementById('musicBubble')?.classList.remove('playing');
             document.getElementById('playIcon')?.classList.replace('fa-pause', 'fa-play');
-            if (document.getElementById('songStatus')) {
-                document.getElementById('songStatus').textContent = '✓ Finalizado';
+            document.getElementById('songStatus') && (document.getElementById('songStatus').textContent = '✓ Finalizado');
+        });
+        audioEl.addEventListener('error', () => {
+            const errorMsg = document.getElementById('audioError');
+            if (errorMsg) {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = '⚠️ No se pudo cargar oldskul.mp3';
             }
+            document.getElementById('songStatus') && (document.getElementById('songStatus').textContent = '❌ Error');
         });
     }
 </script>
