@@ -670,10 +670,13 @@
         </div>
         
         <form onsubmit="checkLogin(); return false;" class="login-form">
-            <div class="input-group">
-                <i class="fas fa-user input-icon"></i>
-                <input type="text" id="userInput" placeholder="Usuario" autocomplete="username" required>
-            </div>
+<div class="input-group">
+<i class="fas fa-user input-icon"></i>
+<input type="text" id="userInput" placeholder="Usuario" autocomplete="username" required>
+<button type="button" class="toggle-pass" onclick="toggleUserClear()" title="Limpiar campo">
+<i class="fas fa-times"></i>
+</button>
+</div> 
             <div class="input-group">
                 <i class="fas fa-lock input-icon"></i>
                 <input type="password" id="passInput" placeholder="Contraseña" autocomplete="current-password" required>
